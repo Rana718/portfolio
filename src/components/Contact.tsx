@@ -6,7 +6,7 @@ import { EarthCanvas } from "./canvas";
 import { SectionWrapper } from "../hoc";
 import { slideIn, fadeIn, staggerContainer } from "../utils/motion";
 
-// Define the state interface for the form
+
 interface FormState {
   name: string;
   email: string;
@@ -23,7 +23,7 @@ const Contact: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Handle input changes
+ 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm({
@@ -32,14 +32,14 @@ const Contact: React.FC = () => {
     });
   };
 
-  // Handle form submission
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
     emailjs
       .send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID, // Ensure these variables are defined in your environment
+        import.meta.env.VITE_EMAILJS_SERVICE_ID, 
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         {
           from_name: form.name,
@@ -71,6 +71,7 @@ const Contact: React.FC = () => {
 
   return (
     <motion.div
+      // @ts-ignore
       variants={staggerContainer}
       initial="hidden"
       animate="show"

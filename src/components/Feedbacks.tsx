@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 import { styles } from "../styles";
 import { SectionWrapper } from "../hoc";
-import { fadeIn, textVariant, staggerContainer } from "../utils/motion";
+import { fadeIn, textVariant } from "../utils/motion";
 import { testimonials } from "../constants";
 
 // Define interfaces for the props
@@ -63,7 +63,7 @@ const Feedbacks: React.FC = () => {
       <div
         className={`bg-tertiary rounded-2xl ${styles.padding} min-h-[300px] relative overflow-hidden`}
       >
-        <motion.div variants={textVariant()} className="relative z-10">
+        <motion.div variants={textVariant(0)} className="relative z-10">
           <p className={`${styles.sectionSubText} text-teal-400`}>What others say</p>
           <h2 className={`${styles.sectionHeadText} text-white`}>Testimonials.</h2>
         </motion.div>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 import { styles } from "../styles";
 import { navLinks } from "../constants";
+// @ts-ignore
 import { logo, menu, close } from "../assets";
 
 interface NavLink {
