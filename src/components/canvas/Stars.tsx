@@ -3,14 +3,14 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial, Preload } from "@react-three/drei";
 // @ts-ignore
 import * as random from "maath/random/dist/maath-random.esm";
-import { Group } from "three";
+import { Points as ThreePoints } from "three";
 
 interface StarsProps {
   [key: string]: any;
 }
 
-const Stars = (props:StarsProps) => {
-  const ref = useRef<Group>(null);
+const Stars = (props: StarsProps) => {
+  const ref = useRef<ThreePoints>(null);
   const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 1.2 }));
 
   useFrame((_, delta) => {
