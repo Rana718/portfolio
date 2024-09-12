@@ -1,13 +1,9 @@
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+
 
 import { styles } from "../styles";
 import { staggerContainer } from "../utils/motion";
 
-type StarWrapperProps = {
-    idName: string;
-    Component: React.ComponentType;
-};
 
 const StarWrapper = (Component: React.ComponentType, idName: string) =>
     function HOC() {
