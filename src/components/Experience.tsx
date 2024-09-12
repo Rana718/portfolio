@@ -8,7 +8,7 @@ import { textVariant } from "../utils/motion";
 const Experience: React.FC = () => {
   return (
     <>
-      <motion.div variants={textVariant(1)} className="text-center">
+      <motion.div variants={textVariant(0.5)} className="text-center">
         <p className={`${styles.sectionSubText} text-teal-400`}>
           My Journey So Far
         </p>

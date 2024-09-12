@@ -85,7 +85,7 @@ const ProjectCard: React.FC<Project> = ({
 const Works: React.FC = () => {
   return (
     <>
-      <motion.div variants={textVariant(2)}>
+      <motion.div variants={textVariant(0.5)}>
         <p className={`${styles.sectionSubText} `}>My work</p>
         <h2 className={`${styles.sectionHeadText}`}>Projects.</h2>
       </motion.div>
@@ -104,7 +104,7 @@ const Works: React.FC = () => {
         </motion.p>
       </div>
 
-      <div className='mt-20 flex flex-wrap gap-7'>
+      <div className='mt-20 flex flex-wrap gap-7 justify-center items-cente'>
         {projects.map((project, index) => (
           <ProjectCard key={`project-${index}`} index={index} {...project} />
         ))}

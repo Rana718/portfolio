@@ -1,24 +1,21 @@
 import { motion } from "framer-motion";
-import { SectionWrapper } from "../hoc";
-import { technicalSkills } from "../constants"; // Import the technicalSkills data
+import { technicalSkills } from "../constants";
 
 const Tech = () => {
   return (
-    <div className='flex flex-row flex-wrap justify-center items-start'>
+    <div className='flex flex-wrap justify-center gap-8'>
       {technicalSkills.map((skill) => (
         <motion.div
-          className='w-28 h-28 flex items-center justify-center'
+          className='w-20 h-20 flex items-center justify-center'
           key={skill.name}
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          style={{ margin: 0, padding: 0 }}
         >
           <img
             src={skill.imageUrl}
             alt={skill.name}
-            className='w-full h-full object-contain'
-            style={{ margin: 0, padding: 0 }}
+            className='object-contain w-16 h-16'
           />
         </motion.div>
       ))}
@@ -26,4 +23,4 @@ const Tech = () => {
   );
 };
 
-export default SectionWrapper(Tech, "");
+export default Tech;

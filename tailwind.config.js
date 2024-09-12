@@ -1,9 +1,16 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx}"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./src/components/**/*.{js,jsx,ts,tsx}",
+  ],
+
   mode: "jit",
   theme: {
     extend: {
+      padding: {
+        '128': '32rem',
+      },
       colors: {
         primary: "#050816",
         secondary: "#aaa6c3",
