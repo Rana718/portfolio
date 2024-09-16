@@ -4,7 +4,13 @@ import { styles } from "../styles";
 const Hero: React.FC = () => {
 
   const handleDownloadClick = () => {
-    alert("CV Coming Soon");
+    const filePath = '/Rana_Dolui.pdf'; // The file path in the public folder
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.setAttribute('download', 'Rana_cv.pdf'); // You can customize the downloaded file name
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   return (
