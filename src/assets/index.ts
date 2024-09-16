@@ -10,6 +10,8 @@ import pass_g from "./pass.png"
 import tictac from "./Tic_Tac_Toe.png"
 import hire from "./HireLens.png"
 import haven_image from "./MindHaven.png"
+import aws_logo from "./tech/aws-svgrepo-com.svg"
+import sql_logo from "./tech/sql-svgrepo-com.svg"
 
 
 import carrent from "./carrent.png";
@@ -32,4 +34,6 @@ export {
   haven_image,
   tictac,
   hire,
+  aws_logo,
+  sql_logo
 };
