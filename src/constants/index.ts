@@ -6,7 +6,9 @@ import {
   tictac,
   hire,
   pass_g,
-  haven_image
+  haven_image,
+  aws_logo,
+  sql_logo,
   // @ts-ignore
 } from "../assets"
 
@@ -170,7 +172,7 @@ const technicalSkills: TechnicalSkill[] = [
   },
   {
     name: "SQL",
-    imageUrl: "https://raw.githubusercontent.com/devicons/devicon/master/icons/sql/sql-original.svg",
+    imageUrl: sql_logo,
   },
   {
     name: "PostgreSQL",
@@ -190,7 +192,7 @@ const technicalSkills: TechnicalSkill[] = [
   },
   {
     name: "AWS",
-    imageUrl: "https://iconscout.com/icons/aws",
+    imageUrl: aws_logo,
   },
   {
     name: "Vercel",
