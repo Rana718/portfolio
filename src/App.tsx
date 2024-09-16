@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 
-import { About, Contact, Experience, Feedbacks, Hero, Navbar,  Works, StarsCanvas, Tech } from "./components";
+import { About, Contact, Experience,  Hero, Navbar,  Works, StarsCanvas, Tech } from "./components"; //Feedbacks,
 
 const App: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const App: React.FC = () => {
         <Experience />
         <Tech />
         <Works />
-        <Feedbacks />
+        {/* <Feedbacks /> */}
         <div className='relative z-0'>
           <Contact />
           <StarsCanvas />
