@@ -39,7 +39,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ index, title, icon }) => (
 const About: React.FC = () => {
   return (
     <>
-      
+
       <motion.div variants={textVariant(0.5)}>
         <p className={styles.sectionSubText}>Introduction</p>
         <h2 className={styles.sectionHeadText}>Overview.</h2>
@@ -47,14 +47,16 @@ const About: React.FC = () => {
 
       <motion.p
         // @ts-ignore
-        variants={fadeIn("", "", 0.1, 1)} 
+        variants={fadeIn("", "", 0.1, 1)}
         className="mt-4 text-secondary text-[17px] max-w-3xl leading-[30px]"
       >
-       I am currently pursuing my Bachelor's degree, where I am deeply passionate about software development, web development, and mobile app development. My interests also extend to the exciting fields of cybersecurity and Web3 technologies. I am continuously exploring new ways to enhance my skills and stay at the forefront of technological advancements. Whether it's building responsive websites, developing secure applications, or delving into decentralized solutions, I am committed to expanding my expertise and contributing to innovative projects. My goal is to become a versatile developer who can navigate both traditional and cutting-edge technologies to create impactful solutions.
-      
-      </motion.p>
+        I am currently pursuing my Bachelor's degree, where I am deeply passionate about software development, web development, and mobile app development. My interests also extend to the exciting fields of cybersecurity and Web3 technologies. I am continuously exploring new ways to enhance my skills and stay at the forefront of technological advancements. Whether it's building responsive websites, developing secure applications, or delving into decentralized solutions, I am committed to expanding my expertise and contributing to innovative projects. My goal is to become a versatile developer who can navigate both traditional and cutting-edge technologies to create impactful solutions.
 
-      <div className="mt-20 flex flex-wrap gap-10 justify-center items-cente">
+      </motion.p>
+      <div className="flex justify-center items-center mt-6">
+        <h2 className="text-white text-[40px] font-bold text-center">Service</h2>
+      </div>
+      <div className="mt-8 flex flex-wrap gap-10 justify-center items-cente">
         {services.map((service, index) => (
           <ServiceCard key={service.title} index={index} {...service} />
         ))}
