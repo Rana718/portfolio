@@ -4,10 +4,10 @@ import { styles } from "../styles";
 const Hero: React.FC = () => {
 
   const handleDownloadClick = () => {
-    const filePath = '/Rana_Dolui.pdf'; // The file path in the public folder
+    const filePath = '/Rana_Dolui.pdf';
     const link = document.createElement('a');
     link.href = filePath;
-    link.setAttribute('download', 'Rana_cv.pdf'); // You can customize the downloaded file name
+    link.setAttribute('download', 'Rana_cv.pdf'); 
     document.body.appendChild(link);
     link.click();
     link.remove();

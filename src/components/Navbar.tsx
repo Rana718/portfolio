@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 
 import { styles } from "../styles";
 import { navLinks } from "../constants";
-// @ts-ignore
 import { logo, menu, close } from "../assets";
 
 interface NavLink {
@@ -41,7 +40,7 @@ const Navbar: React.FC = () => {
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
         <Link
           to="/"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 backdrop-blur-sm px-4 py-2 rounded-lg"
           onClick={() => {
             setActive("");
             window.scrollTo(0, 0);
@@ -51,18 +50,33 @@ const Navbar: React.FC = () => {
             src={logo}
             alt="logo"
             className="w-9 h-9 object-contain"
-            whileHover={{ scale: 1.2, rotate: 360 }}
-            transition={{ duration: 0.5 }}
+            whileHover={{ 
+              scale: 1.2, 
+              rotate: 360,
+              filter: "brightness(1.2)"
+            }}
+            transition={{ 
+              duration: 0.5,
+              type: "spring",
+              stiffness: 260,
+              damping: 20 
+            }}
           />
           <motion.p
             className="text-white text-[18px] font-bold cursor-pointer flex"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            whileHover={{ scale: 1.1 }}
+            transition={{ 
+              duration: 0.8, 
+              ease: [0.6, -0.05, 0.01, 0.99] 
+            }}
+            whileHover={{ 
+              scale: 1.05,
+              textShadow: "0 0 8px rgb(255,255,255)" 
+            }}
           >
-            Rana &nbsp;
-            <span className="sm:block hidden"> | Web Developer</span>
+            RANA &nbsp;
+            <span className="sm:block hidden"> DOLUI</span>
           </motion.p>
         </Link>
 
@@ -72,11 +86,21 @@ const Navbar: React.FC = () => {
               key={nav.id}
               className={`${
                 active === nav.title ? "text-white" : "text-secondary"
-              } hover:text-white text-[18px] font-medium cursor-pointer`}
+              } hover:text-white text-[18px] font-medium cursor-pointer relative`}
               whileHover={{ scale: 1.1 }}
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 10
+              }}
               onClick={() => setActive(nav.title)}
             >
               <a href={`#${nav.id}`}>{nav.title}</a>
+              <motion.div
+                className="absolute -bottom-2 left-0 w-0 h-[2px] bg-white"
+                whileHover={{ width: "100%" }}
+                transition={{ duration: 0.2 }}
+              />
             </motion.li>
           ))}
         </ul>
@@ -87,8 +111,12 @@ const Navbar: React.FC = () => {
             alt="menu"
             className="w-[28px] h-[28px] object-contain cursor-pointer"
             onClick={() => setToggle(!toggle)}
-            whileHover={{ rotate: 180 }}
-            transition={{ duration: 0.5 }}
+            whileTap={{ scale: 0.9 }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 17
+            }}
           />
 
           <motion.div

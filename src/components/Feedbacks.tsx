@@ -6,7 +6,6 @@ import { SectionWrapper } from "../hoc";
 import { fadeIn, textVariant } from "../utils/motion";
 import { testimonials } from "../constants";
 
-// Define interfaces for the props
 interface FeedbackCardProps {
   index: number;
   testimonial: string;

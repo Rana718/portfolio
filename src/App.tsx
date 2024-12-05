@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 
-import { About, Contact, Experience,  Hero, Navbar,  Works, StarsCanvas, Tech } from "./components"; //Feedbacks,
+import { About, Contact, Experience,  Hero, Navbar,  Works, StarsCanvas, Tech } from "./components";
 
 const App: React.FC = () => {
   return (

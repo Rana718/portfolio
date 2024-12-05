@@ -9,7 +9,6 @@ import {
   haven_image,
   aws_logo,
   sql_logo,
-  // @ts-ignore
 } from "../assets"
 
 
@@ -50,7 +49,7 @@ interface TechnicalSkill {
   imageUrl: string;
 }
 
-// Define the data using the interfaces
+
 export const navLinks: NavLink[] = [
   {
     id: "about",
@@ -116,7 +115,7 @@ const technicalSkills: TechnicalSkill[] = [
   },
   {
     name: "React Native",
-    imageUrl: "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg", // React Native doesn't have a separate SVG in devicons, using React's icon.
+    imageUrl: "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg", 
   },
   {
     name: "Expo",
@@ -200,7 +199,7 @@ const technicalSkills: TechnicalSkill[] = [
   },
   {
     name: "Railway",
-    imageUrl: "https://raw.githubusercontent.com/devicons/devicon/master/icons/railway/railway-original.svg", // Railway doesn't have an official SVG in devicons, using a placeholder.
+    imageUrl: "https://raw.githubusercontent.com/devicons/devicon/master/icons/railway/railway-original.svg",
   },
   {
     name: "Java",
