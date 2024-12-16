@@ -133,15 +133,19 @@ const technicalSkills: TechnicalSkill[] = [
   "SQLite",
   "prisma",
 
+  //DevOps
+  "Docker",
+  "AWS",
+  "nginx",
+  "ngrok",
+  "cloudflare",
+  "Vercel",
+  "render",
+
   // Others
   "wsl",
   "androidstudio",
   "Postman",
-  "Docker",
-  "AWS",
-  "cloudflare",
-  "Vercel",
-  "render",
   "Git",
   "Figma",
   "blender",

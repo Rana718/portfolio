@@ -11,7 +11,7 @@ interface NavLink {
   title: string;
 }
 
-const Navbar: React.FC = () => {
+const Navbar = React.memo(() => {
   const [active, setActive] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
@@ -31,11 +31,9 @@ const Navbar: React.FC = () => {
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
-      className={`${
-        styles.paddingX
-      } w-full flex items-center py-5 fixed top-0 z-20 ${
-        scrolled ? "bg-primary shadow-md" : "bg-transparent"
-      } transition-colors duration-300 ease-in-out`}
+      className={`${styles.paddingX
+        } w-full flex items-center py-5 fixed top-0 z-20 ${scrolled ? "bg-primary shadow-md" : "bg-transparent"
+        } transition-colors duration-300 ease-in-out`}
     >
       <div className="w-full flex justify-between items-center max-w-7xl mx-auto">
         <Link
@@ -50,29 +48,29 @@ const Navbar: React.FC = () => {
             src={logo}
             alt="logo"
             className="w-9 h-9 object-contain"
-            whileHover={{ 
-              scale: 1.2, 
+            whileHover={{
+              scale: 1.2,
               rotate: 360,
               filter: "brightness(1.2)"
             }}
-            transition={{ 
+            transition={{
               duration: 0.5,
               type: "spring",
               stiffness: 260,
-              damping: 20 
+              damping: 20
             }}
           />
           <motion.p
             className="text-white text-[18px] font-bold cursor-pointer flex"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ 
-              duration: 0.8, 
-              ease: [0.6, -0.05, 0.01, 0.99] 
+            transition={{
+              duration: 0.8,
+              ease: [0.6, -0.05, 0.01, 0.99]
             }}
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              textShadow: "0 0 8px rgb(255,255,255)" 
+              textShadow: "0 0 8px rgb(255,255,255)"
             }}
           >
             RANA &nbsp;
@@ -84,9 +82,8 @@ const Navbar: React.FC = () => {
           {navLinks.map((nav: NavLink) => (
             <motion.li
               key={nav.id}
-              className={`${
-                active === nav.title ? "text-white" : "text-secondary"
-              } hover:text-white text-[18px] font-medium cursor-pointer relative`}
+              className={`${active === nav.title ? "text-white" : "text-secondary"
+                } hover:text-white text-[18px] font-medium cursor-pointer relative`}
               whileHover={{ scale: 1.1 }}
               transition={{
                 type: "spring",
@@ -123,17 +120,15 @@ const Navbar: React.FC = () => {
             initial={{ scale: 0 }}
             animate={{ scale: toggle ? 1 : 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className={`${
-              !toggle ? "hidden" : "flex"
-            } p-6 black-gradient absolute top-20 right-0 mx-4 my-2 min-w-[140px] z-10 rounded-xl`}
+            className={`${!toggle ? "hidden" : "flex"
+              } p-6 black-gradient absolute top-20 right-0 mx-4 my-2 min-w-[140px] z-10 rounded-xl`}
           >
             <ul className="list-none flex justify-end items-start flex-1 flex-col gap-4">
               {navLinks.map((nav: NavLink) => (
                 <li
                   key={nav.id}
-                  className={`font-poppins font-medium cursor-pointer text-[16px] ${
-                    active === nav.title ? "text-white" : "text-secondary"
-                  }`}
+                  className={`font-poppins font-medium cursor-pointer text-[16px] ${active === nav.title ? "text-white" : "text-secondary"
+                    }`}
                   onClick={() => {
                     setToggle(!toggle);
                     setActive(nav.title);
@@ -148,6 +143,6 @@ const Navbar: React.FC = () => {
       </div>
     </motion.nav>
   );
-};
+});
 
 export default Navbar;

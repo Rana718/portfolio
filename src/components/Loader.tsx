@@ -2,7 +2,7 @@ import React from "react";
 import { Html, useProgress } from "@react-three/drei";
 import { motion } from "framer-motion";
 
-const CanvasLoader: React.FC = () =>{
+const CanvasLoader: React.FC = React.memo(() =>{
     const { progress } = useProgress();
     
     return(
@@ -49,6 +49,6 @@ const CanvasLoader: React.FC = () =>{
 
         </Html>
     )
-};
+});
 
 export default CanvasLoader;

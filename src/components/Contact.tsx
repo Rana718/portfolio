@@ -12,7 +12,7 @@ interface FormState {
   message: string;
 }
 
-const Contact: React.FC = () => {
+const Contact: React.FC = React.memo(() => {
   const formRef = useRef<HTMLFormElement>(null);
   const [form, setForm] = useState<FormState>({
     name: "",
@@ -160,6 +160,6 @@ const Contact: React.FC = () => {
       </motion.div>
     </motion.div>
   );
-};
+});
 
 export default SectionWrapper(Contact, "contact");
