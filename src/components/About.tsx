@@ -1,7 +1,6 @@
 import React from "react";
-import Tilt from "react-parallax-tilt";
 import { motion } from "framer-motion";
-
+import Tilt from 'react-parallax-tilt';
 import { styles } from "../styles";
 import { services } from "../constants";
 import { SectionWrapper } from "../hoc";
@@ -14,32 +13,84 @@ interface ServiceCardProps {
 }
 
 const ServiceCard: React.FC<ServiceCardProps> = ({ index, title, icon }) => (
-  <Tilt className="xs:w-[250px] w-full">
+  <Tilt
+    tiltMaxAngleX={45}
+    tiltMaxAngleY={45}
+    scale={1.1}
+    transitionSpeed={450}
+    className="xs:w-[250px] w-full"
+  >
     <motion.div
       variants={fadeIn("right", "spring", index * 0.5, 0.75)}
-      className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card"
+      className="relative w-full"
     >
-      <div
-        className="bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] flex justify-evenly items-center flex-col"
+      <motion.div
+        className="w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card
+                   hover:shadow-2xl transition-shadow duration-300"
+        whileHover={{
+          boxShadow: "0 0 25px rgba(0, 255, 170, 0.5)",
+          scale: 1.02,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20
+        }}
       >
-        <img
-          src={icon}
-          alt={title}
-          className="w-16 h-16 object-contain"
-        />
+        <motion.div
+          className="bg-tertiary rounded-[20px] py-5 px-12 min-h-[280px] 
+                     flex justify-evenly items-center flex-col
+                     backdrop-blur-sm bg-opacity-90"
+          whileHover={{ backgroundColor: "rgba(40, 44, 52, 0.95)" }}
+        >
+          <motion.img
+            src={icon}
+            alt={title}
+            className="w-16 h-16 object-contain"
+            whileHover={{
+              scale: 1.2,
+              rotate: 360,
+              filter: "brightness(1.2)"
+            }}
+            transition={{
+              duration: 0.6,
+              type: "spring",
+              stiffness: 260,
+              damping: 20
+            }}
+          />
 
-        <h3 className="text-white text-[20px] font-bold text-center">
-          {title}
-        </h3>
-      </div>
+          <motion.h3
+            className="text-white text-[20px] font-bold text-center
+                       tracking-wider"
+            whileHover={{
+              textShadow: "0 0 8px rgba(255, 255, 255, 0.5)",
+              scale: 1.05
+            }}
+          >
+            {title}
+          </motion.h3>
+
+          <motion.div
+            className="absolute inset-0 rounded-[20px] opacity-0 
+                       bg-gradient-to-r from-purple-500 to-cyan-500"
+            whileHover={{ opacity: 0.1 }}
+            transition={{ duration: 0.3 }}
+          />
+        </motion.div>
+      </motion.div>
     </motion.div>
   </Tilt>
 );
 
 const About: React.FC = () => {
   return (
-    <>
-
+    <motion.div
+      variants={textVariant(0.1)}
+      initial="hidden"
+      animate="show"
+      className="relative z-0"
+    >
       <motion.div variants={textVariant(0.5)}>
         <p className={styles.sectionSubText}>Introduction</p>
         <h2 className={styles.sectionHeadText}>Overview.</h2>
@@ -61,10 +112,8 @@ const About: React.FC = () => {
           <ServiceCard key={service.title} index={index} {...service} />
         ))}
       </div>
-    </>
+    </motion.div>
   );
 };
 
 export default SectionWrapper(About, "about");
-
-
