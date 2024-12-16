@@ -48,12 +48,19 @@ export default function Footer() {
                     }}
                     className="fixed bottom-8 w-full flex justify-center"
                 >
-                    <div
-                        className="relative flex items-center gap-4 bg-tertiary/80 backdrop-blur-sm 
-                        px-6 py-3 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.2)]
-                        sm:gap-6 md:gap-8 lg:gap-10 overflow-hidden"
+                    <motion.div
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                        className="relative flex items-center gap-4 bg-gradient-to-r from-[#1e293b]/80 to-[#334155]/80 backdrop-blur-md 
+                        px-6 py-3 rounded-full shadow-lg sm:gap-6 md:gap-8 lg:gap-10 overflow-hidden"
                     >
-
+                        
+                        <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-[#915EFF]/30 via-[#34d399]/30 to-[#9333EA]/30"
+                            initial={{ x: "-100%" }}
+                            whileHover={{ x: 0 }}
+                            transition={{ duration: 0.5 }}
+                        />
 
                         {socialLinks.map((social, index) => (
                             <motion.a
@@ -61,25 +68,26 @@ export default function Footer() {
                                 href={social.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="relative z-10 text-secondary hover:text-[#915EFF] transition-all duration-300 text-lg sm:text-xl md:text-2xl"
-                                whileHover={{
-                                    scale: 1.5,
-                                }}
+                                className="relative z-10 cursor-pointer text-gray-200 transition-all text-lg sm:text-xl md:text-2xl group"
+                                whileHover={{ scale: 1.2 }}
                                 transition={{
-                                    duration: 0.4,
-                                    ease: "easeInOut",
+                                    type: "spring",
+                                    stiffness: 400,
+                                    damping: 10,
                                 }}
                             >
-                                <div
-                                    className="w-8 h-8 flex items-center justify-center bg-transparent hover:bg-[#915EFF]/30 rounded-full transition-all duration-300"
+                                <motion.div
+                                    className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-tr from-[#34d399] to-[#9333EA]/80 
+                                    text-gray-100 shadow-md group-hover:from-[#9333EA] group-hover:to-[#34d399] transition-all duration-300 relative overflow-hidden"
+                                    whileHover={{ scale: 1.3 }}
+                                    transition={{ duration: 0.1 }}
                                 >
                                     {social.icon}
-                                </div>
+                                </motion.div>
                             </motion.a>
                         ))}
-                    </div>
+                    </motion.div>
                 </motion.div>
-
 
             )}
 
