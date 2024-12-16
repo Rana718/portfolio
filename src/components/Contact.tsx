@@ -5,7 +5,6 @@ import { styles } from "../styles";
 import { EarthCanvas } from "./canvas";
 import { SectionWrapper } from "../hoc";
 import { slideIn, fadeIn, staggerContainer } from "../utils/motion";
-import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 interface FormState {
   name: string;
@@ -81,7 +80,7 @@ const Contact: React.FC = () => {
     >
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
-        className="flex-[0.75] bg-gradient-to-r from-gray-700 via-gray-900 to-black p-8 rounded-2xl shadow-lg"
+        className="flex-[0.75] bg-gradient-to-r from-gray-700 via-gray-900 to-black px-4 py-8 rounded-2xl shadow-lg"
       >
         <p className={`${styles.sectionSubText} text-teal-400`}>Get in touch</p>
         <h3 className={`${styles.sectionHeadText} text-white`}>Contact.</h3>
@@ -90,7 +89,7 @@ const Contact: React.FC = () => {
           ref={formRef}
           onSubmit={handleSubmit}
           variants={fadeIn("up", "spring", 0.5, 1)}
-          className="mt-12 flex flex-col gap-8 p-8 rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-2xl"
+          className="mt-12 flex flex-col p-4 gap-8 max-w-[600px] mx-auto rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-2xl"
         >
           <label className="flex flex-col">
             <span className="text-teal-400 font-medium mb-4 transform hover:scale-105 transition-transform">
@@ -153,141 +152,13 @@ const Contact: React.FC = () => {
 
       <motion.div
         variants={slideIn("right", "tween", 0.2, 1)}
-        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px]"
+        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px] relative w-full"
       >
-        <EarthCanvas />
+        <div className="w-full h-full absolute">
+          <EarthCanvas />
+        </div>
       </motion.div>
     </motion.div>
-  );
-};
-
-const ContactForm = () => {
-  return (
-    <section className="relative z-0 min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
-        >
-          <p className="text-teal-400 text-lg font-semibold tracking-wider">GET IN TOUCH</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mt-2">Let's Connect</h2>
-        </motion.div>
-
-        <div className="grid md:grid-cols-2 gap-12">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="space-y-8"
-          >
-            <form className="space-y-6">
-              <div className="relative">
-                <motion.input
-                  whileFocus={{ scale: 1.02 }}
-                  type="text"
-                  id="name"
-                  className="peer w-full bg-gray-800/50 rounded-lg border-2 border-gray-700 p-4 text-white placeholder-transparent focus:border-teal-500 transition-all"
-                  placeholder="Your Name"
-                />
-                <label
-                  htmlFor="name"
-                  className="absolute left-4 -top-2.5 bg-gray-900 px-2 text-sm text-teal-400 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-teal-400"
-                >
-                  Your Name
-                </label>
-              </div>
-
-              <div className="relative">
-                <motion.input
-                  whileFocus={{ scale: 1.02 }}
-                  type="email"
-                  id="email"
-                  className="peer w-full bg-gray-800/50 rounded-lg border-2 border-gray-700 p-4 text-white placeholder-transparent focus:border-teal-500 transition-all"
-                  placeholder="Email Address"
-                />
-                <label
-                  htmlFor="email"
-                  className="absolute left-4 -top-2.5 bg-gray-900 px-2 text-sm text-teal-400 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-teal-400"
-                >
-                  Email Address
-                </label>
-              </div>
-
-              <div className="relative">
-                <motion.textarea
-                  whileFocus={{ scale: 1.02 }}
-                  id="message"
-                  rows={4}
-                  className="peer w-full bg-gray-800/50 rounded-lg border-2 border-gray-700 p-4 text-white placeholder-transparent focus:border-teal-500 transition-all resize-none"
-                  placeholder="Your Message"
-                />
-                <label
-                  htmlFor="message"
-                  className="absolute left-4 -top-2.5 bg-gray-900 px-2 text-sm text-teal-400 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-teal-400"
-                >
-                  Your Message
-                </label>
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full bg-gradient-to-r from-teal-500 to-teal-400 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-teal-500/25 transition-all duration-300"
-              >
-                Send Message
-              </motion.button>
-            </form>
-
-            <div className="flex justify-center space-x-6">
-              {[
-                { icon: FaGithub, link: "#" },
-                { icon: FaLinkedin, link: "#" },
-                { icon: FaTwitter, link: "#" },
-              ].map((social, index) => (
-                <motion.a
-                  key={index}
-                  href={social.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  className="text-gray-400 hover:text-teal-400 transition-colors"
-                >
-                  <social.icon className="w-6 h-6" />
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="bg-gray-800/50 rounded-2xl p-8 backdrop-blur-sm"
-          >
-            <h3 className="text-2xl font-bold text-white mb-6">Contact Information</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-teal-500/20 rounded-lg flex items-center justify-center">
-                  <i className="fas fa-map-marker-alt text-teal-400"></i>
-                </div>
-                <div>
-                  <p className="text-gray-400">Location</p>
-                  <p className="text-white font-medium">Your Address</p>
-                </div>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-teal-500/20 rounded-lg flex items-center justify-center">
-                  <i className="fas fa-envelope text-teal-400"></i>
-                </div>
-                <div>
-                  <p className="text-gray-400">Email</p>
-                  <p className="text-white font-medium">your.email@example.com</p>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    </section>
   );
 };
 
