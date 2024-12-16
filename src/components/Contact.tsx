@@ -45,7 +45,7 @@ const Contact: React.FC = React.memo(() => {
           to_email: import.meta.env.VITE_EMAIL,
           message: form.message,
         },
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        import.meta.env.VITE_PUBLIC_KEY
       )
       .then(
         () => {
@@ -80,7 +80,7 @@ const Contact: React.FC = React.memo(() => {
     >
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
-        className="flex-[0.75] bg-gradient-to-r from-gray-700 via-gray-900 to-black px-4 py-8 rounded-2xl shadow-lg"
+        className="flex-[0.75] bg-gradient-to-r from-gray-700 via-gray-900 to-black p-8 rounded-2xl shadow-lg"
       >
         <p className={`${styles.sectionSubText} text-teal-400`}>Get in touch</p>
         <h3 className={`${styles.sectionHeadText} text-white`}>Contact.</h3>
@@ -89,54 +89,42 @@ const Contact: React.FC = React.memo(() => {
           ref={formRef}
           onSubmit={handleSubmit}
           variants={fadeIn("up", "spring", 0.5, 1)}
-          className="mt-12 flex flex-col p-4 gap-8 max-w-[600px] mx-auto rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 shadow-2xl"
+          className="mt-12 flex flex-col gap-8"
         >
           <label className="flex flex-col">
-            <span className="text-teal-400 font-medium mb-4 transform hover:scale-105 transition-transform">
-              Your Name
-            </span>
+            <span className="text-teal-400 font-medium mb-4">Your Name</span>
             <motion.input
-              whileHover={{ scale: 1.01 }}
-              whileFocus={{ scale: 1.02, borderColor: "#2dd4bf" }}
-              transition={{ type: "spring", stiffness: 300 }}
+              whileFocus={{ scale: 1.02 }}
               type="text"
               name="name"
               value={form.name}
               onChange={handleChange}
               placeholder="What's your good name?"
-              className="bg-gray-800/50 py-4 px-6 placeholder:text-gray-500 text-white rounded-lg outline-none border-2 border-gray-700 font-medium hover:border-teal-500/50 transition-colors duration-300 shadow-inner"
+              className="bg-gray-800 py-4 px-6 placeholder:text-gray-500 text-white rounded-lg outline-none border-none font-medium"
             />
           </label>
           <label className="flex flex-col">
-            <span className="text-teal-400 font-medium mb-4 transform hover:scale-105 transition-transform">
-              Your Email
-            </span>
+            <span className="text-teal-400 font-medium mb-4">Your Email</span>
             <motion.input
-              whileHover={{ scale: 1.01 }}
-              whileFocus={{ scale: 1.02, borderColor: "#2dd4bf" }}
-              transition={{ type: "spring", stiffness: 300 }}
+              whileFocus={{ scale: 1.02 }}
               type="email"
               name="email"
               value={form.email}
               onChange={handleChange}
               placeholder="What's your web address?"
-              className="bg-gray-800/50 py-4 px-6 placeholder:text-gray-500 text-white rounded-lg outline-none border-2 border-gray-700 font-medium hover:border-teal-500/50 transition-colors duration-300 shadow-inner"
+              className="bg-gray-800 py-4 px-6 placeholder:text-gray-500 text-white rounded-lg outline-none border-none font-medium"
             />
           </label>
           <label className="flex flex-col">
-            <span className="text-teal-400 font-medium mb-4 transform hover:scale-105 transition-transform">
-              Your Message
-            </span>
+            <span className="text-teal-400 font-medium mb-4">Your Message</span>
             <motion.textarea
-              whileHover={{ scale: 1.01 }}
-              whileFocus={{ scale: 1.02, borderColor: "#2dd4bf" }}
-              transition={{ type: "spring", stiffness: 300 }}
-              className="bg-gray-800/50 py-4 px-6 placeholder:text-gray-500 text-white rounded-lg outline-none border-2 border-gray-700 font-medium min-h-[150px] hover:border-teal-500/50 transition-colors duration-300 shadow-inner resize-none"
+              whileFocus={{ scale: 1.02 }}
               rows={7}
               name="message"
               value={form.message}
               onChange={handleChange}
               placeholder="What do you want to say?"
+              className="bg-gray-800 py-4 px-6 placeholder:text-gray-500 text-white rounded-lg outline-none border-none font-medium"
             />
           </label>
 
@@ -152,11 +140,9 @@ const Contact: React.FC = React.memo(() => {
 
       <motion.div
         variants={slideIn("right", "tween", 0.2, 1)}
-        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px] relative w-full"
+        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px]"
       >
-        <div className="w-full h-full absolute">
-          <EarthCanvas />
-        </div>
+        <EarthCanvas />
       </motion.div>
     </motion.div>
   );
