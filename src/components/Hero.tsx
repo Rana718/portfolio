@@ -14,7 +14,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative w-full h-2/3 mx-auto pb-128 overflow-hidden">
+    <section className="relative w-full h-[500px] sm:h-[600px] lg:h-[700px] mx-auto overflow-hidden ">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

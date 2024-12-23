@@ -15,7 +15,7 @@ const Footer = React.lazy(() => import("./components/Footer"));
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Loader/>}>
+      <Suspense fallback={<Loader />}>
         <div className="relative z-0 bg-primary">
           <div className="bg-hero-pattern bg-cover bg-no-repeat bg-center">
             <Navbar />
@@ -27,14 +27,15 @@ const App: React.FC = () => {
           <Works />
           <div className="relative z-0">
             <Contact />
-            <StarsCanvas />
+            <Suspense fallback={<Loader />}>
+              <StarsCanvas />
+            </Suspense>
           </div>
         </div>
         <Footer />
       </Suspense>
     </BrowserRouter>
-    
   );
 };
 
-export default App;
+export default React.memo(App);
