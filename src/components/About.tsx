@@ -46,6 +46,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ index, title, icon }) => (
           <motion.img
             src={icon}
             alt={title}
+            loading="lazy"
             className="w-16 h-16 object-contain"
             whileHover={{
               scale: 1.2,

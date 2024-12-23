@@ -31,7 +31,7 @@ const ProjectCard: React.FC<Project> = ({
   source_code_link,
 }) => {
   return (
-    <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
+    <motion.div variants={fadeIn("up", "spring", index * 0.3, 0.75)}>
       <Tilt
         options={{
           max: 45,
@@ -43,6 +43,7 @@ const ProjectCard: React.FC<Project> = ({
         <div className='relative w-full h-[230px]'>
           <img
             src={image}
+            loading="lazy"
             alt='project_image'
             className='w-full h-full object-cover rounded-2xl'
           />
@@ -54,6 +55,7 @@ const ProjectCard: React.FC<Project> = ({
             >
               <img
                 src={github}
+                loading="lazy"
                 alt='source code'
                 className='w-1/2 h-1/2 object-contain'
               />
@@ -81,10 +83,10 @@ const ProjectCard: React.FC<Project> = ({
   );
 };
 
-const Works: React.FC = () => {
+const Works: React.FC = React.memo(() => {
   return (
     <>
-      <motion.div variants={textVariant(0.5)}>
+      <motion.div variants={textVariant(0.1)}>
         <p className={`${styles.sectionSubText} `}>My work</p>
         <h2 className={`${styles.sectionHeadText}`}>Projects.</h2>
       </motion.div>
@@ -110,6 +112,6 @@ const Works: React.FC = () => {
       </div>
     </>
   );
-};
+});
 
 export default SectionWrapper(Works, "");

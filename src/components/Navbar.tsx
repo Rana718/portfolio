@@ -47,6 +47,7 @@ const Navbar = React.memo(() => {
           <motion.img
             src={logo}
             alt="logo"
+            loading="lazy"
             className="w-9 h-9 object-contain"
             whileHover={{
               scale: 1.2,
@@ -105,6 +106,7 @@ const Navbar = React.memo(() => {
         <div className="sm:hidden flex flex-1 justify-end items-center">
           <motion.img
             src={toggle ? close : menu}
+            loading="lazy"
             alt="menu"
             className="w-[28px] h-[28px] object-contain cursor-pointer"
             onClick={() => setToggle(!toggle)}
