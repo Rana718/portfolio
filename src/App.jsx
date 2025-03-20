@@ -36,7 +36,7 @@ function App() {
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, chatButtonRef }}>
       <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
         <Navbar visible={showNavbar} />
-        <div className="container mx-auto px-4 py-8">
+        <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
           <div ref={headerRef}>
             <Header />
           </div>
