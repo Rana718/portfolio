@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --transition-duration: 0.3s;
+    --light-bg: #ffffff;
+    --light-card: #f8f9fa;
+    --light-element: #eaecef;
+    
+    --dark-bg: #151518;
+    --dark-card: #1E1E21;
+    --dark-element: #27272A;
+    
+    --text-light: #2d3748;
+    --text-dark: #f3f4f6;
+  }
+  
+  /* Dark mode styles */
+  .dark {
+    --bg-primary: var(--dark-bg);
+    --card-bg: var(--dark-card);
+    --element-bg: var(--dark-element);
+    --text-primary: var(--text-dark);
+    --text-secondary: #a0aec0;
+  }
+
+  /* Light mode styles */
+  :root {
+    --bg-primary: var(--light-bg);
+    --card-bg: var(--light-card);
+    --element-bg: var(--light-element);
+    --text-primary: var(--text-light);
+    --text-secondary: #4a5568;
+  }
+  
+  body {
+    @apply transition-colors duration-300;
+  }
+}
+
+@layer utilities {
+  .bg-dark {
+    background-color: var(--dark-bg);
+  }
+  
+  .bg-dark-card {
+    background-color: var(--dark-card);
+  }
+  
+  .bg-dark-element {
+    background-color: var(--dark-element);
+  }
+
+  .bg-card {
+    background-color: var(--card-bg);
+  }
+
+  .bg-element {
+    background-color: var(--element-bg);
+  }
+  
+  .text-theme-primary {
+    color: var(--text-primary);
+  }
+  
+  .text-theme-secondary {
+    color: var(--text-secondary);
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-in forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
