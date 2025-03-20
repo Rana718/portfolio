@@ -4,23 +4,17 @@ import { Calendar, Briefcase } from 'lucide-react'
 function Experience() {
     const experiences = [
         {
-            title: 'Full Stack Developer Intern',
-            company: 'Tech Innovations',
-            duration: 'June 2023 - Present',
-            description: 'Working on developing scalable web applications using React, Node.js, and MongoDB. Implementing RESTful APIs and integrating third-party services.'
-        },
-        {
-            title: 'Web Development Freelancer',
-            company: 'Self-Employed',
-            duration: 'Jan 2022 - May 2023',
-            description: 'Designed and developed responsive websites for small businesses and startups. Implemented SEO best practices and performance optimizations.'
+            title: 'Full Stack Developer',
+            company: 'Saciva',
+            duration: 'DEC 2024 - Present',
+            description: " At Saciva, I develop scalable web applications, design and optimize APIs, and manage databases efficiently I implement real-time web notifications and enhance performance using Redis and BullMQ. On the frontend, I build responsive interfaces with Next.js and TailwindCSS, and I streamline deployment processes using GitHub Actions and Render."
         }
     ]
 
     return (
         <div className="mt-20">
             <h2 className="text-3xl font-bold mb-8 text-center text-theme-primary">Work Experience</h2>
-            
+
             <div className="space-y-8">
                 {experiences.map((exp, index) => (
                     <div key={index} className="p-6 rounded-lg shadow-md bg-card transition-colors duration-300">

@@ -1,35 +1,116 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 function Skills() {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        checkScreenSize();
+        window.addEventListener("resize", checkScreenSize);
+        return () => window.removeEventListener("resize", checkScreenSize);
+    }, []);
+
     const skills = [
-        'Next.js',
-        'React',
-        'TypeScript',
-        'JavaScript',
-        'Tailwind CSS',
-        'Node.js',
-        'MongoDB',
-        'Express',
-        'Git',
-        'REST API'
-    ]
+        // Languages
+        "JavaScript", "TypeScript", "Python", "Golang",
+
+        // Frameworks & Libraries
+        "Next.js", "React", "React Native", "Express.js", "Hono.js", "NestJS",
+        "FastAPI", "Flask", "Django", "Fiber",
+
+        // Databases & BaaS
+        "PostgreSQL", "MongoDB", "Firebase",
+        "Prisma", "Drizzle", "Redis", "DuckDB", "Convex", "Supabase",
+
+        // DevOps & Cloud
+        "Docker", "Kubernetes", "AWS", "Kafka",
+
+        // Tools
+        "Git",
+    ];
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.05,
+                delayChildren: 0.2,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+            },
+        },
+    };
 
     return (
-        <div className="p-6 rounded-lg shadow-md bg-card transition-colors duration-300">
-            <h2 className="text-2xl font-bold mb-6 border-b pb-2 border-gray-200 dark:border-gray-700 text-theme-primary">Technical Skills</h2>
-            
-            <div className="flex flex-wrap gap-3">
+        <motion.div
+            className="p-6 rounded-lg shadow-lg bg-card transition-all duration-300 border border-gray-200 dark:border-gray-800 hover:shadow-xl"
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+            whileHover={!isMobile ? { scale: 1.01 } : {}}
+            transition={{ type: "spring", stiffness: 300 }}
+        >
+            <motion.h2
+                className="text-2xl font-bold mb-6 border-b pb-2 border-gray-200 dark:border-gray-700 text-theme-primary bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-400 dark:to-gray-200 bg-clip-text text-transparent"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+            >
+                Skills
+            </motion.h2>
+
+            <motion.div
+                className="flex flex-wrap gap-3"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+            >
                 {skills.map((skill) => (
-                    <div 
+                    <motion.div
                         key={skill}
-                        className="bg-element text-theme-primary px-4 py-2 rounded-2xl text-sm font-medium transition-colors duration-300"
+                        className="bg-element text-theme-primary px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-300 hover:shadow-md relative overflow-hidden group select-none cursor-pointer"
+                        variants={itemVariants}
+                        whileHover={!isMobile ? { scale: 1.03, boxShadow: "0 4px 10px rgba(0,0,0,0.15)" } : {}}
+                        whileTap={!isMobile ? { scale: 0.98 } : {}}
                     >
-                        {skill}
-                    </div>
+                        <span className="relative z-10 group-hover:translate-y-[-1px] transition-transform duration-300 pointer-events-none">
+                            {skill}
+                        </span>
+                        {!isMobile && (
+                            <>
+                                <motion.div
+                                    className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-600 dark:from-gray-600 dark:to-gray-400 opacity-0 group-hover:opacity-90 transition-opacity duration-300"
+                                    initial={{ opacity: 0 }}
+                                    whileHover={{ opacity: 0.9 }}
+                                    style={{ mixBlendMode: "overlay" }}
+                                />
+                                <motion.div
+                                    className="absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-gray-700 to-gray-500 dark:from-gray-400 dark:to-gray-200"
+                                    initial={{ width: 0 }}
+                                    whileHover={{ width: "100%" }}
+                                    transition={{ duration: 0.4, ease: "easeOut" }}
+                                />
+                            </>
+                        )}
+                    </motion.div>
                 ))}
-            </div>
-        </div>
-    )
+            </motion.div>
+        </motion.div>
+    );
 }
 
-export default Skills
+export default Skills;

@@ -11,11 +11,7 @@ function Footer() {
                             &copy; {new Date().getFullYear()} Rana Dolui. All rights reserved.
                         </p>
                     </div>
-                    <div className="flex items-center gap-1 text-theme-secondary">
-                        <span>Made with</span>
-                        <Heart size={16} className="fill-red-500 text-red-500" />
-                        <span>using React & Tailwind CSS</span>
-                    </div>
+                    
                 </div>
             </div>
         </footer>

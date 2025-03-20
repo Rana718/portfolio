@@ -1,77 +1,135 @@
 import React from 'react'
 import { ExternalLink, Github } from 'lucide-react'
+import { peer, caree, codec } from '../assets/images'
+import { motion } from 'framer-motion'
 
 function Projects() {
     const projects = [
         {
-            title: 'E-commerce Platform',
-            description: 'A full-stack e-commerce platform built with Next.js, TypeScript, and MongoDB. Features include user authentication, product filtering, cart functionality, and payment integration.',
-            tech: ['Next.js', 'TypeScript', 'MongoDB', 'Tailwind CSS'],
-            github: 'https://github.com/yourusername/ecommerce',
-            demo: 'https://ecommerce-demo.example.com'
+            title: 'CareerWise',
+            description: 'CareerWise is your go-to AI assistant for interview preparation. It offers realistic mock interviews, real-time feedback, and expert guidance to help you improve. Built with Next.js, Prisma, TypeScript, and Gemini, it makes interview practice feel natural and effective, giving you the confidence to ace any job opportunity.',
+            tech: ['Next.js', 'Prisma', 'TypeScript', 'Framer Motion', 'Gemini'],
+            github: 'https://github.com/Rana718/HireLens',
+            demo: 'https://careerw-ise.vercel.app/',
+            image: caree
         },
         {
-            title: 'AI Chat Assistant',
-            description: 'An AI-powered chat assistant that uses machine learning to provide helpful responses. Built with React, Node.js, and integrated with OpenAI API.',
-            tech: ['React', 'Node.js', 'OpenAI', 'Express'],
-            github: 'https://github.com/yourusername/ai-assistant',
-            demo: 'https://assistant-demo.example.com'
+            title: 'PeerDrop',
+            description: 'PeerDrop lets you share files instantly and securely without needing any third-party servers. Using peer-to-peer technology with end-to-end encryption, it ensures your files are transferred safely in real time. Built with React, TypeScript, Go, and Gorilla WebSockets, it’s a fast and reliable way to share anything without hassle.',
+            tech: ['React', 'TypeScript', 'Framer Motion', 'Go', 'Gorilla WebSockets'],
+            github: 'https://github.com/Rana718/file_sharing',
+            demo: 'https://peerdrop-theta.vercel.app/',
+            image: peer
         },
         {
-            title: 'Portfolio Website',
-            description: 'Personal portfolio website built with React and Tailwind CSS. Features responsive design, dark/light mode, and interactive elements.',
-            tech: ['React', 'Tailwind CSS', 'Vite'],
-            github: 'https://github.com/yourusername/portfolio',
-            demo: '#'
+            title: 'Snipity',
+            description: 'Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether you’re debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.',
+            tech: ['Next.js', 'Convex', 'TypeScript', 'Framer Motion', 'Zustand'],
+            github: 'https://github.com/Rana718/snipity',
+            demo: 'https://snipity.vercel.app/',
+            image: codec
         }
-    ]
+    ];
+
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2
+            }
+        }
+    };
+
+    const cardVariants = {
+        hidden: { y: 50, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                type: "spring",
+                stiffness: 100,
+                damping: 12
+            }
+        }
+    };
 
     return (
-        <div className="mt-20">
-            <h2 className="text-3xl font-bold mb-8 text-center text-theme-primary">Projects</h2>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mt-16 sm:mt-20 px-1 md:px-8">
+            <h2 className="text-3xl font-bold mb-8 text-center text-theme-primary">Project</h2>
+
+            <motion.div
+                className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.1 }}
+            >
                 {projects.map((project, index) => (
-                    <div key={index} className="p-6 rounded-lg shadow-md bg-card flex flex-col transition-colors duration-300">
-                        <h3 className="text-xl font-bold mb-2 text-theme-primary">{project.title}</h3>
-                        <p className="text-theme-secondary mb-4 flex-grow">{project.description}</p>
-                        
-                        <div className="mb-4">
-                            <div className="flex flex-wrap gap-2">
-                                {project.tech.map(tech => (
-                                    <span 
-                                        key={tech} 
-                                        className="text-xs px-2 py-1 bg-element text-theme-primary rounded-2xl transition-colors duration-300"
-                                    >
-                                        {tech}
-                                    </span>
-                                ))}
+                    <motion.div
+                        key={index}
+                        className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl bg-card flex flex-col transition-all duration-300 border border-zinc-100/10"
+                        variants={cardVariants}
+                        whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                    >
+                        <div className="h-[180px] sm:h-[200px] w-full relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10"></div>
+                            <motion.img
+                                src={project.image}
+                                alt={`${project.title} screenshot`}
+                                className="w-full h-full object-cover object-center"
+                                style={{ objectPosition: 'center top' }}
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.3 }}
+                            />
+                        </div>
+                        <div className="p-4 sm:p-6 flex flex-col flex-grow">
+                            <h3 className="text-lg sm:text-xl font-bold mb-2 text-theme-primary">{project.title}</h3>
+                            <p className="text-theme-secondary mb-4 sm:mb-5 flex-grow text-xs sm:text-sm line-clamp-4 sm:line-clamp-5">{project.description}</p>
+
+                            <div className="mb-4 sm:mb-5">
+                                <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                                    {project.tech.map(tech => (
+                                        <motion.span
+                                            key={tech}
+                                            className="text-xs px-2 sm:px-3 py-1 bg-element text-theme-primary rounded-full font-medium cursor-default"
+                                            whileHover={{ scale: 1.05, backgroundColor: "rgba(59, 130, 246, 0.2)" }}
+                                        >
+                                            {tech}
+                                        </motion.span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="flex gap-3 sm:gap-4 mt-auto">
+                                <motion.a
+                                    href={project.github}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-element hover:bg-blue-600 text-theme-primary transition-colors duration-300"
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.97 }}
+                                >
+                                    <Github size={16} />
+                                    <span className="font-medium text-sm">Code</span>
+                                </motion.a>
+                                <motion.a
+                                    href={project.demo}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-zinc-200/20 hover:bg-element text-theme-primary transition-colors duration-300"
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.97 }}
+                                >
+                                    <ExternalLink size={16} />
+                                    <span className="font-medium text-sm">Demo</span>
+                                </motion.a>
                             </div>
                         </div>
-                        
-                        <div className="flex gap-4 mt-auto">
-                            <a 
-                                href={project.github} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1 text-theme-secondary hover:text-blue-600 dark:hover:text-blue-400"
-                            >
-                                <Github size={16} />
-                                <span>Code</span>
-                            </a>
-                            <a 
-                                href={project.demo} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1 text-theme-secondary hover:text-blue-600 dark:hover:text-blue-400"
-                            >
-                                <ExternalLink size={16} />
-                                <span>Demo</span>
-                            </a>
-                        </div>
-                    </div>
+                    </motion.div>
                 ))}
-            </div>
+            </motion.div>
         </div>
     )
 }
