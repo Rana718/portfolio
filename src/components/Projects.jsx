@@ -1,7 +1,7 @@
-import React from 'react'
-import { ExternalLink, Github } from 'lucide-react'
-import { peer, caree, codec } from '../assets/images'
-import { motion } from 'framer-motion'
+import React from 'react';
+import { ExternalLink, Github } from 'lucide-react';
+import { peer, caree, codec } from '../assets/images';
+import { motion } from 'framer-motion';
 
 function Projects() {
     const projects = [
@@ -15,7 +15,7 @@ function Projects() {
         },
         {
             title: 'PeerDrop',
-            description: 'PeerDrop lets you share files instantly and securely without needing any third-party servers. Using peer-to-peer technology with end-to-end encryption, it ensures your files are transferred safely in real time. Built with React, TypeScript, Go, and Gorilla WebSockets, it’s a fast and reliable way to share anything without hassle.',
+            description: "PeerDrop lets you share files instantly and securely without needing any third-party servers. Using peer-to-peer technology with end-to-end encryption, it ensures your files are transferred safely in real time. Built with React, TypeScript, Go, and Gorilla WebSockets, it's a fast and reliable way to share anything without hassle.",
             tech: ['React', 'TypeScript', 'Framer Motion', 'Go', 'Gorilla WebSockets'],
             github: 'https://github.com/Rana718/file_sharing',
             demo: 'https://peerdrop-theta.vercel.app/',
@@ -23,7 +23,7 @@ function Projects() {
         },
         {
             title: 'Snipity',
-            description: 'Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether you’re debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.',
+            description: "Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether you’re debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.",
             tech: ['Next.js', 'Convex', 'TypeScript', 'Framer Motion', 'Zustand'],
             github: 'https://github.com/Rana718/snipity',
             demo: 'https://snipity.vercel.app/',
@@ -56,8 +56,8 @@ function Projects() {
     };
 
     return (
-        <div className="mt-16 sm:mt-20 px-1 md:px-8">
-            <h2 className="text-3xl font-bold mb-8 text-center text-theme-primary">Project</h2>
+        <div className="mt-16 sm:mt-20 px-1 ">
+            <h2 className="text-3xl font-bold mb-8 text-center text-theme-primary">Projects</h2>
 
             <motion.div
                 className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
@@ -86,7 +86,11 @@ function Projects() {
                         </div>
                         <div className="p-4 sm:p-6 flex flex-col flex-grow">
                             <h3 className="text-lg sm:text-xl font-bold mb-2 text-theme-primary">{project.title}</h3>
-                            <p className="text-theme-secondary mb-4 sm:mb-5 flex-grow text-xs sm:text-sm line-clamp-4 sm:line-clamp-5">{project.description}</p>
+
+                            {/* Ensured full description visibility with a minimum height */}
+                            <p className="text-theme-secondary mb-4 sm:mb-5 text-xs sm:text-sm min-h-[96px] sm:min-h-[110px]">
+                                {project.description}
+                            </p>
 
                             <div className="mb-4 sm:mb-5">
                                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -131,7 +135,7 @@ function Projects() {
                 ))}
             </motion.div>
         </div>
-    )
+    );
 }
 
-export default Projects
+export default Projects;
