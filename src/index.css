@@ -15,7 +15,7 @@
     --text-dark: #f3f4f6;
   }
 
- 
+
   .dark {
     --bg-primary: var(--dark-bg);
     --card-bg: var(--dark-card);
@@ -37,6 +37,22 @@
     @apply transition-colors duration-300;
   }
 }
+
+html,
+body {
+  overflow: auto;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 
 @layer utilities {
   .bg-dark {
