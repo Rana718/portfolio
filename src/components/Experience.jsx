@@ -1,15 +1,16 @@
 import React from 'react'
 import { Calendar, Briefcase } from 'lucide-react'
+import { experiences } from '../constants'
 
 function Experience() {
-    const experiences = [
-        {
-            title: 'Full Stack Developer',
-            company: 'Saciva',
-            duration: 'DEC 2024 - Present',
-            description: " At Saciva, I develop scalable web applications, design and optimize APIs, and manage databases efficiently I implement real-time web notifications and enhance performance using Redis and BullMQ. On the frontend, I build responsive interfaces with Next.js and TailwindCSS, and I streamline deployment processes using GitHub Actions and Render."
-        }
-    ]
+    // const experiences = [
+    //     {
+    //         title: 'Full Stack Developer',
+    //         company: 'Saciva',
+    //         duration: 'DEC 2024 - Present',
+    //         description: " At Saciva, I develop scalable web applications, design and optimize APIs, and manage databases efficiently I implement real-time web notifications and enhance performance using Redis and BullMQ. On the frontend, I build responsive interfaces with Next.js and TailwindCSS, and I streamline deployment processes using GitHub Actions and Render."
+    //     }
+    // ]
 
     return (
         <div className="mt-20">

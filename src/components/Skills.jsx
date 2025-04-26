@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { skills } from "../constants";
 
 function Skills() {
     const [isMobile, setIsMobile] = useState(false);
@@ -13,25 +14,7 @@ function Skills() {
         return () => window.removeEventListener("resize", checkScreenSize);
     }, []);
 
-    const skills = [
-        // Languages
-        "JavaScript", "TypeScript", "Python", "Golang",
-
-        // Frameworks & Libraries
-        "Next.js", "React", "React Native", "Express.js", "Hono.js", "NestJS",
-        "FastAPI", "Flask", "Django", "Fiber",
-
-        // Databases & BaaS
-        "PostgreSQL", "MongoDB", "Firebase",
-        "Prisma", "Drizzle", "Redis", "DuckDB", "Convex", "Supabase",
-
-        // DevOps & Cloud
-        "Docker", "Kubernetes", "AWS", "Kafka",
-
-        // Tools
-        "Git",
-    ];
-
+    
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {

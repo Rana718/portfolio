@@ -1,35 +1,35 @@
 import React from 'react';
 import { ExternalLink, Github } from 'lucide-react';
-import { peer, caree, codec } from '../assets/images';
 import { motion } from 'framer-motion';
+import { projects } from '../constants';
 
 function Projects() {
-    const projects = [
-        {
-            title: 'CareerWise',
-            description: 'CareerWise is your go-to AI assistant for interview preparation. It offers realistic mock interviews, real-time feedback, and expert guidance to help you improve. Built with Next.js, Prisma, TypeScript, and Gemini, it makes interview practice feel natural and effective, giving you the confidence to ace any job opportunity.',
-            tech: ['Next.js', 'Prisma', 'TypeScript', 'Framer Motion', 'Gemini'],
-            github: 'https://github.com/Rana718/HireLens',
-            demo: 'https://careerw-ise.vercel.app/',
-            image: caree
-        },
-        {
-            title: 'PeerDrop',
-            description: "PeerDrop lets you share files instantly and securely without needing any third-party servers. Using peer-to-peer technology with end-to-end encryption, it ensures your files are transferred safely in real time. Built with React, TypeScript, Go, and Gorilla WebSockets, it's a fast and reliable way to share anything without hassle.",
-            tech: ['React', 'TypeScript', 'Framer Motion', 'Go', 'Gorilla WebSockets'],
-            github: 'https://github.com/Rana718/file_sharing',
-            demo: 'https://peerdrop-theta.vercel.app/',
-            image: peer
-        },
-        {
-            title: 'Snipity',
-            description: "Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether you’re debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.",
-            tech: ['Next.js', 'Convex', 'TypeScript', 'Framer Motion', 'Zustand'],
-            github: 'https://github.com/Rana718/snipity',
-            demo: 'https://snipity.vercel.app/',
-            image: codec
-        }
-    ];
+    // const projects = [
+    //     {
+    //         title: 'CareerWise',
+    //         description: 'CareerWise is your go-to AI assistant for interview preparation. It offers realistic mock interviews, real-time feedback, and expert guidance to help you improve. Built with Next.js, Prisma, TypeScript, and Gemini, it makes interview practice feel natural and effective, giving you the confidence to ace any job opportunity.',
+    //         tech: ['Next.js', 'Prisma', 'TypeScript', 'Framer Motion', 'Gemini'],
+    //         github: 'https://github.com/Rana718/HireLens',
+    //         demo: 'https://careerw-ise.vercel.app/',
+    //         image: caree
+    //     },
+    //     {
+    //         title: 'PeerDrop',
+    //         description: "PeerDrop lets you share files instantly and securely without needing any third-party servers. Using peer-to-peer technology with end-to-end encryption, it ensures your files are transferred safely in real time. Built with React, TypeScript, Go, and Gorilla WebSockets, it's a fast and reliable way to share anything without hassle.",
+    //         tech: ['React', 'TypeScript', 'Framer Motion', 'Go', 'Gorilla WebSockets'],
+    //         github: 'https://github.com/Rana718/file_sharing',
+    //         demo: 'https://peerdrop-theta.vercel.app/',
+    //         image: peer
+    //     },
+    //     {
+    //         title: 'Snipity',
+    //         description: "Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether you’re debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.",
+    //         tech: ['Next.js', 'Convex', 'TypeScript', 'Framer Motion', 'Zustand'],
+    //         github: 'https://github.com/Rana718/snipity',
+    //         demo: 'https://snipity.vercel.app/',
+    //         image: codec
+    //     }
+    // ];
 
     // Animation variants
     const containerVariants = {
