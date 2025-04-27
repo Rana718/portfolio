@@ -56,7 +56,7 @@ const skills = [
 
     // Databases & BaaS
     "PostgreSQL", "MongoDB", "Firebase",
-    "Prisma", "Drizzle", "Redis", "DuckDB", "Convex", "Supabase",
+    "Prisma", "Drizzle", "Redis", "Convex", "Supabase",
 
     // DevOps & Cloud
     "Docker", "Kubernetes", "AWS", "Kafka",
