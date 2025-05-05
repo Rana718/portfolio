@@ -77,6 +77,7 @@ const skills = [
     "PostgreSQL", "MongoDB",
     "Prisma", "Redis", "Convex", "Supabase",
 
+
     // DevOps & Cloud
     "Docker", "Kubernetes", "AWS", "Kafka" , "CI/CD",
 
