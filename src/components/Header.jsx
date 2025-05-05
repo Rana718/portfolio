@@ -35,7 +35,7 @@ function Header() {
                     <h2 className="text-xl md:text-xl text-blue-600 dark:text-blue-400 mb-4">Full-Stack Developer</h2>
 
                     <p className="text-theme-secondary mb-6">
-                        Hi! I'm a passionate full-stack developer who loves building scalable web and mobile applications. I enjoy exploring Web3, working with AI/ML, and solving real-world problems through technology. I'm always eager to learn new frameworks and tools to improve my skills. Outside of coding, I'm a huge cricket fan—I love both playing and watching the game.
+                        Hi! I'm a passionate full-stack developer who loves building scalable web and mobile applications. I enjoy working with AI/ML and thrive on solving real-world problems through clean, efficient code. I'm always curious and love exploring new frameworks, tools, and technologies. Outside of coding, I love playing and watching cricket.
                     </p>
 
                     <div className="flex flex-wrap gap-4">
@@ -43,7 +43,7 @@ function Header() {
                             className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition flex items-center gap-2"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={()=> downloadResume()}
+                            onClick={() => downloadResume()}
                         >
                             <Download size={18} /> Download Resume
                         </motion.button>

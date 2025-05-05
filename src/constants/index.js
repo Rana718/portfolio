@@ -1,12 +1,14 @@
-
-import { peer, caree, codec, Tic_icon } from '../assets/images';
+import { peer, caree, codec, Tic_icon, pinglo, megic, urlshort } from '../assets/images';
 
 const experiences = [
     {
         title: 'Full Stack Developer',
         company: 'Saciva',
         duration: 'DEC 2024 - Present',
-        description: " At Saciva, I develop scalable web applications, design and optimize APIs, and manage databases efficiently I implement real-time web notifications and enhance performance using Redis and BullMQ. On the frontend, I build responsive interfaces with Next.js and TailwindCSS, and I streamline deployment processes using GitHub Actions and Render."
+        description: `At Saciva, I develop scalable web applications and design optimized APIs with efficient database
+                    management. I implement real-time web notifications using Redis and BullMQ. On the frontend, I build
+                    responsive interfaces with Next.js and TailwindCSS. I manage deployments using GitHub Actions, Render,
+                    and AWS (EC2, S3, load balancing, etc.).`
     }
 ]
 
@@ -29,21 +31,38 @@ const projects = [
     },
     {
         title: 'Snipity',
-        description: "Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether you’re debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.",
+        description: "Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether youre debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.",
         tech: ['Next.js', 'Convex', 'TypeScript', 'Framer Motion', 'Zustand'],
         github: 'https://github.com/Rana718/snipity',
         demo: 'https://snipity.vercel.app/',
         image: codec
     },
     {
+        title: 'Magic Pad',
+        description: "A fun, creative tool inspired by Apple's drawing calculator. I built it for experimentation and enjoyment, letting users interact with playful drawing features that combine functionality with creativity.",
+        tech: ['React', "Vite", 'TypeScript', "FastApI", "Gemini"],
+        github: 'https://github.com/Rana718/MagicPad',
+        demo: 'https://magic-pad.vercel.app/',
+        image: megic
+
+    },
+    {
+        title: "URL Shortener",
+        description: "A simple yet efficient URL shortener that allows users to convert long URLs into compact, shareable links. It uses BigCache for fast, in-memory storage of shortened URLs, ensuring quick access without the overhead of a database. Designed for performance and simplicity, ideal for lightweight use cases or internal tools.",
+        tech: ["React", "Vite", "TypeScript", "Go", "Fiber", "Docker"],
+        github: "https://github.com/Luciferair/link-shortner",
+        demo: "https://shortify-link-shortener.vercel.app/",
+        image: urlshort
+    },
+    {
         title: "Tic Tac Toe Game",
         description: "A modern Tic Tac Toe game with offline, bot, and online multiplayer modes. Built with React, Tailwind CSS, and Node.js using Socket.IO for real-time gameplay.",
-        tech: ["React", "Vite", "Tailwind CSS", "Framer Motion", "Socket.IO", "Node.js", "Express", "Redis"],
+        tech: ["React", "Vite", "Framer Motion", "Socket.IO", "Node.js", "Express", "Redis"],
         github: "https://github.com/Rana718/tic-tac-toe",
         demo: "https://tic-tac-toe-pink-nine.vercel.app/",
         image: Tic_icon
-    }
-    
+    },
+
 ];
 
 const skills = [
@@ -51,18 +70,19 @@ const skills = [
     "JavaScript", "TypeScript", "Python", "Golang",
 
     // Frameworks & Libraries
-    "Next.js", "React", "React Native", "Express.js", "Hono.js", "NestJS",
-    "FastAPI", "Flask", "Django", "Fiber",
+    "Next.js", "React", "React Native", "Node.js",
+    "FastAPI", "Flask", "Fiber",
 
     // Databases & BaaS
-    "PostgreSQL", "MongoDB", "Firebase",
-    "Prisma", "Drizzle", "Redis", "Convex", "Supabase",
+    "PostgreSQL", "MongoDB",
+    "Prisma", "Redis", "Convex", "Supabase",
+
 
     // DevOps & Cloud
-    "Docker", "Kubernetes", "AWS", "Kafka",
+    "Docker", "Kubernetes", "AWS", "Kafka" , "CI/CD",
 
-    // Tools
-    "Git",
+    // // Tools
+    // "Git",
 ];
 
 
