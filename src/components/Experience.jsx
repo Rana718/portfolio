@@ -1,5 +1,4 @@
-import React from 'react'
-import { Calendar, Briefcase } from 'lucide-react'
+import { Calendar, } from 'lucide-react'
 import { experiences } from '../constants'
 
 function Experience() {
@@ -21,10 +20,15 @@ function Experience() {
                     <div key={index} className="p-6 rounded-lg shadow-md bg-card transition-colors duration-300">
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
                             <div>
-                                <h3 className="text-xl font-bold text-theme-primary">{exp.title}</h3>
-                                <div className="flex items-center gap-2 text-theme-secondary">
-                                    <Briefcase size={16} />
-                                    <span>{exp.company}</span>
+                                <div className="flex items-center gap-3">
+                                    <div className='w-12 h-12 rounded-full flex items-center justify-center'>
+                                        <img src={exp.image} className='w-9 h-9' alt={exp.company} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl text-theme-primary">{exp.company}</h3>
+                                        <p className="text-gray-500">{exp.title}</p>
+                                    </div>
+
                                 </div>
                             </div>
                             <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium">

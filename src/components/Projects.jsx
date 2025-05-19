@@ -4,32 +4,6 @@ import { motion } from 'framer-motion';
 import { projects } from '../constants';
 
 function Projects() {
-    // const projects = [
-    //     {
-    //         title: 'CareerWise',
-    //         description: 'CareerWise is your go-to AI assistant for interview preparation. It offers realistic mock interviews, real-time feedback, and expert guidance to help you improve. Built with Next.js, Prisma, TypeScript, and Gemini, it makes interview practice feel natural and effective, giving you the confidence to ace any job opportunity.',
-    //         tech: ['Next.js', 'Prisma', 'TypeScript', 'Framer Motion', 'Gemini'],
-    //         github: 'https://github.com/Rana718/HireLens',
-    //         demo: 'https://careerw-ise.vercel.app/',
-    //         image: caree
-    //     },
-    //     {
-    //         title: 'PeerDrop',
-    //         description: "PeerDrop lets you share files instantly and securely without needing any third-party servers. Using peer-to-peer technology with end-to-end encryption, it ensures your files are transferred safely in real time. Built with React, TypeScript, Go, and Gorilla WebSockets, it's a fast and reliable way to share anything without hassle.",
-    //         tech: ['React', 'TypeScript', 'Framer Motion', 'Go', 'Gorilla WebSockets'],
-    //         github: 'https://github.com/Rana718/file_sharing',
-    //         demo: 'https://peerdrop-theta.vercel.app/',
-    //         image: peer
-    //     },
-    //     {
-    //         title: 'Snipity',
-    //         description: "Snipity is a clean and minimalistic code editor designed for quick snippet creation and sharing. Whether you’re debugging, collaborating, or just saving useful code, Snipity provides an intuitive interface with instant sharing. Built with Next.js, Convex, Framer Motion, and Zustand, it delivers a smooth and interactive experience for developers.",
-    //         tech: ['Next.js', 'Convex', 'TypeScript', 'Framer Motion', 'Zustand'],
-    //         github: 'https://github.com/Rana718/snipity',
-    //         demo: 'https://snipity.vercel.app/',
-    //         image: codec
-    //     }
-    // ];
 
     // Animation variants
     const containerVariants = {
@@ -87,12 +61,12 @@ function Projects() {
                         <div className="p-4 sm:p-6 flex flex-col flex-grow">
                             <h3 className="text-lg sm:text-xl font-bold mb-2 text-theme-primary">{project.title}</h3>
 
-                            {/* Ensured full description visibility with a minimum height */}
-                            <p className="text-theme-secondary mb-4 sm:mb-5 text-xs sm:text-sm min-h-[96px] sm:min-h-[110px]">
+                            
+                            <p className="text-theme-secondary mb-4 sm:mb-5 text-xs sm:text-sm min-h-[40px] sm:min-h-[60px]">
                                 {project.description}
                             </p>
 
-                            <div className="mb-4 sm:mb-5">
+                            {/* <div className="mb-4 sm:mb-5">
                                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
                                     {project.tech.map(tech => (
                                         <motion.span
@@ -104,7 +78,7 @@ function Projects() {
                                         </motion.span>
                                     ))}
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="flex gap-3 sm:gap-4 mt-auto">
                                 <motion.a

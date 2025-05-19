@@ -5,6 +5,7 @@ import Tic_icon from './tic-tac-toe.png'
 import pinglo from './pinglo.png';
 import megic from './megic.png';
 import urlshort from './urlshort.png';
+import saciva from './saciva.png';
 
 
 export{
@@ -14,5 +15,6 @@ export{
     Tic_icon,
     pinglo,
     megic,
-    urlshort
+    urlshort,
+    saciva
 }
