@@ -42,7 +42,7 @@ function App() {
           </div>
           
           <div className="mt-20">
-            <div className="lg:grid lg:grid-cols-2 lg:gap-8 space-y-10 lg:space-y-0">
+            <div className="lg:grid lg:grid-cols-2 lg:gap-10 space-y-10 lg:space-y-0">
               <Skills />
               <Connect />
             </div>
