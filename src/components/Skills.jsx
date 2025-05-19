@@ -14,7 +14,7 @@ function Skills() {
         return () => window.removeEventListener("resize", checkScreenSize);
     }, []);
 
-    
+
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
@@ -40,7 +40,7 @@ function Skills() {
 
     return (
         <motion.div
-            className="p-6 rounded-lg shadow-lg bg-card transition-all duration-300 border border-gray-200 dark:border-gray-800 hover:shadow-xl"
+            className="p-4 rounded-lg shadow-lg bg-card transition-all duration-300 border border-gray-200 dark:border-gray-800 hover:shadow-xl"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
@@ -48,7 +48,7 @@ function Skills() {
             transition={{ type: "spring", stiffness: 300 }}
         >
             <motion.h2
-                className="text-2xl font-bold mb-6 border-b pb-2 border-gray-200 dark:border-gray-700 text-theme-primary bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-400 dark:to-gray-200 bg-clip-text text-transparent"
+                className="text-xl font-bold mb-4 text-theme-primary bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-400 dark:to-gray-200 bg-clip-text text-transparent"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
@@ -57,7 +57,7 @@ function Skills() {
             </motion.h2>
 
             <motion.div
-                className="flex flex-wrap gap-3"
+                className="flex flex-wrap gap-2"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -65,7 +65,7 @@ function Skills() {
                 {skills.map((skill) => (
                     <motion.div
                         key={skill}
-                        className="bg-element text-theme-primary px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-300 hover:shadow-md relative overflow-hidden group select-none cursor-pointer"
+                        className="bg-element text-theme-primary px-3 py-1 rounded-2xl text-sm transition-all duration-300 hover:shadow-md relative overflow-hidden group select-none cursor-pointer"
                         variants={itemVariants}
                         whileHover={!isMobile ? { scale: 1.03, boxShadow: "0 4px 10px rgba(0,0,0,0.15)" } : {}}
                         whileTap={!isMobile ? { scale: 0.98 } : {}}
