@@ -6,6 +6,7 @@ import pinglo from './pinglo.png';
 import megic from './megic.png';
 import urlshort from './urlshort.png';
 import saciva from './saciva.png';
+import omniai from './omniai.png';
 
 
 export{
@@ -16,5 +17,6 @@ export{
     pinglo,
     megic,
     urlshort,
-    saciva
+    saciva,
+    omniai
 }

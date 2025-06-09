@@ -1,4 +1,4 @@
-import { peer, caree, codec, Tic_icon, pinglo, megic, urlshort, saciva } from '../assets/images';
+import { peer, caree, codec, Tic_icon, pinglo, omniai, megic, urlshort, saciva } from '../assets/images';
 
 const experiences = [
     {
@@ -14,6 +14,13 @@ const experiences = [
 ]
 
 const projects = [
+    {
+        title: "OmniAI",
+        description: 'Chat with documents and websites through intelligent AI conversations. Get instant answers from your content.',
+        tech: ['Next.js', 'Go', 'FastAPI', 'LangChain', 'Redis', 'Pinecone'],
+        github: "https://github.com/Rana718/omniai",
+        image: omniai
+    },
     {
         title: 'CareerWise',
         description: 'AI interview prep with mock sessions, feedback, and guidance. Built with Next.js, prisma and Gemini.',
