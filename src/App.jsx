@@ -7,6 +7,7 @@ import Projects from './components/Projects'
 import Footer from './components/Footer'
 import ChatButton from './components/ChatButton'
 import Navbar from './components/Navbar'
+import SEO from './utils/SEO'
 
 
 export const ThemeContext = createContext()
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, chatButtonRef }}>
+      <SEO/>
       <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
         <Navbar visible={showNavbar} />
         <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">

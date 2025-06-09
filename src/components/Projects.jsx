@@ -61,7 +61,7 @@ function Projects() {
                         <div className="p-4 sm:p-6 flex flex-col flex-grow">
                             <h3 className="text-lg sm:text-xl font-bold mb-2 text-theme-primary">{project.title}</h3>
 
-                            
+
                             <p className="text-theme-secondary mb-4 sm:mb-5 text-xs sm:text-sm min-h-[40px] sm:min-h-[60px]">
                                 {project.description}
                             </p>
@@ -92,17 +92,19 @@ function Projects() {
                                     <Github size={16} />
                                     <span className="font-medium text-sm">Code</span>
                                 </motion.a>
-                                <motion.a
-                                    href={project.demo}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-zinc-200/20 hover:bg-element text-theme-primary transition-colors duration-300"
-                                    whileHover={{ scale: 1.03 }}
-                                    whileTap={{ scale: 0.97 }}
-                                >
-                                    <ExternalLink size={16} />
-                                    <span className="font-medium text-sm">Demo</span>
-                                </motion.a>
+                                {project.demo && (
+                                    <motion.a
+                                        href={project.demo}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-zinc-200/20 hover:bg-element text-theme-primary transition-colors duration-300"
+                                        whileHover={{ scale: 1.03 }}
+                                        whileTap={{ scale: 0.97 }}
+                                    >
+                                        <ExternalLink size={16} />
+                                        <span className="font-medium text-sm">Demo</span>
+                                    </motion.a>
+                                )}
                             </div>
                         </div>
                     </motion.div>
