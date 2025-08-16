@@ -1,14 +1,10 @@
-import React, { useState, createContext, useEffect, useRef } from 'react'
-import Header from './components/Header'
-import Skills from './components/Skills'
-import Connect from './components/Connect'
-import Experience from './components/Experience'
-import Projects from './components/Projects'
+import { useState, createContext, useEffect, useRef } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Footer from './components/Footer'
-import ChatButton from './components/ChatButton'
 import Navbar from './components/Navbar'
+import ProjectsPage from './pages/ProjectsPage'
 import SEO from './utils/SEO'
-
+import HomePage from './pages/Homepage'
 
 export const ThemeContext = createContext()
 
@@ -36,26 +32,24 @@ function App() {
   return (
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, chatButtonRef }}>
       <SEO/>
-      <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
-        <Navbar visible={showNavbar} />
-        <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
-          <div ref={headerRef}>
-            <Header />
+      <Router>
+        <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
+          <Navbar visible={showNavbar} />
+          <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
+            <Routes>
+              <Route 
+                path="/" 
+                element={<HomePage headerRef={headerRef} chatButtonRef={chatButtonRef}/>} 
+              />
+              <Route 
+                path="/projects" 
+                element={<ProjectsPage />} 
+              />
+            </Routes>
           </div>
-          
-          <div className="mt-20">
-            <div className="lg:grid lg:grid-cols-2 lg:gap-10 space-y-10 lg:space-y-0">
-              <Skills />
-              <Connect />
-            </div>
-          </div>
-          
-          <Experience />
-          <Projects />
           <Footer />
-          <ChatButton openFromHeaderRef={chatButtonRef} />
         </div>
-      </div>
+      </Router>
     </ThemeContext.Provider>
   )
 }
