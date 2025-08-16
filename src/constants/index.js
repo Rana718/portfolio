@@ -6,10 +6,9 @@ const experiences = [
         image: saciva,
         company: 'Saciva',
         duration: 'DEC 2024 - Present',
-        description: `At Saciva, I develop scalable web applications and design optimized APIs with efficient database
-                    management. I implement real-time web notifications using Redis and BullMQ. On the frontend, I build
-                    responsive interfaces with Next.js and TailwindCSS. I manage deployments using GitHub Actions, Render,
-                    and AWS (EC2, S3, load balancing, etc.).`
+        description: `At Saciva, I work as a Full Stack Developer, focusing on both frontend and backend development, while also managing the complete DevOps setup. The 
+        frontend is deployed on Vercel, and the backend is hosted on Hostinger with zero downtime during updates. For the frontend, we use Next.js with DuckDB, and for the backend, Express.js 
+        along with other supporting technologies. I containerized the application using Docker and configured Nginx to ensure scalability. Additionally, I implemented a robust monitoring system using Sentry, Grafana, and Prometheus.`
     }
 ];
 
@@ -112,7 +111,7 @@ const projects = [
         github: 'https://github.com/Rana718/Fitly',
         image: fitly,
         featured: false,
-        status: 'Not completed'
+        status: 'not completed'
     },
     {
         id: 9,

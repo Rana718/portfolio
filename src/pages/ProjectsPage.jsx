@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Github, ArrowLeft, Filter, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Filter, Search } from 'lucide-react';
 import { projects, getCategories, getProjectsByCategory } from '../constants';
+import ProjectCard from '../components/ProjectCard';
+import SEO from '../utils/SEO';
 
 function ProjectsPage() {
     const [selectedCategory, setSelectedCategory] = useState('all');
@@ -11,6 +12,22 @@ function ProjectsPage() {
     const [showFilters, setShowFilters] = useState(false);
 
     const categories = getCategories();
+
+    const getCategoryFilterColor = (category, isSelected) => {
+        if (!isSelected) {
+            return 'bg-element text-theme-secondary border-zinc-200/10 hover:bg-blue-600/10 hover:text-blue-400';
+        }
+
+        const colors = {
+            'AI/ML': 'bg-purple-600/20 text-purple-400 border-purple-500/30',
+            'Web App': 'bg-blue-600/20 text-blue-400 border-blue-500/30',
+            'Mobile App': 'bg-green-600/20 text-green-400 border-green-500/30',
+            'Game': 'bg-red-600/20 text-red-400 border-red-500/30',
+            'Creative Tool': 'bg-orange-600/20 text-orange-400 border-orange-500/30',
+            'all': 'bg-blue-600/20 text-blue-400 border-blue-500/30'
+        };
+        return colors[category] || colors['all'];
+    };
 
     useEffect(() => {
         let filtered = getProjectsByCategory(selectedCategory);
@@ -56,32 +73,17 @@ function ProjectsPage() {
         }
     };
 
-    const getCategoryColor = (category) => {
-        const colors = {
-            'AI/ML': 'bg-purple-600/20 text-purple-400 border-purple-500/30',
-            'Web App': 'bg-blue-600/20 text-blue-400 border-blue-500/30',
-            'Game': 'bg-green-600/20 text-green-400 border-green-500/30',
-            'Creative Tool': 'bg-orange-600/20 text-orange-400 border-orange-500/30',
-            'all': 'bg-gray-600/20 text-gray-400 border-gray-500/30'
-        };
-        return colors[category] || colors['all'];
-    };
-
     return (
         <div className="min-h-screen py-8">
+            <SEO 
+                title="Projects - Rana Dolui | Full Stack Developer Portfolio"
+                description="Explore my complete collection of projects including AI-powered applications, web apps, mobile apps, games, and creative tools. Built with React, Next.js, Go, Python, and modern technologies."
+                keywords="Rana Dolui Projects, Full Stack Developer Portfolio, React Projects, Next.js Projects, AI Applications, Web Development Projects, Mobile Apps, Python Projects, Go Projects, JavaScript Portfolio, TypeScript Projects"
+                url="https://ranadolui.me/projects"
+            />
+            
             {/* Header */}
             <div className="mb-8">
-                <Link to="/">
-                    <motion.button
-                        className="flex items-center gap-2 mb-6 px-4 py-2 rounded-lg bg-element hover:bg-blue-600 text-theme-primary transition-colors duration-300"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <ArrowLeft size={16} />
-                        Back to Home
-                    </motion.button>
-                </Link>
-
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -130,10 +132,7 @@ function ProjectsPage() {
                             <motion.button
                                 key={category}
                                 onClick={() => setSelectedCategory(category)}
-                                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 border ${selectedCategory === category
-                                        ? getCategoryColor(category)
-                                        : 'bg-element text-theme-secondary border-zinc-200/10 hover:bg-blue-600/10 hover:text-blue-400'
-                                    }`}
+                                className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 border ${getCategoryFilterColor(category, selectedCategory === category)}`}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
@@ -158,86 +157,11 @@ function ProjectsPage() {
                     exit="exit"
                 >
                     {filteredProjects.map((project) => (
-                        <motion.div
+                        <ProjectCard
                             key={project.id}
-                            className="group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl bg-card flex flex-col transition-all duration-300 border border-zinc-100/10 hover:border-blue-500/20"
+                            project={project}
                             variants={cardVariants}
-                            whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                            layout
-                        >
-                            <div className="h-[200px] w-full relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
-                                <motion.img
-                                    src={project.image}
-                                    alt={`${project.title} screenshot`}
-                                    className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
-                                    style={{ objectPosition: 'center top' }}
-                                />
-                                <div className="absolute top-3 right-3 z-20">
-                                    <span className={`px-2 py-1 text-xs font-medium rounded-full backdrop-blur-sm border ${getCategoryColor(project.category)}`}>
-                                        {project.category}
-                                    </span>
-                                </div>
-                                {project.featured && (
-                                    <div className="absolute top-3 left-3 z-20">
-                                        <span className="px-2 py-1 text-xs font-medium bg-yellow-600/90 text-white rounded-full backdrop-blur-sm">
-                                            Featured
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="p-6 flex flex-col flex-grow">
-                                <h3 className="text-xl font-bold mb-3 text-theme-primary group-hover:text-blue-400 transition-colors">
-                                    {project.title}
-                                </h3>
-
-                                <p className="text-theme-secondary mb-4 text-sm leading-relaxed flex-grow">
-                                    {project.description}
-                                </p>
-
-                                {/* <div className="mb-5">
-                                    <div className="flex flex-wrap gap-2">
-                                        {project.tech.map(tech => (
-                                            <motion.span
-                                                key={tech}
-                                                className="text-xs px-3 py-1 bg-element text-theme-primary rounded-full font-medium cursor-default border border-zinc-200/10"
-                                                whileHover={{ scale: 1.05, backgroundColor: "rgba(59, 130, 246, 0.1)" }}
-                                            >
-                                                {tech}
-                                            </motion.span>
-                                        ))}
-                                    </div>
-                                </div> */}
-
-                                <div className="flex gap-3 mt-auto">
-                                    <motion.a
-                                        href={project.github}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-element hover:bg-blue-600 text-theme-primary hover:text-white transition-all duration-300 border border-zinc-200/10 flex-1 justify-center"
-                                        whileHover={{ scale: 1.03 }}
-                                        whileTap={{ scale: 0.97 }}
-                                    >
-                                        <Github size={16} />
-                                        <span className="font-medium text-sm">Code</span>
-                                    </motion.a>
-                                    {project.demo && (
-                                        <motion.a
-                                            href={project.demo}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-500/30 hover:bg-blue-600 text-blue-400 hover:text-white transition-all duration-300 flex-1 justify-center"
-                                            whileHover={{ scale: 1.03 }}
-                                            whileTap={{ scale: 0.97 }}
-                                        >
-                                            <ExternalLink size={16} />
-                                            <span className="font-medium text-sm">Demo</span>
-                                        </motion.a>
-                                    )}
-                                </div>
-                            </div>
-                        </motion.div>
+                        />
                     ))}
                 </motion.div>
             </AnimatePresence>

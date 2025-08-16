@@ -1,39 +1,12 @@
-import React, { useState, createContext, useEffect, useRef } from 'react'
+import { useState, createContext, useEffect, useRef } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Header from './components/Header'
-import Skills from './components/Skills'
-import Connect from './components/Connect'
-import Experience from './components/Experience'
-import Projects from './components/Projects'
 import Footer from './components/Footer'
-import ChatButton from './components/ChatButton'
 import Navbar from './components/Navbar'
 import ProjectsPage from './pages/ProjectsPage'
 import SEO from './utils/SEO'
+import HomePage from './pages/Homepage'
 
 export const ThemeContext = createContext()
-
-function HomePage({ headerRef, chatButtonRef }) {
-  return (
-    <>
-      <div ref={headerRef}>
-        <Header />
-      </div>
-      
-      <div className="mt-20">
-        <div className="lg:grid lg:grid-cols-2 lg:gap-10 space-y-10 lg:space-y-0">
-          <Skills />
-          <Connect />
-        </div>
-      </div>
-      
-      <Experience />
-      <Projects />
-      <Footer />
-      <ChatButton openFromHeaderRef={chatButtonRef} />
-    </>
-  )
-}
 
 function App() {
   const [isDarkTheme, setIsDarkTheme] = useState(true)
@@ -66,7 +39,7 @@ function App() {
             <Routes>
               <Route 
                 path="/" 
-                element={<HomePage headerRef={headerRef} chatButtonRef={chatButtonRef} />} 
+                element={<HomePage headerRef={headerRef} chatButtonRef={chatButtonRef}/>} 
               />
               <Route 
                 path="/projects" 
@@ -74,6 +47,7 @@ function App() {
               />
             </Routes>
           </div>
+          <Footer />
         </div>
       </Router>
     </ThemeContext.Provider>
