@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Heart, Github, Linkedin, Twitter, Mail, Code, Coffee, Zap } from 'lucide-react'
 import { motion, useInView, useAnimation } from 'framer-motion'
+import DiscordIcon from './ui/DiscoardIcon'
 
 function Footer() {
     const footerRef = useRef(null)
@@ -17,6 +18,7 @@ function Footer() {
         { icon: Github, url: "https://github.com/Rana718", color: "hover:text-gray-400" },
         { icon: Linkedin, url: "https://www.linkedin.com/in/rana-dolui-89357728a/", color: "hover:text-blue-400" },
         { icon: Twitter, url: "https://x.com/Ranad187", color: "hover:text-sky-400" },
+        { icon: DiscordIcon, url: "https://discord.com/users/1282694093696274505", color: "hover:text-indigo-400" },
         { icon: Mail, url: "mailto:ranadolui718@gmail.com", color: "hover:text-red-400" }
     ]
 
@@ -106,7 +108,7 @@ function Footer() {
                     </motion.p>
                 </motion.div>
 
-                {/* Social Links - Completely simplified */}
+                {/* Social Links - Simplified without problematic animations */}
                 <motion.div className="flex justify-center space-x-6 mb-8" variants={itemVariants}>
                     {socialLinks.map((social, index) => {
                         const IconComponent = social.icon;
@@ -116,14 +118,11 @@ function Footer() {
                                 href={social.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-block p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                                className="p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:scale-110 hover:shadow-lg inline-flex items-center justify-center"
                                 style={{ 
                                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                                     minWidth: "48px",
-                                    minHeight: "48px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center"
+                                    minHeight: "48px"
                                 }}
                             >
                                 <IconComponent 

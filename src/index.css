@@ -31,10 +31,12 @@
     --text-secondary: #4a5568;
   }
 
-  /* Improved smooth scrolling */
+  /* Improved smooth scrolling with better performance */
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 2rem;
+    /* Prevent scroll snapping issues */
+    scroll-snap-type: none;
   }
 
   body {
@@ -42,17 +44,23 @@
     /* Prevent layout shifts during initial load */
     min-height: 100vh;
     overflow-x: hidden;
+    /* Optimize scrolling performance */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent scroll snapping */
+    scroll-snap-type: none;
+    /* Better scroll performance */
+    overscroll-behavior: auto;
   }
 
   /* Better scroll behavior for all elements */
   * {
     scroll-behavior: smooth;
-  }
-
-  /* Optimize rendering performance */
-  * {
+    /* Optimize rendering performance */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent scroll snapping on all elements */
+    scroll-snap-type: none;
+    scroll-snap-align: none;
   }
 
   /* Prevent scroll issues during animations */
@@ -68,6 +76,8 @@ html,
 body {
   overflow-x: hidden;
   scroll-behavior: smooth;
+  /* Prevent scroll interruption */
+  scroll-snap-type: none;
 }
 
 /* Hide scrollbars but keep functionality */
@@ -90,6 +100,16 @@ body {
 img {
   max-width: 100%;
   height: auto;
+}
+
+/* Prevent sections from blocking scroll */
+section,
+.section,
+div[class*="mt-"],
+div[class*="py-"],
+div[class*="space-y-"] {
+  scroll-snap-type: none;
+  scroll-snap-align: none;
 }
 
 @layer utilities {
@@ -121,19 +141,28 @@ img {
     color: var(--text-secondary);
   }
 
-  /* Smooth scroll utility class */
+  /* Smooth scroll utility class with no snap */
   .smooth-scroll {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    scroll-snap-type: none;
+    overscroll-behavior: auto;
   }
 
-  /* Prevent scroll issues during loading */
+  /* Prevent scroll blocking */
+  .no-scroll-snap {
+    scroll-snap-type: none !important;
+    scroll-snap-align: none !important;
+  }
+
+  /* Only apply scroll lock during initial loading */
   .loading-scroll-fix {
     overflow: hidden;
+    height: 100vh;
   }
 
   .animate-fade-in {
-    animation: fadeIn 0.2s ease-in forwards;
+    animation: fadeIn 0.3s ease-in forwards;
   }
 
   .animate-slide-up {
@@ -327,208 +356,16 @@ img {
 .scroll-container {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
-  will-change: scroll-position;
+  scroll-snap-type: none;
+  overscroll-behavior: auto;
 }
 
-@layer utilities {
-  .bg-dark {
-    background-color: var(--dark-bg);
-  }
-
-  .bg-dark-card {
-    background-color: var(--dark-card);
-  }
-
-  .bg-dark-element {
-    background-color: var(--dark-element);
-  }
-
-  .bg-card {
-    background-color: var(--card-bg);
-  }
-
-  .bg-element {
-    background-color: var(--element-bg);
-  }
-
-  .text-theme-primary {
-    color: var(--text-primary);
-  }
-
-  .text-theme-secondary {
-    color: var(--text-secondary);
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 0.2s ease-in forwards;
-  }
-
-  .animate-slide-up {
-    animation: slideUp 0.6s ease-out forwards;
-  }
-
-  .animate-bounce-in {
-    animation: bounceIn 0.8s ease-out forwards;
-  }
-
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite alternate;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes bounceIn {
-    0% {
-      opacity: 0;
-      transform: scale(0.3);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1.05);
-    }
-    70% {
-      transform: scale(0.9);
-    }
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes glow {
-    from {
-      box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-    }
-    to {
-      box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
-    }
-  }
-
-  /* Custom gradient backgrounds */
-  .gradient-bg-1 {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
-  }
-
-  .gradient-bg-2 {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
-  }
-
-  .gradient-bg-3 {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.1) 100%);
-  }
-
-  /* Improved hover effects */
-  .hover-lift {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .hover-lift:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  }
-
-  .dark .hover-lift:hover {
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  }
-
-  /* Glass morphism effect */
-  .glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-
-  .dark .glass {
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  /* Custom scrollbar for specific elements */
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: var(--element-bg);
-    border-radius: 3px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: rgba(59, 130, 246, 0.5);
-    border-radius: 3px;
-  }
-
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: rgba(59, 130, 246, 0.7);
-  }
+/* Ensure smooth scrolling throughout the page */
+.page-content {
+  scroll-snap-type: none;
 }
 
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Loading animation */
-.loading-dots {
-  display: inline-block;
-}
-
-.loading-dots::after {
-  content: '';
-  animation: dots 1.5s steps(4, end) infinite;
-}
-
-@keyframes dots {
-  0%, 20% {
-    content: '';
-  }
-  40% {
-    content: '.';
-  }
-  60% {
-    content: '..';
-  }
-  80%, 100% {
-    content: '...';
-  }
-}
-
-/* Focus styles for accessibility */
-.focus-ring:focus {
-  outline: 2px solid rgba(59, 130, 246, 0.5);
-  outline-offset: 2px;
-}
-
-/* Selection styles */
-::selection {
-  background-color: rgba(59, 130, 246, 0.3);
-  color: inherit;
-}
-
-.dark ::selection {
-  background-color: rgba(59, 130, 246, 0.4);
+.page-content > * {
+  scroll-snap-type: none;
+  scroll-snap-align: none;
 }
