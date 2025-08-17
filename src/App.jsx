@@ -2,7 +2,9 @@ import { useState, createContext, useEffect, useRef } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
+import ErrorBoundary from './components/ErrorBoundary'
 import ProjectsPage from './pages/ProjectsPage'
+import NotFound from './pages/NotFound'
 import SEO from './utils/SEO'
 import HomePage from './pages/Homepage'
 
@@ -30,27 +32,34 @@ function App() {
   }, [])
 
   return (
-    <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, chatButtonRef }}>
-      <SEO/>
-      <Router>
-        <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
-          <Navbar visible={showNavbar} />
-          <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
-            <Routes>
-              <Route 
-                path="/" 
-                element={<HomePage headerRef={headerRef} chatButtonRef={chatButtonRef}/>} 
-              />
-              <Route 
-                path="/projects" 
-                element={<ProjectsPage />} 
-              />
-            </Routes>
+    <ErrorBoundary>
+      <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, chatButtonRef }}>
+        <SEO/>
+        <Router>
+          <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
+            <Navbar visible={showNavbar} />
+            <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
+              <Routes>
+                <Route 
+                  path="/" 
+                  element={<HomePage headerRef={headerRef} chatButtonRef={chatButtonRef}/>} 
+                />
+                <Route 
+                  path="/projects" 
+                  element={<ProjectsPage />} 
+                />
+                {/* Catch-all route for 404 pages */}
+                <Route 
+                  path="*" 
+                  element={<NotFound />} 
+                />
+              </Routes>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      </Router>
-    </ThemeContext.Provider>
+        </Router>
+      </ThemeContext.Provider>
+    </ErrorBoundary>
   )
 }
 

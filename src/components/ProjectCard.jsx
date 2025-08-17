@@ -1,5 +1,6 @@
 import { ExternalLink, Github, Smartphone, Monitor, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getSkillIcon } from '../utils/SkillIcon';
 
 function ProjectCard({ project, variants }) {
     const getCategoryIcon = (category) => {
@@ -26,6 +27,69 @@ function ProjectCard({ project, variants }) {
 
     const isIncomplete = (status) => {
         return status !== 'completed';
+    };
+
+    // Get available skill icons for the project
+    const getAvailableSkillIcons = (skills) => {
+        const availableIcons = [];
+        const unavailableCount = skills.filter(skill => {
+            const iconPath = getSkillIcon(skill);
+            if (iconPath) {
+                availableIcons.push({ skill, iconPath });
+                return false;
+            }
+            return true;
+        }).length;
+
+        return { availableIcons, unavailableCount };
+    };
+
+    const renderSkillIcons = () => {
+        if (!project.tech || project.tech.length === 0) return null;
+
+        const { availableIcons, unavailableCount } = getAvailableSkillIcons(project.tech);
+        const maxVisible = 5;
+        const visibleIcons = availableIcons.slice(0, maxVisible);
+        const remainingCount = (availableIcons.length - maxVisible) + unavailableCount;
+
+        return (
+            <div className="flex items-center mb-4">
+                <div className="flex items-center">
+                    {visibleIcons.map((item, index) => (
+                        <div
+                            key={item.skill}
+                            className="relative"
+                            style={{ 
+                                marginLeft: index > 0 ? '-6px' : '0',
+                                zIndex: visibleIcons.length - index 
+                            }}
+                        >
+                            <div className="w-8 h-8 bg-element border-2 border-gray-600 border-card rounded-full flex items-center justify-center p-1 hover:scale-110 transition-transform duration-200">
+                                <img
+                                    src={`/icons/${item.iconPath}`}
+                                    alt={item.skill}
+                                    className="w-4 h-4 object-contain"
+                                    title={item.skill}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                    
+                    {remainingCount > 0 && (
+                        <div
+                            className="relative w-8 h-8 bg-element border-2 border-gray-600 border-card rounded-full flex items-center justify-center text-xs font-semibold text-theme-primary hover:scale-110 transition-transform duration-200"
+                            style={{ 
+                                marginLeft: visibleIcons.length > 0 ? '-6px' : '0',
+                                zIndex: 0
+                            }}
+                            title={`+${remainingCount} more technologies`}
+                        >
+                            +{remainingCount}
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -59,6 +123,7 @@ function ProjectCard({ project, variants }) {
                     </span>
                 </div>
                 
+                {/* Only show In Progress badge for incomplete projects */}
                 {isIncomplete(project.status) && (
                     <div className="absolute top-3 right-3 z-20">
                         <span className="px-2 py-1 text-xs font-medium rounded-full backdrop-blur-sm flex items-center gap-1 bg-yellow-600/90 text-white">
@@ -67,7 +132,6 @@ function ProjectCard({ project, variants }) {
                         </span>
                     </div>
                 )}
-
             </div>
 
             <div className="p-6 flex flex-col flex-grow">
@@ -84,9 +148,12 @@ function ProjectCard({ project, variants }) {
                     )}
                 </h3>
 
-                <p className="text-theme-secondary mb-4 text-sm leading-relaxed flex-grow">
+                <p className="text-theme-secondary mb-4 text-sm leading-relaxed">
                     {project.description}
                 </p>
+
+                {/* Skill Icons */}
+                {renderSkillIcons()}
 
                 <div className="flex gap-3 mt-auto">
                     <motion.a
