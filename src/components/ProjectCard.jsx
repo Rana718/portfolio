@@ -1,35 +1,42 @@
-import { ExternalLink, Github, Smartphone, Monitor, Clock } from 'lucide-react';
+import { ExternalLink, Github, Smartphone, Monitor, Clock, Gamepad2, Palette, Brain } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { getSkillIcon } from '../utils/SkillIcon';
+import { getRandomBackground } from '../constants/cardcolor';
 
 function ProjectCard({ project, variants }) {
     const getCategoryIcon = (category) => {
         switch (category) {
             case 'Mobile App':
-                return <Smartphone size={14} />;
+                return <Smartphone size={16} />;
             case 'Web App':
-                return <Monitor size={14} />;
+                return <Monitor size={16} />;
+            case 'Game':
+                return <Gamepad2 size={16} />;
+            case 'Creative Tool':
+                return <Palette size={16} />;
+            case 'AI/ML':
+                return <Brain size={16} />;
             default:
-                return null;
+                return <Monitor size={16} />;
         }
     };
 
     const getCategoryColor = (category) => {
         const colors = {
-            'AI/ML': 'bg-purple-600/90 text-white',
-            'Web App': 'bg-blue-600/90 text-white',
-            'Mobile App': 'bg-green-600/90 text-white',
-            'Game': 'bg-red-600/90 text-white',
-            'Creative Tool': 'bg-orange-600/90 text-white',
+            'AI/ML': 'bg-purple-600/90 text-white border-purple-500/50',
+            'Web App': 'bg-blue-600/90 text-white border-blue-500/50',
+            'Mobile App': 'bg-green-600/90 text-white border-green-500/50',
+            'Game': 'bg-red-600/90 text-white border-red-500/50',
+            'Creative Tool': 'bg-orange-600/90 text-white border-orange-500/50',
         };
-        return colors[category] || 'bg-gray-600/90 text-white';
+        return colors[category] || 'bg-gray-600/90 text-white border-gray-500/50';
     };
 
     const isIncomplete = (status) => {
         return status !== 'completed';
     };
 
-    // Get available skill icons for the project
+    
     const getAvailableSkillIcons = (skills) => {
         const availableIcons = [];
         const unavailableCount = skills.filter(skill => {
@@ -105,28 +112,63 @@ function ProjectCard({ project, variants }) {
         >
             <div className="h-[200px] w-full relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10"></div>
-                <motion.img
-                    src={project.image}
-                    alt={`${project.title} screenshot`}
-                    className={`w-full h-full object-center group-hover:scale-110 transition-transform duration-500 ${
-                        project.category === 'Mobile App' 
-                            ? 'object-contain bg-gray-900' 
-                            : 'object-cover'
-                    }`}
-                    style={{ objectPosition: 'center top' }}
-                />
                 
-                <div className="absolute top-3 left-3 z-20">
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full backdrop-blur-sm flex items-center gap-1 ${getCategoryColor(project.category)}`}>
-                        {getCategoryIcon(project.category)}
-                        {project.category}
-                    </span>
+                <div className={`w-full h-full ${getRandomBackground(project.id)} flex items-center justify-center p-4 relative`}>
+                    <div className="absolute inset-0 opacity-10 bg-gradient-to-br from-white/5 via-transparent to-black/10"></div>
+                    
+                    <motion.img
+                        src={project.image}
+                        alt={`${project.title} screenshot`}
+                        className={`group-hover:scale-105 transition-transform duration-500 rounded-lg shadow-2xl relative z-10 ${
+                            project.category === 'Mobile App' 
+                                ? 'max-w-[70%] max-h-[100%] object-contain' 
+                                : 'w-full h-full object-cover rounded-lg'
+                        }`}
+                        style={{ 
+                            filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.6))',
+                            ...(project.category === 'Mobile App' 
+                                ? {} 
+                                : { objectPosition: 'center top' }
+                            )
+                        }}
+                        onError={(e) => {
+                            e.target.style.display = 'none';
+                        }}
+                        onLoad={(e) => {
+                            const img = e.target;
+                            const aspectRatio = img.naturalWidth / img.naturalHeight;
+                            
+                            if (project.category !== 'Mobile App') {
+                                if (aspectRatio > 1.5) {
+                                    img.style.width = '100%';
+                                    img.style.height = 'auto';
+                                    img.style.objectFit = 'cover';
+                                } else if (aspectRatio < 0.8) {
+                                    img.style.width = 'auto';
+                                    img.style.height = '100%';
+                                    img.style.objectFit = 'cover';
+                                    img.style.objectPosition = 'center';
+                                }
+                            }
+                        }}
+                    />
                 </div>
                 
-                {/* Only show In Progress badge for incomplete projects */}
+                {/* Category icon only (no text) */}
+                <div className="absolute top-3 left-3 z-20">
+                    <motion.div 
+                        className={`p-2 rounded-full backdrop-blur-sm border ${getCategoryColor(project.category)} shadow-lg`}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        title={project.category}
+                    >
+                        {getCategoryIcon(project.category)}
+                    </motion.div>
+                </div>
+                
+                {/* In Progress badge */}
                 {isIncomplete(project.status) && (
                     <div className="absolute top-3 right-3 z-20">
-                        <span className="px-2 py-1 text-xs font-medium rounded-full backdrop-blur-sm flex items-center gap-1 bg-yellow-600/90 text-white">
+                        <span className="px-2 py-1 text-xs font-medium rounded-full backdrop-blur-sm flex items-center gap-1 bg-yellow-600/90 text-white border border-yellow-500/50 shadow-lg">
                             <Clock size={12} />
                             In Progress
                         </span>

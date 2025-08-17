@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react'
-import { Heart, Github, Linkedin, Twitter, Mail, ArrowUp, Code, Coffee, Zap } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { Heart, Github, Linkedin, Twitter, Mail, Code, Coffee, Zap } from 'lucide-react'
 import { motion, useInView, useAnimation } from 'framer-motion'
 
 function Footer() {
@@ -12,10 +12,6 @@ function Footer() {
             controls.start('visible')
         }
     }, [isInView, controls])
-
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-    }
 
     const socialLinks = [
         { icon: Github, url: "https://github.com/Rana718", color: "hover:text-gray-400" },
@@ -52,15 +48,6 @@ function Footer() {
         }
     }
 
-    const iconVariants = {
-        hidden: { scale: 0, rotate: -180 },
-        visible: {
-            scale: 1,
-            rotate: 0,
-            transition: { duration: 0.5, ease: "backOut" }
-        }
-    }
-
     const floatingVariants = {
         animate: {
             y: [-10, 10, -10],
@@ -81,7 +68,7 @@ function Footer() {
             animate={controls}
             variants={containerVariants}
         >
-            {/* Animated Background matching theme */}
+            {/* Animated Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/3 via-purple-500/3 to-blue-500/3 dark:from-blue-500/5 dark:via-purple-500/5 dark:to-blue-500/5" />
             
             {/* Floating Icons */}
@@ -104,10 +91,7 @@ function Footer() {
             </div>
 
             <div className="container mx-auto px-4 relative z-10">
-                <motion.div 
-                    className="text-center mb-8"
-                    variants={itemVariants}
-                >
+                <motion.div className="text-center mb-8" variants={itemVariants}>
                     <motion.h3 
                         className="text-2xl font-bold text-theme-primary mb-4"
                         whileHover={{ scale: 1.05 }}
@@ -117,37 +101,38 @@ function Footer() {
                             Let's Build Something Amazing Together
                         </span>
                     </motion.h3>
-                    <motion.p 
-                        className="text-theme-secondary max-w-md mx-auto"
-                        variants={itemVariants}
-                    >
+                    <motion.p className="text-theme-secondary max-w-md mx-auto" variants={itemVariants}>
                         Always excited to work on innovative projects and connect with fellow developers
                     </motion.p>
                 </motion.div>
 
-                {/* Social Links */}
-                <motion.div 
-                    className="flex justify-center space-x-6 mb-8"
-                    variants={itemVariants}
-                >
-                    {socialLinks.map((social, index) => (
-                        <motion.a
-                            key={index}
-                            href={social.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`p-3 rounded-full bg-element hover:bg-blue-600/10 dark:hover:bg-blue-400/10 transition-all duration-300 ${social.color} group border border-gray-200/10 dark:border-gray-800/10`}
-                            variants={iconVariants}
-                            whileHover={{ 
-                                scale: 1.2, 
-                                rotate: 10,
-                                boxShadow: "0 10px 20px rgba(59, 130, 246, 0.1)"
-                            }}
-                            whileTap={{ scale: 0.9 }}
-                        >
-                            <social.icon size={20} className="text-theme-primary group-hover:animate-pulse" />
-                        </motion.a>
-                    ))}
+                {/* Social Links - Completely simplified */}
+                <motion.div className="flex justify-center space-x-6 mb-8" variants={itemVariants}>
+                    {socialLinks.map((social, index) => {
+                        const IconComponent = social.icon;
+                        return (
+                            <a
+                                key={index}
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                                style={{ 
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                                    minWidth: "48px",
+                                    minHeight: "48px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <IconComponent 
+                                    size={20} 
+                                    className={`text-gray-700 dark:text-gray-300 transition-colors duration-300 ${social.color}`} 
+                                />
+                            </a>
+                        );
+                    })}
                 </motion.div>
 
                 {/* Divider */}
@@ -160,33 +145,18 @@ function Footer() {
                 />
 
                 {/* Footer Content */}
-                <motion.div 
-                    className="flex flex-col md:flex-row justify-center items-center gap-4"
-                    variants={itemVariants}
-                >
-                    <motion.div
-                        className="flex items-center gap-2 text-theme-secondary"
-                        whileHover={{ scale: 1.05 }}
-                    >
+                <motion.div className="flex flex-col md:flex-row justify-center items-center gap-4" variants={itemVariants}>
+                    <motion.div className="flex items-center gap-2 text-theme-secondary" whileHover={{ scale: 1.05 }}>
                         <span>&copy; {new Date().getFullYear()} Rana Dolui. Made with</span>
                         <motion.div
-                            animate={{ 
-                                scale: [1, 1.2, 1],
-                                rotate: [0, 10, -10, 0]
-                            }}
-                            transition={{ 
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
+                            animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         >
                             <Heart size={16} className="text-red-500 fill-current" />
                         </motion.div>
                         <span>and lots of coffee</span>
                     </motion.div>
-
                 </motion.div>
-
             </div>
 
             {/* Animated Wave Effect */}
