@@ -16,77 +16,49 @@ function AppContent() {
   const headerRef = useRef(null)
   const chatButtonRef = useRef(null)
   const location = useLocation()
-  const isScrollingRef = useRef(false)
 
   const toggleTheme = () => {
     setIsDarkTheme((prev) => !prev)
   }
 
-  // Handle navbar visibility based on scroll and route
   const handleScroll = useCallback(() => {
-    // Prevent scroll handling during programmatic scrolling
-    if (isScrollingRef.current) return
-
     const currentPath = location.pathname
     
     if (currentPath === '/') {
-      // Home page - show navbar when header is out of view
       if (headerRef.current) {
         const headerBottom = headerRef.current.getBoundingClientRect().bottom
-        setShowNavbar(headerBottom < -10) // Add small buffer
+        setShowNavbar(headerBottom < -10)
       }
-    } else {
-      // Other pages - always show navbar
+    } else if (currentPath === '/projects') {
       setShowNavbar(true)
+    } else {
+      setShowNavbar(false)
     }
   }, [location.pathname])
 
-  // Optimized scroll handler with better performance
   const optimizedScrollHandler = useCallback(() => {
-    if (!isScrollingRef.current) {
-      requestAnimationFrame(() => {
-        handleScroll()
-      })
+    const currentPath = location.pathname
+    if (currentPath === '/' || currentPath === '/projects') {
+      requestAnimationFrame(handleScroll)
     }
-  }, [handleScroll])
+  }, [handleScroll, location.pathname])
 
   useEffect(() => {
-    // Handle route changes
     const currentPath = location.pathname
     
-    // Set scrolling flag to prevent interference
-    isScrollingRef.current = true
-    
     if (currentPath === '/') {
-      // Home page - navbar visibility depends on scroll
-      setTimeout(() => {
-        handleScroll()
-        isScrollingRef.current = false
-      }, 100)
-    } else {
-      // Other pages - always show navbar
+      setTimeout(handleScroll, 100)
+    } else if (currentPath === '/projects') {
       setShowNavbar(true)
-      isScrollingRef.current = false
+    } else {
+      setShowNavbar(false)
     }
 
-    // Smooth scroll to top on route change
-    window.scrollTo({ 
-      top: 0, 
-      behavior: 'smooth' 
-    })
-
-    // Reset scroll flag after scroll completes
-    setTimeout(() => {
-      isScrollingRef.current = false
-    }, 500)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [location.pathname, handleScroll])
 
   useEffect(() => {
-    // Add scroll event listener with passive option for better performance
-    const scrollOptions = { passive: true, capture: false }
-    window.addEventListener('scroll', optimizedScrollHandler, scrollOptions)
-    
-    // Also listen for resize events
+    window.addEventListener('scroll', optimizedScrollHandler, { passive: true })
     window.addEventListener('resize', handleScroll, { passive: true })
     
     return () => {
@@ -95,30 +67,19 @@ function AppContent() {
     }
   }, [optimizedScrollHandler, handleScroll])
 
-  // Optimize scroll behavior
   useEffect(() => {
-    // Ensure smooth scrolling is enabled
     document.documentElement.style.scrollBehavior = 'smooth'
-    document.documentElement.style.scrollSnapType = 'none'
     
-    // Add optimized scroll classes
-    document.body.classList.add('scroll-container', 'no-scroll-snap')
-    
-    // Disable scroll restoration to prevent jumping
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual'
-    }
-    
-    return () => {
-      document.body.classList.remove('scroll-container', 'no-scroll-snap')
     }
   }, [])
 
   return (
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, chatButtonRef }}>
-      <div className={`min-h-screen no-scroll-snap ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
+      <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-900'} transition-colors duration-300`}>
         <Navbar visible={showNavbar} />
-        <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8 no-scroll-snap">
+        <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
           <Routes>
             <Route 
               path="/" 

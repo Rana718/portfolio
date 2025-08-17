@@ -31,53 +31,34 @@
     --text-secondary: #4a5568;
   }
 
-  /* Improved smooth scrolling with better performance */
+  /* Simplified smooth scrolling */
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 2rem;
-    /* Prevent scroll snapping issues */
-    scroll-snap-type: none;
   }
 
   body {
     @apply transition-colors duration-300;
-    /* Prevent layout shifts during initial load */
     min-height: 100vh;
     overflow-x: hidden;
-    /* Optimize scrolling performance */
     -webkit-overflow-scrolling: touch;
-    /* Prevent scroll snapping */
-    scroll-snap-type: none;
-    /* Better scroll performance */
-    overscroll-behavior: auto;
   }
 
-  /* Better scroll behavior for all elements */
+  /* Basic font optimization */
   * {
-    scroll-behavior: smooth;
-    /* Optimize rendering performance */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* Prevent scroll snapping on all elements */
-    scroll-snap-type: none;
-    scroll-snap-align: none;
   }
 
-  /* Prevent scroll issues during animations */
-  .motion-reduce {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
-}
-
-/* Improved scrolling behavior */
-html,
-body {
-  overflow-x: hidden;
-  scroll-behavior: smooth;
-  /* Prevent scroll interruption */
-  scroll-snap-type: none;
 }
 
 /* Hide scrollbars but keep functionality */
@@ -91,25 +72,10 @@ html {
   scrollbar-width: none;
 }
 
-/* Prevent scroll jumping during page load */
-body {
-  position: relative;
-}
-
-/* Optimize image loading to prevent layout shifts */
+/* Optimize image loading */
 img {
   max-width: 100%;
   height: auto;
-}
-
-/* Prevent sections from blocking scroll */
-section,
-.section,
-div[class*="mt-"],
-div[class*="py-"],
-div[class*="space-y-"] {
-  scroll-snap-type: none;
-  scroll-snap-align: none;
 }
 
 @layer utilities {
@@ -139,26 +105,6 @@ div[class*="space-y-"] {
 
   .text-theme-secondary {
     color: var(--text-secondary);
-  }
-
-  /* Smooth scroll utility class with no snap */
-  .smooth-scroll {
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: none;
-    overscroll-behavior: auto;
-  }
-
-  /* Prevent scroll blocking */
-  .no-scroll-snap {
-    scroll-snap-type: none !important;
-    scroll-snap-align: none !important;
-  }
-
-  /* Only apply scroll lock during initial loading */
-  .loading-scroll-fix {
-    overflow: hidden;
-    height: 100vh;
   }
 
   .animate-fade-in {
@@ -335,37 +281,7 @@ div[class*="space-y-"] {
   background-color: rgba(59, 130, 246, 0.4);
 }
 
-/* Optimize animations for better performance */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
-/* Prevent layout shift during font loading */
+/* Font loading optimization */
 @font-face {
   font-display: swap;
-}
-
-/* Improve scroll performance */
-.scroll-container {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  scroll-snap-type: none;
-  overscroll-behavior: auto;
-}
-
-/* Ensure smooth scrolling throughout the page */
-.page-content {
-  scroll-snap-type: none;
-}
-
-.page-content > * {
-  scroll-snap-type: none;
-  scroll-snap-align: none;
 }

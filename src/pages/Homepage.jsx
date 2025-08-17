@@ -7,30 +7,30 @@ import Projects from '../components/Projects'
 
 function HomePage({ headerRef, chatButtonRef }) {
     return (
-        <div className="page-content no-scroll-snap">
-            <div ref={headerRef} className="no-scroll-snap">
+        <div>
+            <div ref={headerRef}>
                 <Header />
             </div>
 
-            <div className="mt-20 no-scroll-snap">
-                <div className="lg:grid lg:grid-cols-2 lg:gap-10 space-y-10 lg:space-y-0 no-scroll-snap">
-                    <div className="no-scroll-snap">
+            <div className="mt-20">
+                <div className="lg:grid lg:grid-cols-2 lg:gap-10 space-y-10 lg:space-y-0">
+                    <div>
                         <Skills />
                     </div>
-                    <div className="no-scroll-snap">
+                    <div>
                         <Connect />
                     </div>
                 </div>
             </div>
 
-            <div className="no-scroll-snap">
+            <div>
                 <Experience />
             </div>
-            
-            <div className="no-scroll-snap">
+
+            <div>
                 <Projects />
             </div>
-            
+
             {/* <ChatButton openFromHeaderRef={chatButtonRef} /> */}
         </div>
     )
