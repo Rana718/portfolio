@@ -1,9 +1,9 @@
 import ChatButton from '../components/ChatButton'
-import Header from '../components/Header'
-import Skills from '../components/Skills'
-import Connect from '../components/Connect'
-import Experience from '../components/Experience'
-import Projects from '../components/Projects'
+import Header from '@/components/Header'
+import Skills from '@/components/home/Skills'
+import Connect from '@/components/home/Connect'
+import Experience from '@/components/home/Experience'
+import Projects from '@/components/home/Projects'
 
 function HomePage({ headerRef, chatButtonRef }) {
     return (

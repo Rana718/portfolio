@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, Search } from 'lucide-react';
 import { projects, getCategories, getProjectsByCategory } from '../constants';
-import ProjectCard from '../components/ProjectCard';
+import ProjectCard from '@/components/home/ProjectCard';
 import SEO from '../utils/SEO';
 
 function ProjectsPage() {

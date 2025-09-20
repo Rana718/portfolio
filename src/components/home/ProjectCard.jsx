@@ -1,7 +1,7 @@
 import { ExternalLink, Github, Smartphone, Monitor, Clock, Gamepad2, Palette, Brain } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { getSkillIcon } from '../utils/SkillIcon';
-import { getRandomBackground } from '../constants/cardcolor';
+import { getSkillIcon } from '@/utils/SkillIcon';
+import { getRandomBackground } from '@/constants/cardcolor';
 
 function ProjectCard({ project, variants }) {
     const getCategoryIcon = (category) => {
@@ -71,7 +71,7 @@ function ProjectCard({ project, variants }) {
                                 zIndex: visibleIcons.length - index 
                             }}
                         >
-                            <div className="w-8 h-8 bg-element border-2 border-gray-600 border-card rounded-full flex items-center justify-center p-1 hover:scale-110 transition-transform duration-200">
+                            <div className="w-8 h-8 bg-element border-2 border-gray-600 rounded-full flex items-center justify-center p-1 hover:scale-110 transition-transform duration-200">
                                 <img
                                     src={`/icons/${item.iconPath}`}
                                     alt={item.skill}
@@ -84,7 +84,7 @@ function ProjectCard({ project, variants }) {
                     
                     {remainingCount > 0 && (
                         <div
-                            className="relative w-8 h-8 bg-element border-2 border-gray-600 border-card rounded-full flex items-center justify-center text-xs font-semibold text-theme-primary hover:scale-110 transition-transform duration-200"
+                            className="relative w-8 h-8 bg-element border-2 border-gray-600 rounded-full flex items-center justify-center text-xs font-semibold text-theme-primary hover:scale-110 transition-transform duration-200"
                             style={{ 
                                 marginLeft: visibleIcons.length > 0 ? '-6px' : '0',
                                 zIndex: 0

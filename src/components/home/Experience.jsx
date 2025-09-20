@@ -1,5 +1,5 @@
 import { Calendar, } from 'lucide-react'
-import { experiences } from '../constants'
+import { experiences } from '@/constants'
 
 function Experience() {
     // const experiences = [

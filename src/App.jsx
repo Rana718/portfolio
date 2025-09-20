@@ -1,12 +1,13 @@
 import { useState, createContext, useEffect, useRef, useCallback } from 'react'
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
-import Footer from './components/Footer'
+import Footer from '@/components/Footer'
 import Navbar from './components/Navbar'
 import ErrorBoundary from './components/ErrorBoundary'
 import ProjectsPage from './pages/ProjectsPage'
 import NotFound from './pages/NotFound'
 import SEO from './utils/SEO'
 import HomePage from './pages/Homepage'
+import BottomDock from './components/BottomDock'
 
 export const ThemeContext = createContext()
 
@@ -23,7 +24,7 @@ function AppContent() {
 
   const handleScroll = useCallback(() => {
     const currentPath = location.pathname
-    
+
     if (currentPath === '/') {
       if (headerRef.current) {
         const headerBottom = headerRef.current.getBoundingClientRect().bottom
@@ -45,7 +46,7 @@ function AppContent() {
 
   useEffect(() => {
     const currentPath = location.pathname
-    
+
     if (currentPath === '/') {
       setTimeout(handleScroll, 100)
     } else if (currentPath === '/projects') {
@@ -60,7 +61,7 @@ function AppContent() {
   useEffect(() => {
     window.addEventListener('scroll', optimizedScrollHandler, { passive: true })
     window.addEventListener('resize', handleScroll, { passive: true })
-    
+
     return () => {
       window.removeEventListener('scroll', optimizedScrollHandler)
       window.removeEventListener('resize', handleScroll)
@@ -69,7 +70,7 @@ function AppContent() {
 
   useEffect(() => {
     document.documentElement.style.scrollBehavior = 'smooth'
-    
+
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual'
     }
@@ -81,20 +82,21 @@ function AppContent() {
         <Navbar visible={showNavbar} />
         <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
           <Routes>
-            <Route 
-              path="/" 
-              element={<HomePage headerRef={headerRef} chatButtonRef={chatButtonRef}/>} 
+            <Route
+              path="/"
+              element={<HomePage headerRef={headerRef} chatButtonRef={chatButtonRef} />}
             />
-            <Route 
-              path="/projects" 
-              element={<ProjectsPage />} 
+            <Route
+              path="/projects"
+              element={<ProjectsPage />}
             />
-            <Route 
-              path="*" 
-              element={<NotFound />} 
+            <Route
+              path="*"
+              element={<NotFound />}
             />
           </Routes>
         </div>
+        <BottomDock />
         <Footer />
       </div>
     </ThemeContext.Provider>
@@ -104,7 +106,7 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <SEO/>
+      <SEO />
       <Router>
         <AppContent />
       </Router>

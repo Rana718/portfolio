@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { skills } from "../constants";
+import { skills } from "@/constants";
 
 function Skills() {
     const [isMobile, setIsMobile] = useState(false);
