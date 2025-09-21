@@ -9,17 +9,17 @@ import { FaLinkedinIn, FaGithub, FaDiscord } from 'react-icons/fa';
 const socialLinks = [
     {
         name: "LinkedIn",
-        url: "https://linkedin.com/in/your-profile",
+        url: "https://www.linkedin.com/in/rana-dolui-89357728a/",
         icon: FaLinkedinIn,
     },
     {
         name: "GitHub",
-        url: "https://github.com/your-username",
+        url: "https://github.com/Rana718",
         icon: FaGithub,
     },
     {
         name: "Discord",
-        url: "https://discord.gg/your-server",
+        url: "https://discord.com/users/1282694093696274505",
         icon: FaDiscord,
     },
 ];

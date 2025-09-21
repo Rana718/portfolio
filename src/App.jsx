@@ -19,7 +19,15 @@ function AppContent() {
   const location = useLocation()
 
   const toggleTheme = () => {
-    setIsDarkTheme((prev) => !prev)
+    setIsDarkTheme((prev) => {
+      const newTheme = !prev;
+      if (newTheme) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return newTheme;
+    });
   }
 
   const handleScroll = useCallback(() => {
