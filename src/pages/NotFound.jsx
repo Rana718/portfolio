@@ -107,15 +107,15 @@ function NotFound() {
                 {/* Suggestions */}
                 <motion.div variants={itemVariants} className="mb-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                        <div className="flex items-center justify-center gap-2 p-4 rounded-lg bg-element border border-zinc-200/10">
+                        <div className="flex items-center justify-center gap-2 p-4 rounded-lg bg-element border border-gray-100/10">
                             <Search size={16} className="text-blue-400" />
                             <span className="text-theme-secondary">Check the URL</span>
                         </div>
-                        <div className="flex items-center justify-center gap-2 p-4 rounded-lg bg-element border border-zinc-200/10">
+                        <div className="flex items-center justify-center gap-2 p-4 rounded-lg bg-element border border-gray-100/10">
                             <Code size={16} className="text-purple-400" />
                             <span className="text-theme-secondary">Browse Projects</span>
                         </div>
-                        <div className="flex items-center justify-center gap-2 p-4 rounded-lg bg-element border border-zinc-200/10">
+                        <div className="flex items-center justify-center gap-2 p-4 rounded-lg bg-element border border-gray-100/10">
                             <Home size={16} className="text-green-400" />
                             <span className="text-theme-secondary">Go Home</span>
                         </div>
@@ -140,7 +140,7 @@ function NotFound() {
 
                     <Link to="/projects">
                         <motion.button
-                            className="flex items-center gap-2 px-6 py-3 rounded-lg bg-element hover:bg-purple-600 text-theme-primary hover:text-white border border-zinc-200/10 hover:border-purple-500/50 font-medium transition-all duration-300"
+                            className="flex items-center gap-2 px-6 py-3 rounded-lg bg-element hover:bg-purple-600 text-theme-primary hover:text-white border border-gray-100/10 hover:border-purple-500/50 font-medium transition-all duration-300"
                             whileHover={{ scale: 1.05, y: -2 }}
                             whileTap={{ scale: 0.95 }}
                         >
@@ -151,7 +151,7 @@ function NotFound() {
 
                     <motion.button
                         onClick={() => window.history.back()}
-                        className="flex items-center gap-2 px-6 py-3 rounded-lg bg-element hover:bg-gray-600 text-theme-secondary hover:text-white border border-zinc-200/10 hover:border-gray-500/50 font-medium transition-all duration-300"
+                        className="flex items-center gap-2 px-6 py-3 rounded-lg bg-element hover:bg-gray-600 text-theme-secondary hover:text-white border border-gray-100/10 hover:border-gray-500/50 font-medium transition-all duration-300"
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                     >

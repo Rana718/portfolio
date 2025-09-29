@@ -40,7 +40,7 @@ function Skills() {
 
     return (
         <motion.div
-            className="p-4 rounded-lg shadow-lg bg-card transition-all duration-300 border border-gray-200 dark:border-gray-800 hover:shadow-xl"
+            className="p-4 rounded-lg shadow-lg bg-card transition-all duration-300 border border-gray-100 dark:border-gray-800 hover:shadow-xl"
             initial="hidden"
             animate="visible"
             variants={containerVariants}

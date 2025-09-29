@@ -36,7 +36,7 @@ function BottomDock() {
                             rel="noopener noreferrer"
                             aria-label={social.name}
                             className={cn(
-                                "flex items-center justify-center w-12 h-12 rounded-full bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors",
+                                "flex items-center justify-center w-12 h-12 rounded-full bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors",
                             )}
                         >
                             <social.icon className="w-5 h-5" />
@@ -45,11 +45,11 @@ function BottomDock() {
                 ))}
 
                 {/* Separator */}
-                <div className="w-[1px] h-8 bg-gray-300 dark:bg-gray-600 mx-2" />
+                <div className="w-[1px] h-8 bg-gray-200 dark:bg-gray-600 mx-2" />
 
                 {/* Theme Toggle */}
                 <DockIcon>
-                    <AnimatedThemeToggler className="flex items-center justify-center w-12 h-12 rounded-full bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" />
+                    <AnimatedThemeToggler className="flex items-center justify-center w-12 h-12 rounded-full bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" />
                 </DockIcon>
             </Dock>
         </div>

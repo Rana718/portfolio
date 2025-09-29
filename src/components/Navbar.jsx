@@ -25,7 +25,7 @@ function Navbar({ visible }) {
             <AnimatePresence mode="wait">
                 <motion.div
                     key={`navbar-${location.pathname}`}
-                    className="fixed top-0 left-0 right-0 bg-card/80 backdrop-blur-md border-b border-gray-200/60 dark:border-gray-800/50 z-50 shadow-lg"
+                    className="fixed top-0 left-0 right-0 bg-card/80 backdrop-blur-md border-b border-gray-100/60 dark:border-gray-800/50 z-50 shadow-lg"
                     initial={{ y: -100, opacity: 0 }}
                     animate={{
                         y: isVisible ? 0 : -100,

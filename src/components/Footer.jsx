@@ -65,7 +65,7 @@ function Footer() {
     return (
         <motion.footer 
             ref={footerRef}
-            className="relative mt-20 py-12 overflow-hidden border-t border-gray-200 dark:border-gray-700"
+            className="relative mt-20 py-12 overflow-hidden border-t border-gray-100 dark:border-gray-700"
             initial="hidden"
             animate={controls}
             variants={containerVariants}
@@ -108,7 +108,7 @@ function Footer() {
                     </motion.p>
                 </motion.div>
 
-                {/* Social Links - Simplified without problematic animations */}
+                {/* Social Links */}
                 <motion.div className="flex justify-center space-x-6 mb-8" variants={itemVariants}>
                     {socialLinks.map((social, index) => {
                         const IconComponent = social.icon;
@@ -118,7 +118,7 @@ function Footer() {
                                 href={social.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-all duration-300 hover:scale-110 hover:shadow-lg inline-flex items-center justify-center"
+                                className="p-3 rounded-full bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:scale-110 hover:shadow-lg inline-flex items-center justify-center"
                                 style={{ 
                                     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
                                     minWidth: "48px",
@@ -136,7 +136,7 @@ function Footer() {
 
                 {/* Divider */}
                 <motion.div 
-                    className="h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-700 to-transparent mb-8"
+                    className="h-px bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent mb-8"
                     variants={itemVariants}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}

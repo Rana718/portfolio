@@ -71,7 +71,7 @@ function ProjectCard({ project, variants }) {
                                 zIndex: visibleIcons.length - index 
                             }}
                         >
-                            <div className="w-8 h-8 bg-element border-2 border-gray-600 rounded-full flex items-center justify-center p-1 hover:scale-110 transition-transform duration-200">
+                            <div className="w-8 h-8 bg-element border-2 border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center p-1 hover:scale-110 transition-transform duration-200">
                                 <img
                                     src={`/icons/${item.iconPath}`}
                                     alt={item.skill}
@@ -84,7 +84,7 @@ function ProjectCard({ project, variants }) {
                     
                     {remainingCount > 0 && (
                         <div
-                            className="relative w-8 h-8 bg-element border-2 border-gray-600 rounded-full flex items-center justify-center text-xs font-semibold text-theme-primary hover:scale-110 transition-transform duration-200"
+                            className="relative w-8 h-8 bg-element border-2 border-gray-300 dark:border-gray-600 rounded-full flex items-center justify-center text-xs font-semibold text-theme-primary hover:scale-110 transition-transform duration-200"
                             style={{ 
                                 marginLeft: visibleIcons.length > 0 ? '-6px' : '0',
                                 zIndex: 0
@@ -104,7 +104,7 @@ function ProjectCard({ project, variants }) {
             className={`group rounded-xl overflow-hidden shadow-lg hover:shadow-2xl bg-card flex flex-col transition-all duration-300 border ${
                 isIncomplete(project.status) 
                     ? 'border-yellow-500/30 hover:border-yellow-400/50 bg-gradient-to-br from-card to-yellow-900/5' 
-                    : 'border-zinc-100/10 hover:border-blue-500/20'
+                    : 'border-gray-100/10 hover:border-blue-500/20'
             }`}
             variants={variants}
             whileHover={{ y: -8, transition: { duration: 0.3 } }}
@@ -205,7 +205,7 @@ function ProjectCard({ project, variants }) {
                         className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-300 border flex-1 justify-center ${
                             isIncomplete(project.status)
                                 ? 'bg-yellow-600/10 hover:bg-yellow-600 text-yellow-400 hover:text-white border-yellow-500/30'
-                                : 'bg-element hover:bg-blue-600 text-theme-primary hover:text-white border-zinc-200/10'
+                                : 'bg-element hover:bg-blue-600 text-theme-primary hover:text-white border-gray-100/10'
                         }`}
                         whileHover={{ scale: 1.03 }}
                         whileTap={{ scale: 0.97 }}
