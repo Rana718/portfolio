@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { getFeaturedProjects } from '../constants';
+import { getFeaturedProjects } from '@/constants';
 import ProjectCard from './ProjectCard';
 
 function Projects() {

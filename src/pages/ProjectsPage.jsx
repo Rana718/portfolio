@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, Search } from 'lucide-react';
 import { projects, getCategories, getProjectsByCategory } from '../constants';
-import ProjectCard from '../components/ProjectCard';
+import ProjectCard from '@/components/home/ProjectCard';
 import SEO from '../utils/SEO';
 
 function ProjectsPage() {
@@ -15,7 +15,7 @@ function ProjectsPage() {
 
     const getCategoryFilterColor = (category, isSelected) => {
         if (!isSelected) {
-            return 'bg-element text-theme-secondary border-zinc-200/10 hover:bg-blue-600/10 hover:text-blue-400';
+            return 'bg-element text-theme-secondary border-gray-100/20 hover:bg-blue-600/10 hover:text-blue-400';
         }
 
         const colors = {
@@ -74,7 +74,7 @@ function ProjectsPage() {
     };
 
     return (
-        <div className="min-h-screen py-8">
+        <div className="min-h-screen py-8 lg:mx-56 md:mx-8 mx-2 px-4 ">
             <SEO 
                 title="Projects - Rana Dolui | Full Stack Developer Portfolio"
                 description="Explore my complete collection of projects including AI-powered applications, web apps, mobile apps, games, and creative tools. Built with React, Next.js, Go, Python, and modern technologies."
@@ -113,7 +113,7 @@ function ProjectsPage() {
                         placeholder="Search projects..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-3 rounded-lg bg-card border border-zinc-200/10 text-theme-primary placeholder-theme-secondary focus:outline-none focus:border-blue-500/50 transition-colors"
+                        className="w-full pl-10 pr-4 py-3 rounded-lg bg-card border border-gray-100/20 text-theme-primary placeholder-theme-secondary focus:outline-none focus:border-blue-500/50 transition-colors"
                     />
                 </div>
 

@@ -1,4 +1,4 @@
-import { peer, caree, codec, Tic_icon, pinglo, omniai, megic, urlshort, saciva, khelratna, fitly, graft, aiapp, newsapp } from '../assets/images';
+import { peer, caree, codec, Tic_icon, pinglo, omniai, megic, urlshort, saciva, khelratna, fitly, graft, aiapp, newsapp, hui, frees } from '../assets/images';
 
 const experiences = [
     {
@@ -6,10 +6,24 @@ const experiences = [
         image: saciva,
         company: 'Saciva',
         duration: 'DEC 2024 - Present',
-        description: `At Saciva, I work as a Full Stack Developer, focusing on both frontend and backend development, while also managing the complete DevOps setup. The 
-        frontend is deployed on Vercel, and the backend is hosted on Hostinger with zero downtime during updates. For the frontend, we use Next.js with DuckDB, and for the backend, Express.js 
-        along with other supporting technologies. I containerized the application using Docker and configured Nginx to ensure scalability. Additionally, I implemented a robust monitoring system using Sentry, Grafana, and Prometheus.`
+        description: `At Saciva, I work as a Full Stack Developer handling frontend, backend, and DevOps. The frontend (Next.js + DuckDB) is deployed on Vercel, and the backend (Express.js) is hosted on Hostinger with zero-downtime updates.
+        I containerized the app with Docker, set up Nginx for scalability, and implemented monitoring using Sentry, Grafana, and Prometheus.`
+    },
+    {
+        title: 'React Native Intern',
+        image: hui,
+        company: 'HumanEra Intelligence',
+        duration: 'JUL 2025 - SEP 2025',
+        description: `Developed a cross-platform mobile app using React Native and Expo. Implemented user authentication with Clerk and managed state using Zustand for a seamless user experience. Adopted a local-first approach and integrated GraphQL for efficient data handling.`
+    },
+    {
+        title: 'Freelance Developer',
+        image: frees,
+        company: 'Self-Employed',
+        duration: 'AUG 2025 - Present',
+        description: `As a freelance developer, I build full-stack web and mobile applications for clients across various industries. I specialize in creating scalable, production-ready solutions using modern technologies like Next.js, React Native, FastAPI, and Go.`
     }
+    
 ];
 
 const projects = [
@@ -18,7 +32,7 @@ const projects = [
         title: "OmniAI",
         description: 'Chat with documents and websites through intelligent AI conversations. Get instant answers from your content.',
         longDescription: 'OmniAI is an advanced AI-powered platform that enables users to have intelligent conversations with their documents and websites. Built with cutting-edge technologies like LangChain and Pinecone for vector storage, it provides instant, contextual answers from your content. The platform features real-time processing, secure document handling, and seamless integration with various file formats.',
-        tech: ['Next.js', 'Go', 'FastAPI', 'LangChain', 'Redis', 'Pinecone'],
+        tech: ['Next.js', 'TypeScript', 'TailwindCSS', 'Go', 'FastAPI', 'LangChain', 'Redis', 'Pinecone', 'Postgresql', 'Docker', 'gRPC', 'RabbitMQ', 'nginx'],
         category: 'AI/ML',
         github: "https://github.com/Rana718/omniai",
         image: omniai,
@@ -30,7 +44,7 @@ const projects = [
         title: 'CareerWise',
         description: 'AI interview prep with mock sessions, feedback, and guidance. Built with Next.js, prisma and Gemini.',
         longDescription: 'CareerWise is a comprehensive AI-powered interview preparation platform that helps job seekers practice and improve their interview skills. It features mock interview sessions, real-time feedback, personalized guidance, and performance analytics. Built with modern technologies for a seamless user experience.',
-        tech: ['Next.js', 'Prisma', 'TypeScript', 'Framer Motion', 'Gemini'],
+        tech: ['Next.js', 'TailwindCSS', 'Prisma', 'TypeScript', 'Postgresql', 'Framer Motion', 'Gemini'],
         category: 'Web App',
         github: 'https://github.com/Rana718/HireLens',
         demo: 'https://careerw-ise.vercel.app/',
@@ -43,7 +57,7 @@ const projects = [
         title: 'PeerDrop',
         description: 'Instant, secure file sharing via peer-to-peer tech with end-to-end encryption. Built with React, Go, and WebSockets.',
         longDescription: 'PeerDrop revolutionizes file sharing with peer-to-peer technology and end-to-end encryption. No file size limits, no server storage, just direct, secure transfers between devices. Built with React frontend and Go backend using WebSockets for real-time communication.',
-        tech: ['React', 'TypeScript', 'Framer Motion', 'Go', 'Gorilla WebSockets'],
+        tech: ['React', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'Go', 'WebSocket'],
         category: 'Web App',
         github: 'https://github.com/Rana718/file_sharing',
         demo: 'https://peerdrop-theta.vercel.app/',
@@ -81,7 +95,7 @@ const projects = [
         title: 'NewsApp',
         description: 'A news aggregator app that fetches the latest news from various sources using NewsAPI.',
         longDescription: 'NewsApp is a modern news aggregator that pulls the latest articles from multiple sources using the NewsAPI. It features a clean, responsive design with categories for easy navigation, and allows users to search for specific topics. Built with Next.js and TailwindCSS, it provides a seamless user experience with fast loading times and smooth transitions.',
-        tech: ['React Native', 'expo', 'TypeScript', 'NativeWind', 'NewsAPI'],
+        tech: ['React Native', 'expo', 'TypeScript', 'TailwindCSS', 'NewsAPI'],
         category: 'Mobile App',
         github: 'https://github.com/Rana718/NewsApp',
         image: newsapp,
@@ -106,7 +120,7 @@ const projects = [
         title: 'Fitly',
         description: 'AI-powered web app that helps users find the best jobs based on their skills and interests.',
         longDescription: 'Fitly is an AI-powered web application designed to connect users with the most suitable job opportunities. It also allows users to generate tailored CVs based on job descriptions, making the application process smarter and more efficient.',
-        tech: ['Next.js', 'TypeScript', 'TailwindCSS', 'FastAPI', 'Python', 'Selenium', 'Gemini'],
+        tech: ['Next.js', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'FastAPI', 'Postgresql', 'Python', 'Selenium', 'Gemini'],
         category: 'Web App',
         github: 'https://github.com/Rana718/Fitly',
         image: fitly,
@@ -118,7 +132,7 @@ const projects = [
         title: "Pinglo",
         description: 'Real-time chat application with modern UI and seamless messaging experience.',
         longDescription: 'Pinglo is a real-time chat application built for modern communication needs. Features include instant messaging, group chats, file sharing, emoji reactions, and user presence indicators. Built with React and Socket.IO for real-time communication.',
-        tech: ['React', 'Socket.IO', 'Node.js', 'MongoDB'],
+        tech: ['Nextjs', 'Socket.IO', 'Framer Motion', 'TailwindCSS', 'TypeScript', 'Express', 'MongoDB'],
         category: 'Web App',
         github: "https://github.com/Rana718/pinglo",
         // demo: "https://pinglo-chat.vercel.app/",
@@ -131,7 +145,7 @@ const projects = [
         title: 'AI App',
         description: 'A simple AI app where user can generate images and text using Gemini.',
         longDescription: 'AI App is a simple yet powerful application that allows users to generate images and text using the Gemini AI model. It features a user-friendly interface, real-time generation capabilities, and supports various input formats for both text and image generation.',
-        tech: ['React Native', 'expo', 'clerk', 'TypeScript', 'NativeWind', 'Gemini'],
+        tech: ['React Native', 'expo', 'clerk', 'TypeScript', 'TailwindCSS', 'Gemini'],
         category: 'Mobile App',
         github: 'https://github.com/Rana718/Image_AI_App',
         image: aiapp,
@@ -156,7 +170,7 @@ const projects = [
         title: "URL Shortener",
         description: 'Fast, in-memory URL shortener using BigCache for quick link generation. Built with React, Go, and Docker.',
         longDescription: 'A high-performance URL shortening service built with Go and React. Features in-memory caching with BigCache for lightning-fast redirects, analytics tracking, custom short URLs, and bulk URL processing. Containerized with Docker for easy deployment and scaling.',
-        tech: ['React', 'Vite', 'TypeScript', 'Go', 'Fiber', 'Docker'],
+        tech: ['React', 'Vite', 'TypeScript', 'Go', 'Fiber', 'Redis', 'Docker'],
         category: 'Web App',
         github: "https://github.com/Luciferair/link-shortner",
         demo: "https://shortify-link-shortener.vercel.app/",
