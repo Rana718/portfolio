@@ -74,7 +74,7 @@ function ProjectsPage() {
     };
 
     return (
-        <div className="min-h-screen py-8">
+        <div className="min-h-screen py-8 lg:mx-56 md:mx-8 mx-2 px-4 ">
             <SEO 
                 title="Projects - Rana Dolui | Full Stack Developer Portfolio"
                 description="Explore my complete collection of projects including AI-powered applications, web apps, mobile apps, games, and creative tools. Built with React, Next.js, Go, Python, and modern technologies."

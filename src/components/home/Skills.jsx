@@ -40,15 +40,15 @@ function Skills() {
 
     return (
         <motion.div
-            className="p-4 rounded-lg shadow-lg bg-card transition-all duration-300 border border-gray-100 dark:border-gray-800 hover:shadow-xl"
+            className="relative p-6 rounded-xl bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 hover:shadow-2xl transition-all duration-300 h-full overflow-hidden"
             initial="hidden"
             animate="visible"
             variants={containerVariants}
-            whileHover={!isMobile ? { scale: 1.01 } : {}}
+            whileHover={!isMobile ? { y: -5 } : {}}
             transition={{ type: "spring", stiffness: 300 }}
         >
             <motion.h2
-                className="text-xl font-bold mb-4 text-theme-primary bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-400 dark:to-gray-200 bg-clip-text text-transparent"
+                className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}

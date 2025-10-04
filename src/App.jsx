@@ -18,17 +18,16 @@ function AppContent() {
   const chatButtonRef = useRef(null)
   const location = useLocation()
 
-  const toggleTheme = () => {
-    setIsDarkTheme((prev) => {
-      const newTheme = !prev;
-      if (newTheme) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-      return newTheme;
-    });
-  }
+  const toggleTheme = useCallback(() => {
+    const newTheme = !isDarkTheme;
+    if (newTheme) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    setIsDarkTheme(newTheme);
+  }, [isDarkTheme])
 
   const handleScroll = useCallback(() => {
     const currentPath = location.pathname
@@ -88,7 +87,7 @@ function AppContent() {
     <ThemeContext.Provider value={{ isDarkTheme, toggleTheme, chatButtonRef }}>
       <div className={`min-h-screen ${isDarkTheme ? 'dark bg-dark text-white' : 'bg-white text-gray-800'} transition-colors duration-300`}>
         <Navbar visible={showNavbar} />
-        <div className="lg:mx-56 md:mx-8 mx-2 px-4 py-8">
+        <div className="py-8">
           <Routes>
             <Route
               path="/"

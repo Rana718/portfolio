@@ -1,4 +1,4 @@
-import { peer, caree, codec, Tic_icon, pinglo, omniai, megic, urlshort, saciva, khelratna, fitly, graft, aiapp, newsapp } from '../assets/images';
+import { peer, caree, codec, Tic_icon, pinglo, omniai, megic, urlshort, saciva, khelratna, fitly, graft, aiapp, newsapp, hui, frees } from '../assets/images';
 
 const experiences = [
     {
@@ -6,10 +6,24 @@ const experiences = [
         image: saciva,
         company: 'Saciva',
         duration: 'DEC 2024 - Present',
-        description: `At Saciva, I work as a Full Stack Developer, focusing on both frontend and backend development, while also managing the complete DevOps setup. The 
-        frontend is deployed on Vercel, and the backend is hosted on Hostinger with zero downtime during updates. For the frontend, we use Next.js with DuckDB, and for the backend, Express.js 
-        along with other supporting technologies. I containerized the application using Docker and configured Nginx to ensure scalability. Additionally, I implemented a robust monitoring system using Sentry, Grafana, and Prometheus.`
+        description: `At Saciva, I work as a Full Stack Developer handling frontend, backend, and DevOps. The frontend (Next.js + DuckDB) is deployed on Vercel, and the backend (Express.js) is hosted on Hostinger with zero-downtime updates.
+        I containerized the app with Docker, set up Nginx for scalability, and implemented monitoring using Sentry, Grafana, and Prometheus.`
+    },
+    {
+        title: 'React Native Intern',
+        image: hui,
+        company: 'HumanEra Intelligence',
+        duration: 'JUL 2025 - SEP 2025',
+        description: `Developed a cross-platform mobile app using React Native and Expo. Implemented user authentication with Clerk and managed state using Zustand for a seamless user experience. Adopted a local-first approach and integrated GraphQL for efficient data handling.`
+    },
+    {
+        title: 'Freelance Developer',
+        image: frees,
+        company: 'Self-Employed',
+        duration: 'AUG 2025 - Present',
+        description: `As a freelance developer, I build full-stack web and mobile applications for clients across various industries. I specialize in creating scalable, production-ready solutions using modern technologies like Next.js, React Native, FastAPI, and Go.`
     }
+    
 ];
 
 const projects = [

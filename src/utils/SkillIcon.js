@@ -31,17 +31,21 @@ const getSkillIcon = (skill) => {
         'Zustand': 'zustand.svg',
         'Gorilla WebSockets': 'websocket.svg',
         'WebSockets': 'websocket.svg',
+        'WebSocket': 'websocket.svg',
         'RabbitMQ': 'rabbitmq.svg',
         'Kubernetes': 'kubernetes.svg',
         'Nginx': 'nginx.svg',
+        'nginx': 'nginx.svg',
         'gRPC': 'grpc.svg',
         'Express': 'expressjs.svg',
+        'Express.js': 'expressjs.svg',
         'Flask': 'flask.svg',
-        'NativeWind': 'tailwindcss.svg', // Using TailwindCSS icon for NativeWind
-        'BullMQ': 'redis.svg', // Using Redis icon as BullMQ uses Redis
+        'NativeWind': 'tailwindcss.svg',
+        'BullMQ': 'redis.svg',
         'Supabase': 'supabase.svg',
         'Kafka': 'kafka.svg',
         'CI/CD': 'githubactions.svg',
+        'GitHub Actions': 'githubactions.svg',
         'AWS': 'aws.svg',
     };
 

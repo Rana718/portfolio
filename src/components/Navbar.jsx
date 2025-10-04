@@ -3,6 +3,7 @@ import { Download, Home, FolderOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import downloadResume from '../utils/Download';
+import { ScrollProgress } from './ui/scroll-progress';
 
 function Navbar({ visible }) {
     const location = useLocation();
@@ -136,6 +137,9 @@ function Navbar({ visible }) {
                             </div>
                         </div>
                     </div>
+                    
+                    {/* Scroll Progress Bar */}
+                    <ScrollProgress className="h-1 top-auto bottom-0" />
                 </motion.div>
             </AnimatePresence>
         );

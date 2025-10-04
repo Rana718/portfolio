@@ -12,7 +12,8 @@ import fitly from './fitly.png';
 import aiapp from './aiapp.jpg';
 import khelratna from './khelratna.png';
 import newsapp from './newsapp.jpg';
-
+import hui from './hui.png';
+import frees from './frees.png';
 
 export{
     caree,
@@ -28,5 +29,7 @@ export{
     fitly,
     aiapp,
     khelratna,
-    newsapp
+    newsapp,
+    hui,
+    frees
 }

@@ -36,9 +36,15 @@ function Connect() {
     ];
 
     return (
-        <motion.div className="p-4 rounded-md shadow-md bg-card border border-gray-100 dark:border-gray-800" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+        <motion.div 
+            className="relative p-6 rounded-xl bg-white dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 hover:shadow-2xl transition-all duration-300 h-full overflow-hidden" 
+            initial={{ opacity: 0, y: 10 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            whileHover={!isMobile ? { y: -5 } : {}}
+            transition={{ duration: 0.5 }}
+        >
             <motion.h2
-                className="text-xl font-bold mb-4 text-theme-primary bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-400 dark:to-gray-200 bg-clip-text text-transparent"
+                className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-900 dark:text-white"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
