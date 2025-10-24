@@ -23,7 +23,7 @@ const experiences = [
         duration: 'AUG 2025 - Present',
         description: `As a freelance developer, I build full-stack web and mobile applications for clients across various industries. I specialize in creating scalable, production-ready solutions using modern technologies like Next.js, React Native, FastAPI, and Go.`
     }
-    
+
 ];
 
 const projects = [
@@ -80,12 +80,12 @@ const projects = [
     },
     {
         id: 5,
-        title: 'Graft',
-        description: 'A Go-based database migration CLI tool with smart migrations and multi-database support.',
-        longDescription: 'Graft is a production-ready database migration CLI tool built with Go. It offers Prisma-like functionality with support for PostgreSQL, MySQL, and SQLite. 🔄 Smart migrations, 💾 automatic backups, and the ability to run raw SQL code.',
-        tech: ['Go', 'Cobra', 'PostgreSQL', 'MySQL', 'SQLite', 'Viper'],
-        category: 'Creative Tool',
-        github: 'https://github.com/Rana718/Graft',
+        title: 'Flash ORM',
+        description: 'A powerful, database-agnostic ORM built in Go with Prisma-like functionality and multi-database support.',
+        longDescription: 'Flash ORM is a high-performance database ORM that outperforms Drizzle and Prisma by 3-12x in benchmarks. It provides safe transaction-based migrations, visual database management through Flash Studio, and generates type-safe code for Go, JavaScript/TypeScript, and Python. Features include schema introspection, multi-format exports (JSON, CSV, SQLite), and support for PostgreSQL, MySQL, and SQLite databases.',
+        tech: ['Go', 'PostgreSQL', 'MySQL', 'SQLite', 'SQLC', 'Cobra CLI', 'JavaScript', 'TypeScript', 'Python'],
+        category: 'Backend/Database',
+        github: 'https://github.com/Lumos-Labs-HQ/flash',
         image: graft,
         featured: true,
         status: 'completed'
