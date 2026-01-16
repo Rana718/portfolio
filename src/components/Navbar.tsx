@@ -1,6 +1,7 @@
 "use client";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = ["About", "Experience", "Projects", "Contact"];
@@ -8,6 +9,8 @@ const navItems = ["About", "Experience", "Projects", "Contact"];
 export const Navbar = () => {
   const [active, setActive] = useState("home");
   const [isOpen, setOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const handleNavClick = (id: string) => {
     setActive(id);
@@ -15,6 +18,15 @@ export const Navbar = () => {
     const section = document.getElementById(id);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleLogoClick = () => {
+    if (pathname !== '/') {
+      router.push('/');
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setActive('home');
     }
   };
 
@@ -56,8 +68,8 @@ export const Navbar = () => {
         <div className="flex gap-3 items-center">
           <ThemeToggle />
           <button
-            className="text-sm md:text-md lg:text-lg font-bold hover:cursor-pointer"
-            onClick={() => handleNavClick("home")}
+            className="text-sm md:text-md lg:text-lg font-bold hover:cursor-pointer transition-colors hover:text-green-500"
+            onClick={handleLogoClick}
           >
             RANA DOLUI
           </button>
