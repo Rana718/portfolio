@@ -1,0 +1,152 @@
+"use client";
+import { useTheme } from "@/lib/theme-provider";
+import { 
+  SiReact, SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
+  SiNodedotjs, SiExpress, SiGo, SiPython, SiFastapi, SiFlask,
+  SiPostgresql, SiMongodb, SiRedis, SiPrisma, SiMysql, SiSqlite,
+  SiDocker, SiAmazonwebservices, SiApachekafka, SiKubernetes,
+  SiNginx, SiGithubactions, SiGrafana, SiPrometheus, SiRabbitmq,
+  SiDjango, SiFirebase, SiSupabase, SiVercel, SiCloudflare,
+  SiGit, SiGithub, SiPostman, SiVite, SiFigma, 
+  SiNeovim, SiAndroidstudio, SiUbuntu, SiArchlinux,
+  SiKalilinux, SiHtml5, SiCss3, SiGnubash, SiC, SiCplusplus,
+  SiKotlin, SiRust, SiSolidity, SiBootstrap, SiThreedotjs,
+  SiRedux, SiSocketdotio, SiSelenium, SiHelm, SiArgo,
+  SiRender, SiRailway, SiPnpm, SiGradle, SiVim,
+   SiIntellijidea, SiPycharm, SiDatagrip,
+  SiElectron, SiClerk, SiTrpc, SiDeno, SiExpo, SiBun,
+  SiAuth0, SiHono, 
+} from 'react-icons/si';
+import { 
+  TbBrandReactNative, TbBrandFramerMotion, TbBrandGolang
+} from 'react-icons/tb';
+
+const technologies = [
+  // Languages
+  { name: 'JavaScript', icon: SiJavascript, light: '#F7DF1E', dark: '#F7DF1E' },
+  { name: 'TypeScript', icon: SiTypescript, light: '#3178C6', dark: '#3178C6' },
+  { name: 'Python', icon: SiPython, light: '#3776AB', dark: '#3776AB' },
+  { name: 'Go', icon: TbBrandGolang, light: '#00ADD8', dark: '#00ADD8' },
+  { name: 'C', icon: SiC, light: '#555555', dark: '#A8B9CC' },
+  { name: 'C++', icon: SiCplusplus, light: '#00599C', dark: '#00599C' },
+  { name: 'Kotlin', icon: SiKotlin, light: '#7F52FF', dark: '#7F52FF' },
+  { name: 'Rust', icon: SiRust, light: '#CE422B', dark: '#CE422B' },
+  { name: 'Solidity', icon: SiSolidity, light: '#363636', dark: '#A0A0A0' },
+  { name: 'Bash', icon: SiGnubash, light: '#4EAA25', dark: '#4EAA25' },
+  // { name: 'PowerShell', icon: SiPowershell, light: '#5391FE', dark: '#5391FE' },
+  { name: 'HTML', icon: SiHtml5, light: '#E34F26', dark: '#E34F26' },
+  { name: 'CSS', icon: SiCss3, light: '#1572B6', dark: '#1572B6' },
+  
+  // Frontend Frameworks
+  { name: 'React', icon: SiReact, light: '#61DAFB', dark: '#61DAFB' },
+  { name: 'Next.js', icon: SiNextdotjs, light: '#000000', dark: '#FFFFFF' },
+  { name: 'React Native', icon: TbBrandReactNative, light: '#61DAFB', dark: '#61DAFB' },
+  { name: 'Electron', icon: SiElectron, light: '#47848F', dark: '#47848F' },
+  { name: 'Expo', icon: SiExpo, light: '#000020', dark: '#FFFFFF' },
+  { name: 'TailwindCSS', icon: SiTailwindcss, light: '#06B6D4', dark: '#06B6D4' },
+  { name: 'Bootstrap', icon: SiBootstrap, light: '#7952B3', dark: '#7952B3' },
+  { name: 'Three.js', icon: SiThreedotjs, light: '#000000', dark: '#FFFFFF' },
+  { name: 'Redux', icon: SiRedux, light: '#764ABC', dark: '#764ABC' },
+  { name: 'Framer Motion', icon: TbBrandFramerMotion, light: '#0055FF', dark: '#0055FF' },
+  { name: 'Clerk', icon: SiClerk, light: '#6C47FF', dark: '#6C47FF' },
+  { name: 'Auth0', icon: SiAuth0, light: '#EB5424', dark: '#EB5424' },
+  
+  // Backend
+  { name: 'Node.js', icon: SiNodedotjs, light: '#339933', dark: '#339933' },
+  { name: 'Express', icon: SiExpress, light: '#000000', dark: '#FFFFFF' },
+  { name: 'Hono', icon: SiHono, light: '#E36002', dark: '#E36002' },
+  { name: 'Django', icon: SiDjango, light: '#092E20', dark: '#44B78B' },
+  { name: 'Flask', icon: SiFlask, light: '#000000', dark: '#FFFFFF' },
+  { name: 'FastAPI', icon: SiFastapi, light: '#009688', dark: '#009688' },
+  { name: 'tRPC', icon: SiTrpc, light: '#2596BE', dark: '#2596BE' },
+  { name: 'Socket.IO', icon: SiSocketdotio, light: '#010101', dark: '#FFFFFF' },
+  { name: 'Selenium', icon: SiSelenium, light: '#43B02A', dark: '#43B02A' },
+  
+  // Databases
+  { name: 'PostgreSQL', icon: SiPostgresql, light: '#4169E1', dark: '#4169E1' },
+  { name: 'MySQL', icon: SiMysql, light: '#4479A1', dark: '#4479A1' },
+  { name: 'SQLite', icon: SiSqlite, light: '#003B57', dark: '#07A9E1' },
+  { name: 'MongoDB', icon: SiMongodb, light: '#47A248', dark: '#47A248' },
+  { name: 'Redis', icon: SiRedis, light: '#DC382D', dark: '#DC382D' },
+  { name: 'Firebase', icon: SiFirebase, light: '#FFCA28', dark: '#FFCA28' },
+  { name: 'Supabase', icon: SiSupabase, light: '#3ECF8E', dark: '#3ECF8E' },
+  { name: 'Prisma', icon: SiPrisma, light: '#2D3748', dark: '#CBD5E0' },
+  
+  // DevOps
+  { name: 'Docker', icon: SiDocker, light: '#2496ED', dark: '#2496ED' },
+  { name: 'Kubernetes', icon: SiKubernetes, light: '#326CE5', dark: '#326CE5' },
+  { name: 'Helm', icon: SiHelm, light: '#0F1689', dark: '#5B8DEE' },
+  { name: 'ArgoCD', icon: SiArgo, light: '#EF7B4D', dark: '#EF7B4D' },
+  { name: 'Nginx', icon: SiNginx, light: '#009639', dark: '#009639' },
+  { name: 'Grafana', icon: SiGrafana, light: '#F46800', dark: '#F46800' },
+  { name: 'Prometheus', icon: SiPrometheus, light: '#E6522C', dark: '#E6522C' },
+  { name: 'GitHub Actions', icon: SiGithubactions, light: '#2088FF', dark: '#2088FF' },
+  { name: 'AWS', icon: SiAmazonwebservices, light: '#FF9900', dark: '#FF9900' },
+  { name: 'Vercel', icon: SiVercel, light: '#000000', dark: '#FFFFFF' },
+  { name: 'Cloudflare', icon: SiCloudflare, light: '#F38020', dark: '#F38020' },
+  { name: 'Render', icon: SiRender, light: '#46E3B7', dark: '#46E3B7' },
+  { name: 'Railway', icon: SiRailway, light: '#0B0D0E', dark: '#FFFFFF' },
+  { name: 'Kafka', icon: SiApachekafka, light: '#231F20', dark: '#FFFFFF' },
+  { name: 'RabbitMQ', icon: SiRabbitmq, light: '#FF6600', dark: '#FF6600' },
+  
+  // Tools
+  { name: 'Git', icon: SiGit, light: '#F05032', dark: '#F05032' },
+  { name: 'GitHub', icon: SiGithub, light: '#181717', dark: '#FFFFFF' },
+  { name: 'Postman', icon: SiPostman, light: '#FF6C37', dark: '#FF6C37' },
+  { name: 'Vite', icon: SiVite, light: '#646CFF', dark: '#646CFF' },
+  { name: 'pnpm', icon: SiPnpm, light: '#F69220', dark: '#F69220' },
+  { name: 'Bun', icon: SiBun, light: '#000000', dark: '#FBF0DF' },
+  { name: 'Deno', icon: SiDeno, light: '#000000', dark: '#FFFFFF' },
+  { name: 'Figma', icon: SiFigma, light: '#F24E1E', dark: '#F24E1E' },
+  { name: 'Gradle', icon: SiGradle, light: '#02303A', dark: '#02D9FF' },
+  
+  // IDEs
+  // { name: 'VS Code', icon: SiVscode, light: '#007ACC', dark: '#007ACC' },
+  { name: 'Neovim', icon: SiNeovim, light: '#57A143', dark: '#57A143' },
+  { name: 'Vim', icon: SiVim, light: '#019733', dark: '#019733' },
+  { name: 'Android Studio', icon: SiAndroidstudio, light: '#3DDC84', dark: '#3DDC84' },
+  // { name: 'Visual Studio', icon: SiVisualstudio, light: '#5C2D91', dark: '#5C2D91' },
+  // { name: 'IntelliJ IDEA', icon: SiIntellijidea, light: '#000000', dark: '#FFFFFF' },
+  // { name: 'PyCharm', icon: SiPycharm, light: '#000000', dark: '#21D789' },
+  // { name: 'DataGrip', icon: SiDatagrip, light: '#000000', dark: '#22D88F' },
+  
+  // OS
+  // { name: 'Windows', icon: SiWindows, light: '#0078D6', dark: '#0078D6' },
+  // { name: 'Ubuntu', icon: SiUbuntu, light: '#E95420', dark: '#E95420' },
+  // { name: 'Arch Linux', icon: SiArchlinux, light: '#1793D1', dark: '#1793D1' },
+  // { name: 'Kali Linux', icon: SiKalilinux, light: '#557C94', dark: '#557C94' },
+];
+
+export const TechStack = () => {
+  const { theme } = useTheme();
+  
+  return (
+    <section className="max-w-7xl mx-auto px-4 py-16 md:py-24">
+      <div className="text-center mb-8 md:mb-12">
+        <h2 className="text-2xl md:text-4xl font-bold tracking-wide mb-3">
+          TECH STACK
+        </h2>
+        <div className="w-16 md:w-24 h-1 bg-green-500 mx-auto mb-4 md:mb-6" />
+        <p className="text-foreground/60 text-xs md:text-sm max-w-2xl mx-auto">
+          Technologies I work with to build modern applications
+        </p>
+      </div>
+
+      <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-6xl mx-auto">
+        {technologies.map(({ name, icon: Icon, light, dark }) => (
+          <div
+            key={name}
+            className="group relative flex flex-col items-center gap-2"
+          >
+            <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl border border-foreground/20 bg-background hover:border-foreground/40 transition-all duration-300 hover:scale-110">
+              <Icon className="w-5 h-5 md:w-6 md:h-6" style={{ color: theme === 'dark' ? dark : light }} />
+            </div>
+            {/* <span className="text-[10px] text-foreground/60 font-semibold opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-6 whitespace-nowrap">
+              {name}
+            </span> */}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
