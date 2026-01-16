@@ -1,5 +1,6 @@
 import { ChevronDown, Github, Linkedin, Mail } from "lucide-react";
 import { Typewriter } from "./Typewriter";
+import { ParticleBurst } from "./ParticleBurst";
 
 const socials = [
   { url: "https://github.com/Rana718", label: "Github", icon: Github },
@@ -8,15 +9,8 @@ const socials = [
 ];
 
 export const Hero = () => (
-  <section id="home" className="relative min-h-screen">
-    <div
-      className="absolute inset-0 pointer-events-none"
-      style={{
-        backgroundImage: `linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px)`,
-        backgroundColor: "var(--grid-bg)",
-        backgroundSize: "50px 50px",
-      }}
-    />
+  <section id="home" className="relative min-h-screen bg-background">
+    <ParticleBurst />
     <header className="relative z-10 pt-24 sm:pt-28 md:pt-32 min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 md:px-8">
       <div className="max-w-2xl w-full">
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-center mb-2 sm:mb-4">
