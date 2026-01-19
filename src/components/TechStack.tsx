@@ -2,18 +2,17 @@
 import { useTheme } from "@/lib/theme-provider";
 import { 
   SiReact, SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
-  SiNodedotjs, SiExpress, SiGo, SiPython, SiFastapi, SiFlask,
+  SiNodedotjs, SiExpress, SiPython, SiFastapi, SiFlask,
   SiPostgresql, SiMongodb, SiRedis, SiPrisma, SiMysql, SiSqlite,
   SiDocker, SiAmazonwebservices, SiApachekafka, SiKubernetes,
   SiNginx, SiGithubactions, SiGrafana, SiPrometheus, SiRabbitmq,
   SiDjango, SiFirebase, SiSupabase, SiVercel, SiCloudflare,
   SiGit, SiGithub, SiPostman, SiVite, SiFigma, 
-  SiNeovim, SiAndroidstudio, SiUbuntu, SiArchlinux,
-  SiKalilinux, SiHtml5, SiCss3, SiGnubash, SiC, SiCplusplus,
+  SiNeovim, SiAndroidstudio, 
+  SiHtml5, SiCss3, SiGnubash, SiC, SiCplusplus,
   SiKotlin, SiRust, SiSolidity, SiBootstrap, SiThreedotjs,
   SiRedux, SiSocketdotio, SiSelenium, SiHelm, SiArgo,
   SiRender, SiRailway, SiPnpm, SiGradle, SiVim,
-   SiIntellijidea, SiPycharm, SiDatagrip,
   SiElectron, SiClerk, SiTrpc, SiDeno, SiExpo, SiBun,
   SiAuth0, SiHono, 
 } from 'react-icons/si';
@@ -33,7 +32,6 @@ const technologies = [
   { name: 'Rust', icon: SiRust, light: '#CE422B', dark: '#CE422B' },
   { name: 'Solidity', icon: SiSolidity, light: '#363636', dark: '#A0A0A0' },
   { name: 'Bash', icon: SiGnubash, light: '#4EAA25', dark: '#4EAA25' },
-  // { name: 'PowerShell', icon: SiPowershell, light: '#5391FE', dark: '#5391FE' },
   { name: 'HTML', icon: SiHtml5, light: '#E34F26', dark: '#E34F26' },
   { name: 'CSS', icon: SiCss3, light: '#1572B6', dark: '#1572B6' },
   
@@ -101,27 +99,16 @@ const technologies = [
   { name: 'Gradle', icon: SiGradle, light: '#02303A', dark: '#02D9FF' },
   
   // IDEs
-  // { name: 'VS Code', icon: SiVscode, light: '#007ACC', dark: '#007ACC' },
   { name: 'Neovim', icon: SiNeovim, light: '#57A143', dark: '#57A143' },
   { name: 'Vim', icon: SiVim, light: '#019733', dark: '#019733' },
   { name: 'Android Studio', icon: SiAndroidstudio, light: '#3DDC84', dark: '#3DDC84' },
-  // { name: 'Visual Studio', icon: SiVisualstudio, light: '#5C2D91', dark: '#5C2D91' },
-  // { name: 'IntelliJ IDEA', icon: SiIntellijidea, light: '#000000', dark: '#FFFFFF' },
-  // { name: 'PyCharm', icon: SiPycharm, light: '#000000', dark: '#21D789' },
-  // { name: 'DataGrip', icon: SiDatagrip, light: '#000000', dark: '#22D88F' },
-  
-  // OS
-  // { name: 'Windows', icon: SiWindows, light: '#0078D6', dark: '#0078D6' },
-  // { name: 'Ubuntu', icon: SiUbuntu, light: '#E95420', dark: '#E95420' },
-  // { name: 'Arch Linux', icon: SiArchlinux, light: '#1793D1', dark: '#1793D1' },
-  // { name: 'Kali Linux', icon: SiKalilinux, light: '#557C94', dark: '#557C94' },
 ];
 
 export const TechStack = () => {
   const { theme } = useTheme();
   
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16 md:py-24">
+    <section className="max-w-7xl mx-auto px-4 pb-16 md:pb-24">
       <div className="text-center mb-8 md:mb-12">
         <h2 className="text-2xl md:text-4xl font-bold tracking-wide mb-3">
           TECH STACK

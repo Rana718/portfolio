@@ -77,12 +77,6 @@ export const Footer = () => {
             <p className="text-xs text-gray-500">
               © 2025 RANA DOLUI - ALL RIGHTS RESERVED
             </p>
-            <a
-              href="#home"
-              className="border border-gray-500 p-2.5 hover:border-white transition rounded-full"
-            >
-              <span className="text-white">↑</span>
-            </a>
           </div>
         </div>
       </div>

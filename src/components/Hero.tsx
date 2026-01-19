@@ -1,6 +1,7 @@
 import { ChevronDown, Github, Linkedin, Mail } from "lucide-react";
 import { Typewriter } from "./Typewriter";
 import { ParticleBurst } from "./ParticleBurst";
+import { LiquidButton } from "./LiquidButton";
 
 const socials = [
   { url: "https://github.com/Rana718", label: "Github", icon: Github },
@@ -37,33 +38,35 @@ export const Hero = () => (
         </div>
 
         <div className="flex justify-center gap-3 sm:gap-4 mb-10 sm:mb-12">
-          <a
-            className="flex items-center px-6 sm:px-8 py-2 sm:py-3 bg-foreground text-background font-semibold text-xs sm:text-sm hover:bg-foreground/70 transition-colors duration-150 rounded-3xl"
+          <LiquidButton
             href="#projects"
+            variant="primary"
+            className="px-6 sm:px-8 py-2 sm:py-3 text-xs sm:text-sm rounded-3xl"
           >
             VIEW PROJECTS
-          </a>
-          <a
-            className="px-6 sm:px-8 py-2 sm:py-3 bg-background text-foreground border-2 border-foreground font-semibold text-xs sm:text-sm hover:bg-foreground hover:text-background transition-colors duration-150 rounded-3xl"
+          </LiquidButton>
+          <LiquidButton
             href="/Rana_Dolui.pdf"
             download
+            variant="secondary"
+            className="px-6 sm:px-8 py-2 sm:py-3 text-xs sm:text-sm rounded-3xl"
           >
             DOWNLOAD CV
-          </a>
+          </LiquidButton>
         </div>
 
         <div className="flex justify-center gap-4 sm:gap-6 mb-12 sm:mb-16">
           {socials.map(({ url, label, icon: Icon }) => (
-            <a
+            <LiquidButton
               key={label}
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 sm:p-3 border-2 rounded-full border-foreground/20 hover:border-foreground transition-colors duration-150 hover:bg-foreground hover:text-background"
-              aria-label={label}
+              variant="secondary"
+              className="p-2 sm:p-3 rounded-full"
             >
               <Icon size={18} />
-            </a>
+            </LiquidButton>
           ))}
         </div>
       </div>

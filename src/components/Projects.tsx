@@ -1,6 +1,7 @@
 "use client";
 import { projects } from "@/lib/data";
 import { ProjectCard } from "./ProjectCard";
+import { LiquidButton } from "./LiquidButton";
 
 export const Projects = () => {
   const featuredProjects = projects.filter((p) => p.featured);
@@ -24,12 +25,13 @@ export const Projects = () => {
       </div>
 
       <div className="flex justify-center mt-8">
-        <a
+        <LiquidButton
           href="/projects"
-          className="bg-foreground text-background rounded-xl py-3 px-8 text-sm font-bold hover:bg-foreground/90 transition-all hover:scale-105"
+          variant="primary"
+          className="rounded-xl py-3 px-8 text-sm"
         >
           VIEW ALL PROJECTS
-        </a>
+        </LiquidButton>
       </div>
     </section>
   );

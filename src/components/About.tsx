@@ -25,19 +25,22 @@ export const About = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {skillsArray.map(({ icon: Icon, title, description, tech }) => (
           <div
-            className="border border-foreground/30 p-4 md:p-6 text-center rounded-3xl"
+            className="relative overflow-hidden border border-foreground/30 p-4 md:p-6 text-center rounded-3xl group hover:border-foreground/50 transition-all duration-300"
             key={title}
           >
-            <div className="text-2xl md:text-3xl mb-3 text-foreground/80 flex justify-center">
-              <Icon />
+            <div className="absolute inset-0 bg-gradient-to-t from-green-500/10 to-green-600/5 translate-y-full group-hover:translate-y-1/2 transition-transform duration-700 ease-out" />
+            <div className="relative z-10">
+              <div className="text-2xl md:text-3xl mb-3 text-foreground/80 flex justify-center">
+                <Icon />
+              </div>
+              <h3 className="font-bold text-xs md:text-sm mb-2 tracking-wider">
+                {title}
+              </h3>
+              <p className="text-xs text-foreground/60 mb-3">{tech}</p>
+              <p className="text-xs text-foreground/60 leading-relaxed">
+                {description}
+              </p>
             </div>
-            <h3 className="font-bold text-xs md:text-sm mb-2 tracking-wider">
-              {title}
-            </h3>
-            <p className="text-xs text-foreground/60 mb-3">{tech}</p>
-            <p className="text-xs text-foreground/60 leading-relaxed">
-              {description}
-            </p>
           </div>
         ))}
       </div>

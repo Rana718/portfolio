@@ -1,6 +1,7 @@
 "use client";
 import { Code2, ExternalLink } from "lucide-react";
 import Image from "next/image";
+import { LiquidButton } from "./LiquidButton";
 import { 
   SiReact, SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
   SiNodedotjs, SiExpress, SiGo, SiPython, SiFastapi, SiFlask,
@@ -103,25 +104,27 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         </div>
 
         <div className="flex gap-3">
-          <a
+          <LiquidButton
+            href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 bg-foreground text-background rounded-xl py-2.5 px-4 text-xs font-bold flex items-center justify-center gap-2 hover:bg-foreground/90 transition"
-            href={project.github}
+            variant="primary"
+            className="flex-1 rounded-xl py-2.5 px-4 text-xs"
           >
             <Code2 size={16} />
             CODE
-          </a>
+          </LiquidButton>
           {project.demo && (
-            <a
+            <LiquidButton
+              href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 border border-foreground/30 text-foreground rounded-xl py-2.5 px-4 text-xs font-bold flex items-center justify-center gap-2 hover:bg-foreground/5 transition"
-              href={project.demo}
+              variant="secondary"
+              className="flex-1 rounded-xl py-2.5 px-4 text-xs"
             >
               <ExternalLink size={16} />
               DEMO
-            </a>
+            </LiquidButton>
           )}
         </div>
       </div>

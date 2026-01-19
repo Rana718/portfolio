@@ -63,7 +63,7 @@ export const Navbar = () => {
   }, []);
 
   return (
-    <nav className="fixed top-10 w-full max-w-xs md:max-w-2xl lg:max-w-3xl z-50 px-4">
+    <nav className="fixed top-6 w-full max-w-xs md:max-w-2xl lg:max-w-3xl z-50 px-4">
       <div className="px-4 py-2 md:px-6 md:py-4 flex justify-between backdrop-blur-sm items-center border border-foreground/10 rounded-full bg-background/80">
         <div className="flex gap-3 items-center">
           <ThemeToggle />
