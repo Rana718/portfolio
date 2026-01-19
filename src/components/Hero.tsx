@@ -64,6 +64,7 @@ export const Hero = () => (
               rel="noopener noreferrer"
               variant="secondary"
               className="p-2 sm:p-3 rounded-full"
+              aria-label={label}
             >
               <Icon size={18} />
             </LiquidButton>
@@ -72,7 +73,7 @@ export const Hero = () => (
       </div>
 
       <div className="absolute bottom-6 sm:bottom-8 animate-bounce">
-        <a href="#about">
+        <a href="#about" aria-label="Scroll to about section">
           <ChevronDown size={28} className="text-foreground/40" />
         </a>
       </div>

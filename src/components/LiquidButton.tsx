@@ -10,6 +10,7 @@ interface LiquidButtonProps {
   download?: boolean;
   target?: string;
   rel?: string;
+  "aria-label"?: string;
 }
 
 export const LiquidButton = ({
@@ -21,6 +22,7 @@ export const LiquidButton = ({
   download,
   target,
   rel,
+  "aria-label": ariaLabel,
 }: LiquidButtonProps) => {
   const [fillHeight, setFillHeight] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -116,6 +118,7 @@ export const LiquidButton = ({
         download={download}
         target={target}
         rel={rel}
+        aria-label={ariaLabel}
         onMouseEnter={handleMouseEnter}
         onMouseDown={handleMouseDown}
         onMouseUp={handleMouseUp}
@@ -130,6 +133,7 @@ export const LiquidButton = ({
     <button 
       onClick={onClick} 
       className={`${baseClasses} ${variantClasses}`}
+      aria-label={ariaLabel}
       onMouseEnter={handleMouseEnter}
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
