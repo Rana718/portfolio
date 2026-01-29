@@ -1,4 +1,4 @@
-import { peer, caree, codec, Tic_icon, pinglo, omniai, megic, urlshort, saciva, khelratna, fitly, graft, aiapp, newsapp, hui, frees } from '../assets/images';
+import { peer, caree, codec, Tic_icon, pinglo, omniai, megic, urlshort, saciva, khelratna, fitly, graft, aiapp, newsapp, hui, frees, passman, aicv } from '../assets';
 
 const experiences = [
     {
@@ -54,14 +54,14 @@ const projects = [
     },
     {
         id: 3,
-        title: 'PeerDrop',
-        description: 'Instant, secure file sharing via peer-to-peer tech with end-to-end encryption. Built with React, Go, and WebSockets.',
-        longDescription: 'PeerDrop revolutionizes file sharing with peer-to-peer technology and end-to-end encryption. No file size limits, no server storage, just direct, secure transfers between devices. Built with React frontend and Go backend using WebSockets for real-time communication.',
-        tech: ['React', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'Go', 'WebSocket'],
+        title: 'AI Resume Builder',
+        description: 'Built AI resume builder with automated CV generation, cover letter creation, payment integration, user management, and analytics dashboard for subscription-based service.',
+        longDescription: 'Full-stack AI-powered resume builder with Next.js frontend and FastAPI backend. Features include CV generation, cover letter creation, LinkedIn integration, payment processing, and admin dashboard with Docker deployment.',
+        tech: ['NextJS', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'Zustand', 'FastAPI', 'SQLAlchemy', 'Firebase', 'Postgresql', 'Razorpay', 'Docker', 'Redis', 'OpenAI'],
         category: 'Web App',
-        github: 'https://github.com/Rana718/file_sharing',
-        demo: 'https://peerdrop-theta.vercel.app/',
-        image: peer,
+        github: 'https://github.com/Rana718/cvbuilder',
+        // demo: 'https://peerdrop-theta.vercel.app/',
+        image: aicv,
         featured: true,
         status: 'completed'
     },
@@ -73,7 +73,7 @@ const projects = [
         tech: ['Next.js', 'Clerk', 'Prisma', 'TypeScript', 'Framer Motion', 'TailwindCSS'],
         category: 'Mobile App',
         github: 'https://github.com/Rana718/khelratna_user',
-        // demo: '',
+        demo: 'https://play.google.com/store/apps/details?id=com.khelratna.app',
         image: khelratna,
         featured: true,
         status: 'completed'
@@ -92,6 +92,32 @@ const projects = [
     },
     {
         id: 6,
+        title: 'Passman',
+        description: 'Secure password manager with end-to-end encryption, multi-factor authentication, vault management, zero-trust mode, and recovery keys for account protection.',
+        longDescription: 'A full-stack password manager with end-to-end encryption, multi-factor authentication (TOTP/Email OTP), vault management, zero-trust mode, and 40 recovery keys for secure password reset and account recovery.',
+        tech: ['SvelteKit', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'Redis'],
+        category: 'Web App',
+        github: 'https://github.com/Rana718/passman',
+        // demo: 'https://peerdrop-theta.vercel.app/',
+        image: passman,
+        featured: true,
+        status: 'completed'
+    },
+    {
+        id: 7,
+        title: 'PeerDrop',
+        description: 'Instant, secure file sharing via peer-to-peer tech with end-to-end encryption. Built with React, Go, and WebSockets.',
+        longDescription: 'PeerDrop revolutionizes file sharing with peer-to-peer technology and end-to-end encryption. No file size limits, no server storage, just direct, secure transfers between devices. Built with React frontend and Go backend using WebSockets for real-time communication.',
+        tech: ['React', 'TypeScript', 'TailwindCSS', 'Framer Motion', 'Go', 'WebSocket'],
+        category: 'Web App',
+        github: 'https://github.com/Rana718/file_sharing',
+        demo: 'https://peerdrop-theta.vercel.app/',
+        image: peer,
+        featured: false,
+        status: 'completed'
+    },
+    {
+        id: 8,
         title: 'NewsApp',
         description: 'A news aggregator app that fetches the latest news from various sources using NewsAPI.',
         longDescription: 'NewsApp is a modern news aggregator that pulls the latest articles from multiple sources using the NewsAPI. It features a clean, responsive design with categories for easy navigation, and allows users to search for specific topics. Built with Next.js and TailwindCSS, it provides a seamless user experience with fast loading times and smooth transitions.',
@@ -99,11 +125,11 @@ const projects = [
         category: 'Mobile App',
         github: 'https://github.com/Rana718/NewsApp',
         image: newsapp,
-        featured: true,
+        featured: false,
         status: 'completed'
     },
     {
-        id: 7,
+        id: 9,
         title: 'Snipity',
         description: 'Minimal code editor for creating and sharing snippets easily. Built with Next.js, Convex, Zustand, and Framer Motion.',
         longDescription: 'Snipity is a modern, minimal code editor designed for developers to create, edit, and share code snippets effortlessly. Features syntax highlighting, real-time collaboration, snippet organization, and seamless sharing capabilities. Built with Next.js and powered by Convex for real-time data synchronization.',
@@ -116,7 +142,7 @@ const projects = [
         status: 'completed'
     },
     {
-        id: 8,
+        id: 10,
         title: 'Fitly',
         description: 'AI-powered web app that helps users find the best jobs based on their skills and interests.',
         longDescription: 'Fitly is an AI-powered web application designed to connect users with the most suitable job opportunities. It also allows users to generate tailored CVs based on job descriptions, making the application process smarter and more efficient.',
@@ -128,7 +154,7 @@ const projects = [
         status: 'not completed'
     },
     {
-        id: 9,
+        id: 11,
         title: "Pinglo",
         description: 'Real-time chat application with modern UI and seamless messaging experience.',
         longDescription: 'Pinglo is a real-time chat application built for modern communication needs. Features include instant messaging, group chats, file sharing, emoji reactions, and user presence indicators. Built with React and Socket.IO for real-time communication.',
@@ -141,7 +167,7 @@ const projects = [
         status: 'not completed'
     },
     {
-        id: 10,
+        id: 12,
         title: 'AI App',
         description: 'A simple AI app where user can generate images and text using Gemini.',
         longDescription: 'AI App is a simple yet powerful application that allows users to generate images and text using the Gemini AI model. It features a user-friendly interface, real-time generation capabilities, and supports various input formats for both text and image generation.',
@@ -153,7 +179,7 @@ const projects = [
         status: 'completed'
     },
     {
-        id: 11,
+        id: 13,
         title: 'Magic Pad',
         description: "A creative drawing tool inspired by Apple's calculator sketchpad. Built for fun and interaction.",
         longDescription: "Magic Pad is an innovative drawing application inspired by Apple's calculator sketchpad feature. It combines creativity with AI, allowing users to draw and interact with their sketches in unique ways. Features include gesture recognition, AI-powered sketch analysis, and interactive drawing tools.",
@@ -166,7 +192,7 @@ const projects = [
         status: 'completed'
     },
     {
-        id: 12,
+        id: 14,
         title: "URL Shortener",
         description: 'Fast, in-memory URL shortener using BigCache for quick link generation. Built with React, Go, and Docker.',
         longDescription: 'A high-performance URL shortening service built with Go and React. Features in-memory caching with BigCache for lightning-fast redirects, analytics tracking, custom short URLs, and bulk URL processing. Containerized with Docker for easy deployment and scaling.',
@@ -179,7 +205,7 @@ const projects = [
         status: 'completed'
     },
     {
-        id: 13,
+        id: 15,
         title: "Tic Tac Toe Game",
         description: 'Modern Tic Tac Toe with bot, offline, and online multiplayer using Socket.IO and Redis.',
         longDescription: 'A modern take on the classic Tic Tac Toe game featuring multiple game modes including AI bot, offline play, and real-time online multiplayer. Built with React and Socket.IO for seamless real-time gameplay, Redis for session management, and beautiful animations with Framer Motion.',
