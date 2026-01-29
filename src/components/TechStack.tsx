@@ -110,6 +110,9 @@ export const TechStack = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
+  const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
+  const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -142,8 +145,8 @@ export const TechStack = () => {
             isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
           }`}
           style={{
-            background: "linear-gradient(90deg, transparent, #00ff88, transparent)",
-            boxShadow: "0 0 20px rgba(0, 255, 136, 0.5)",
+            background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
+            boxShadow: `0 0 20px rgba(${accentRgb}, 0.5)`,
           }}
         />
         <p
@@ -164,16 +167,26 @@ export const TechStack = () => {
             }`}
             style={{ transitionDelay: `${Math.min(300 + index * 20, 1000)}ms` }}
           >
-            <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl border border-foreground/20 bg-background transition-all duration-300 hover:border-[#00ff88]/50 hover:shadow-[0_0_20px_rgba(0,255,136,0.2)] hover:scale-110 hover:bg-[#00ff88]/5">
+            <div
+              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl border border-foreground/20 bg-background transition-all duration-300"
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.5)`;
+                e.currentTarget.style.boxShadow = `0 0 20px rgba(${accentRgb}, 0.2)`;
+                e.currentTarget.style.transform = "scale(1.1)";
+                e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.05)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "";
+                e.currentTarget.style.boxShadow = "";
+                e.currentTarget.style.transform = "";
+                e.currentTarget.style.backgroundColor = "";
+              }}
+            >
               <Icon
-                className="w-5 h-5 md:w-6 md:h-6 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(0,255,136,0.5)]"
+                className="w-5 h-5 md:w-6 md:h-6 transition-all duration-300"
                 style={{ color: theme === 'dark' ? dark : light }}
               />
             </div>
-            {/* Tooltip on hover */}
-            {/* <span className="text-[10px] text-[#00ff88] font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 absolute -bottom-6 whitespace-nowrap bg-background/90 px-2 py-0.5 rounded border border-[#00ff88]/30">
-              {name}
-            </span> */}
           </div>
         ))}
       </div>

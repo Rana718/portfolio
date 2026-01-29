@@ -1,5 +1,9 @@
 "use client";
-import { ReactNode, useState, useRef, useId } from "react";
+import { ReactNode, useState, useRef, useEffect } from "react";
+import { useTheme } from "@/lib/theme-provider";
+
+// Counter for generating stable unique IDs
+let idCounter = 0;
 
 interface LiquidButtonProps {
   children: ReactNode;
@@ -26,8 +30,19 @@ export const LiquidButton = ({
 }: LiquidButtonProps) => {
   const [fillHeight, setFillHeight] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [uniqueId, setUniqueId] = useState<string | null>(null);
   const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const uniqueId = useId();
+  const { theme } = useTheme();
+
+  // Generate stable ID on client side only to avoid hydration mismatch
+  useEffect(() => {
+    setUniqueId(`lb-${++idCounter}`);
+  }, []);
+
+  // Theme-aware colors
+  const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
+  const accentColorSecondary = theme === "dark" ? "#00d4aa" : "#FF9500";
+  const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -60,11 +75,11 @@ export const LiquidButton = ({
   const baseClasses = `relative overflow-hidden font-bold transition-all duration-300 inline-flex items-center justify-center ${className}`;
 
   const variantClasses = variant === "primary"
-    ? "bg-foreground text-background hover:shadow-[0_0_25px_rgba(0,255,136,0.4)]"
-    : "bg-background text-foreground border-2 border-foreground/40 hover:border-[#00ff88] hover:shadow-[0_0_20px_rgba(0,255,136,0.25)]";
+    ? `bg-foreground text-background hover:shadow-[0_0_25px_rgba(${accentRgb},0.4)]`
+    : `bg-background text-foreground border-2 border-foreground/40 hover:border-[${accentColor}] hover:shadow-[0_0_20px_rgba(${accentRgb},0.25)]`;
 
-  const gradientId = `neonGradient-${uniqueId}`;
-  const glowId = `glow-${uniqueId}`;
+  const gradientId = uniqueId ? `neonGradient-${uniqueId}` : "neonGradient-ssr";
+  const glowId = uniqueId ? `glow-${uniqueId}` : "glow-ssr";
 
   const content = (
     <>
@@ -72,7 +87,7 @@ export const LiquidButton = ({
         {children}
       </span>
       <span
-        className="absolute inset-0 z-[15] flex items-center justify-center gap-2 font-bold pointer-events-none overflow-hidden transition-all duration-300"
+        className="absolute inset-0 z-15 flex items-center justify-center gap-2 font-bold pointer-events-none overflow-hidden transition-all duration-300"
         style={{
           clipPath: `inset(${100 - fillHeight}% 0 0 0)`,
           color: variant === "primary" ? "#0a0a0a" : "#fafafa",
@@ -96,9 +111,9 @@ export const LiquidButton = ({
         >
           <defs>
             <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#00ff88" />
-              <stop offset="50%" stopColor="#00d4aa" />
-              <stop offset="100%" stopColor="#00ff88" />
+              <stop offset="0%" stopColor={accentColor} />
+              <stop offset="50%" stopColor={accentColorSecondary} />
+              <stop offset="100%" stopColor={accentColor} />
             </linearGradient>
             <filter id={glowId}>
               <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
@@ -130,7 +145,7 @@ export const LiquidButton = ({
       <div
         className="absolute inset-0 z-0 pointer-events-none transition-opacity duration-300"
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(0, 255, 136, 0.1) 0%, transparent 70%)',
+          background: `radial-gradient(ellipse at center, rgba(${accentRgb}, 0.1) 0%, transparent 70%)`,
           opacity: isHovered ? 1 : 0,
         }}
       />

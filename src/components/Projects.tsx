@@ -3,11 +3,16 @@ import { projects } from "@/lib/data";
 import { ProjectCard } from "./ProjectCard";
 import { LiquidButton } from "./LiquidButton";
 import { useEffect, useRef, useState } from "react";
+import { useTheme } from "@/lib/theme-provider";
 
 export const Projects = () => {
   const featuredProjects = projects.filter((p) => p.featured);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const { theme } = useTheme();
+
+  const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
+  const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -29,7 +34,7 @@ export const Projects = () => {
   return (
     <section
       ref={sectionRef}
-      className="max-w-7xl mx-auto text-center py-32 lg:py-46 px-4 md:px-8"
+      className="max-w-7xl mx-auto text-center py-20 lg:py-32 px-4 md:px-8"
       id="projects"
     >
       <h2
@@ -44,8 +49,8 @@ export const Projects = () => {
           isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
         }`}
         style={{
-          background: "linear-gradient(90deg, transparent, #00ff88, transparent)",
-          boxShadow: "0 0 20px rgba(0, 255, 136, 0.5)",
+          background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
+          boxShadow: `0 0 20px rgba(${accentRgb}, 0.5)`,
         }}
       />
       <p
@@ -73,7 +78,7 @@ export const Projects = () => {
       </div>
 
       <div
-        className={`flex justify-center mt-8 transition-all duration-700 ${
+        className={`flex justify-center mt-1 transition-all duration-700 ${
           isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
         style={{ transitionDelay: "800ms" }}
