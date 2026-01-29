@@ -1,22 +1,23 @@
 "use client";
 import { useTheme } from "@/lib/theme-provider";
-import { 
+import { useEffect, useRef, useState } from "react";
+import {
   SiReact, SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
   SiNodedotjs, SiExpress, SiPython, SiFastapi, SiFlask,
   SiPostgresql, SiMongodb, SiRedis, SiPrisma, SiMysql, SiSqlite,
   SiDocker, SiAmazonwebservices, SiApachekafka, SiKubernetes,
   SiNginx, SiGithubactions, SiGrafana, SiPrometheus, SiRabbitmq,
   SiDjango, SiFirebase, SiSupabase, SiVercel, SiCloudflare,
-  SiGit, SiGithub, SiPostman, SiVite, SiFigma, 
-  SiNeovim, SiAndroidstudio, 
+  SiGit, SiGithub, SiPostman, SiVite, SiFigma,
+  SiNeovim, SiAndroidstudio,
   SiHtml5, SiCss3, SiGnubash, SiC, SiCplusplus,
   SiKotlin, SiRust, SiSolidity, SiBootstrap, SiThreedotjs,
   SiRedux, SiSocketdotio, SiSelenium, SiHelm, SiArgo,
   SiRender, SiRailway, SiPnpm, SiGradle, SiVim,
   SiElectron, SiClerk, SiTrpc, SiDeno, SiExpo, SiBun,
-  SiAuth0, SiHono, 
+  SiAuth0, SiHono,
 } from 'react-icons/si';
-import { 
+import {
   TbBrandReactNative, TbBrandFramerMotion, TbBrandGolang
 } from 'react-icons/tb';
 
@@ -34,7 +35,7 @@ const technologies = [
   { name: 'Bash', icon: SiGnubash, light: '#4EAA25', dark: '#4EAA25' },
   { name: 'HTML', icon: SiHtml5, light: '#E34F26', dark: '#E34F26' },
   { name: 'CSS', icon: SiCss3, light: '#1572B6', dark: '#1572B6' },
-  
+
   // Frontend Frameworks
   { name: 'React', icon: SiReact, light: '#61DAFB', dark: '#61DAFB' },
   { name: 'Next.js', icon: SiNextdotjs, light: '#000000', dark: '#FFFFFF' },
@@ -48,7 +49,7 @@ const technologies = [
   { name: 'Framer Motion', icon: TbBrandFramerMotion, light: '#0055FF', dark: '#0055FF' },
   { name: 'Clerk', icon: SiClerk, light: '#6C47FF', dark: '#6C47FF' },
   { name: 'Auth0', icon: SiAuth0, light: '#EB5424', dark: '#EB5424' },
-  
+
   // Backend
   { name: 'Node.js', icon: SiNodedotjs, light: '#339933', dark: '#339933' },
   { name: 'Express', icon: SiExpress, light: '#000000', dark: '#FFFFFF' },
@@ -59,7 +60,7 @@ const technologies = [
   { name: 'tRPC', icon: SiTrpc, light: '#2596BE', dark: '#2596BE' },
   { name: 'Socket.IO', icon: SiSocketdotio, light: '#010101', dark: '#FFFFFF' },
   { name: 'Selenium', icon: SiSelenium, light: '#43B02A', dark: '#43B02A' },
-  
+
   // Databases
   { name: 'PostgreSQL', icon: SiPostgresql, light: '#4169E1', dark: '#4169E1' },
   { name: 'MySQL', icon: SiMysql, light: '#4479A1', dark: '#4479A1' },
@@ -69,7 +70,7 @@ const technologies = [
   { name: 'Firebase', icon: SiFirebase, light: '#FFCA28', dark: '#FFCA28' },
   { name: 'Supabase', icon: SiSupabase, light: '#3ECF8E', dark: '#3ECF8E' },
   { name: 'Prisma', icon: SiPrisma, light: '#2D3748', dark: '#CBD5E0' },
-  
+
   // DevOps
   { name: 'Docker', icon: SiDocker, light: '#2496ED', dark: '#2496ED' },
   { name: 'Kubernetes', icon: SiKubernetes, light: '#326CE5', dark: '#326CE5' },
@@ -86,7 +87,7 @@ const technologies = [
   { name: 'Railway', icon: SiRailway, light: '#0B0D0E', dark: '#FFFFFF' },
   { name: 'Kafka', icon: SiApachekafka, light: '#231F20', dark: '#FFFFFF' },
   { name: 'RabbitMQ', icon: SiRabbitmq, light: '#FF6600', dark: '#FF6600' },
-  
+
   // Tools
   { name: 'Git', icon: SiGit, light: '#F05032', dark: '#F05032' },
   { name: 'GitHub', icon: SiGithub, light: '#181717', dark: '#FFFFFF' },
@@ -97,7 +98,7 @@ const technologies = [
   { name: 'Deno', icon: SiDeno, light: '#000000', dark: '#FFFFFF' },
   { name: 'Figma', icon: SiFigma, light: '#F24E1E', dark: '#F24E1E' },
   { name: 'Gradle', icon: SiGradle, light: '#02303A', dark: '#02D9FF' },
-  
+
   // IDEs
   { name: 'Neovim', icon: SiNeovim, light: '#57A143', dark: '#57A143' },
   { name: 'Vim', icon: SiVim, light: '#019733', dark: '#019733' },
@@ -106,29 +107,71 @@ const technologies = [
 
 export const TechStack = () => {
   const { theme } = useTheme();
-  
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="max-w-7xl mx-auto px-4 pb-16 md:pb-24">
+    <section ref={sectionRef} className="max-w-7xl mx-auto px-4 pb-16 md:pb-24">
       <div className="text-center mb-8 md:mb-12">
-        <h2 className="text-2xl md:text-4xl font-bold tracking-wide mb-3">
+        <h2
+          className={`text-2xl md:text-4xl font-bold tracking-wide mb-3 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           TECH STACK
         </h2>
-        <div className="w-16 md:w-24 h-1 bg-green-500 mx-auto mb-4 md:mb-6" />
-        <p className="text-foreground/60 text-xs md:text-sm max-w-2xl mx-auto">
+        <div
+          className={`w-16 md:w-24 h-1 mx-auto mb-4 md:mb-6 rounded-full transition-all duration-700 delay-100 ${
+            isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+          }`}
+          style={{
+            background: "linear-gradient(90deg, transparent, #00ff88, transparent)",
+            boxShadow: "0 0 20px rgba(0, 255, 136, 0.5)",
+          }}
+        />
+        <p
+          className={`text-foreground/60 text-xs md:text-sm max-w-2xl mx-auto transition-all duration-700 delay-200 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           Technologies I work with to build modern applications
         </p>
       </div>
 
       <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-6xl mx-auto">
-        {technologies.map(({ name, icon: Icon, light, dark }) => (
+        {technologies.map(({ name, icon: Icon, light, dark }, index) => (
           <div
             key={name}
-            className="group relative flex flex-col items-center gap-2"
+            className={`group relative flex flex-col items-center gap-2 transition-all duration-500 ${
+              isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+            }`}
+            style={{ transitionDelay: `${Math.min(300 + index * 20, 1000)}ms` }}
           >
-            <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl border border-foreground/20 bg-background hover:border-foreground/40 transition-all duration-300 hover:scale-110">
-              <Icon className="w-5 h-5 md:w-6 md:h-6" style={{ color: theme === 'dark' ? dark : light }} />
+            <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl border border-foreground/20 bg-background transition-all duration-300 hover:border-[#00ff88]/50 hover:shadow-[0_0_20px_rgba(0,255,136,0.2)] hover:scale-110 hover:bg-[#00ff88]/5">
+              <Icon
+                className="w-5 h-5 md:w-6 md:h-6 transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(0,255,136,0.5)]"
+                style={{ color: theme === 'dark' ? dark : light }}
+              />
             </div>
-            {/* <span className="text-[10px] text-foreground/60 font-semibold opacity-0 group-hover:opacity-100 transition-opacity absolute -bottom-6 whitespace-nowrap">
+            {/* Tooltip on hover */}
+            {/* <span className="text-[10px] text-[#00ff88] font-semibold opacity-0 group-hover:opacity-100 transition-all duration-300 absolute -bottom-6 whitespace-nowrap bg-background/90 px-2 py-0.5 rounded border border-[#00ff88]/30">
               {name}
             </span> */}
           </div>

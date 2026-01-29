@@ -2,7 +2,7 @@
 import { Code2, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { LiquidButton } from "./LiquidButton";
-import { 
+import {
   SiReact, SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
   SiNodedotjs, SiExpress, SiGo, SiPython, SiFastapi, SiFlask,
   SiPostgresql, SiMongodb, SiRedis, SiPrisma, SiMysql,
@@ -63,19 +63,25 @@ interface ProjectCardProps {
 
 export const ProjectCard = ({ project }: ProjectCardProps) => {
   return (
-    <div className="group border border-foreground/20 overflow-hidden hover:border-foreground/40 transition-all rounded-2xl flex flex-col bg-background">
+    <div className="group border border-foreground/20 overflow-hidden transition-all duration-500 rounded-2xl flex flex-col bg-background hover:border-[#00ff88]/40 hover:shadow-[0_0_30px_rgba(0,255,136,0.1)]">
+      {/* Image container with neon overlay on hover */}
       <div className="relative h-48 bg-foreground/5 overflow-hidden">
         <Image
           src={project.image}
           alt={project.title}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500"
+          className="object-cover group-hover:scale-110 transition-transform duration-700"
         />
+        {/* Neon gradient overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#00ff88]/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+        {/* Top glow effect */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00ff88] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
 
       <div className="p-5 flex flex-1 flex-col justify-between text-left">
         <div>
-          <h3 className="font-bold text-lg mb-2 tracking-wide">
+          <h3 className="font-bold text-lg mb-2 tracking-wide group-hover:text-[#00ff88] transition-colors duration-300">
             {project.title}
           </h3>
           <p className="text-foreground/60 text-xs leading-relaxed mb-4">
@@ -83,16 +89,17 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           </p>
         </div>
 
+        {/* Tech icons with hover effect */}
         <div className="flex flex-wrap gap-2 mb-4">
           {[...new Set(project.tech)].slice(0, 8).map((tech) => {
             const Icon = techIcons[tech];
             return Icon ? (
               <div
                 key={tech}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-foreground/5 hover:bg-foreground/10 transition-colors"
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-foreground/5 hover:bg-[#00ff88]/10 hover:shadow-[0_0_10px_rgba(0,255,136,0.2)] transition-all duration-300"
                 title={tech}
               >
-                <Icon className="w-4 h-4 text-foreground/70" />
+                <Icon className="w-4 h-4 text-foreground/70 hover:text-[#00ff88] transition-colors duration-300" />
               </div>
             ) : null;
           })}

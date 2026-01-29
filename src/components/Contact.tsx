@@ -1,4 +1,6 @@
+"use client";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const socials = [
   { icon: Github, label: "Github", url: "https://github.com/Rana718" },
@@ -7,49 +9,108 @@ const socials = [
 ];
 
 export const Contact = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="mx-auto max-w-7xl px-4 py-32 sm:px-8 sm:py-46" id="contact">
+    <section
+      ref={sectionRef}
+      className="mx-auto max-w-7xl px-4 py-32 sm:px-8 sm:py-46"
+      id="contact"
+    >
       <div className="mb-12 text-center sm:mb-16">
-        <h1 className="mb-4 text-3xl font-bold sm:text-5xl">CONTACT</h1>
-        <div className="w-16 md:w-24 h-1 bg-green-500 mx-auto mb-6 md:mb-8" />
-        <p className="mx-auto max-w-2xl text-xs text-foreground/60 sm:text-sm">
+        <h1
+          className={`mb-4 text-3xl font-bold sm:text-5xl transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          CONTACT
+        </h1>
+        <div
+          className={`w-16 md:w-24 h-1 mx-auto mb-6 md:mb-8 rounded-full transition-all duration-700 delay-100 ${
+            isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+          }`}
+          style={{
+            background: "linear-gradient(90deg, transparent, #00ff88, transparent)",
+            boxShadow: "0 0 20px rgba(0, 255, 136, 0.5)",
+          }}
+        />
+        <p
+          className={`mx-auto max-w-2xl text-xs text-foreground/60 sm:text-sm transition-all duration-700 delay-200 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           Got an idea in mind? Let's collaborate and build something remarkable.
         </p>
       </div>
 
       <div className="max-w-2xl mx-auto">
-        <div className="mb-8">
+        <div
+          className={`mb-8 transition-all duration-700 delay-300 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
             GET IN TOUCH
           </h2>
           <div className="flex flex-col gap-y-4">
-            <div className="flex items-center justify-between p-3 sm:p-4 rounded-2xl border border-foreground/30">
+            <div className="group flex items-center justify-between p-3 sm:p-4 rounded-2xl border border-foreground/20 transition-all duration-500 hover:border-[#00ff88]/40 hover:shadow-[0_0_25px_rgba(0,255,136,0.1)]">
               <div className="flex gap-3 sm:gap-4 items-center">
-                <Mail className="h-5 w-5 shrink-0 text-foreground/90 sm:h-6 sm:w-6" />
-                <div className="min-w-0">
-                  <p className="text-xs text-foreground/60 uppercase">EMAIL</p>
-                  <p className="truncate text-xs sm:text-sm">ranadolui.dev@gmail.com</p>
+                <div className="p-2 rounded-xl bg-[#00ff88]/10 group-hover:bg-[#00ff88]/20 transition-colors duration-300">
+                  <Mail className="h-5 w-5 shrink-0 text-[#00ff88] sm:h-6 sm:w-6" />
                 </div>
+                <div className="min-w-0">
+                  <p className="text-xs text-[#00ff88]/70 uppercase font-medium">EMAIL</p>
+                  <p className="truncate text-xs sm:text-sm group-hover:text-[#00ff88] transition-colors duration-300">
+                    ranadolui.dev@gmail.com
+                  </p>
+                </div>
+              </div>
+              {/* Animated arrow on hover */}
+              <div className="opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                <span className="text-[#00ff88]">→</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div>
+        <div
+          className={`transition-all duration-700 delay-400 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
           <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
             SOCIAL LINKS
           </h2>
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
-            {socials.map(({ icon: Icon, label, url }) => (
+            {socials.map(({ icon: Icon, label, url }, index) => (
               <a
                 target="_blank"
                 rel="noopener noreferrer"
                 key={label}
                 href={url}
-                className="flex h-14 w-14 items-center justify-center rounded-full border border-foreground/30 p-3 hover:bg-foreground/5 transition sm:h-16 sm:w-16 sm:p-4"
+                className="group flex h-14 w-14 items-center justify-center rounded-full border border-foreground/20 p-3 transition-all duration-300 hover:border-[#00ff88] hover:bg-[#00ff88]/10 hover:shadow-[0_0_25px_rgba(0,255,136,0.3)] sm:h-16 sm:w-16 sm:p-4"
                 aria-label={label}
+                style={{ animationDelay: `${500 + index * 100}ms` }}
               >
-                <Icon className="h-6 w-6 text-foreground/90 sm:h-7 sm:w-7" />
+                <Icon className="h-6 w-6 text-foreground/70 group-hover:text-[#00ff88] transition-colors duration-300 group-hover:drop-shadow-[0_0_8px_rgba(0,255,136,0.5)] sm:h-7 sm:w-7" />
               </a>
             ))}
           </div>

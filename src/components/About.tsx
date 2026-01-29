@@ -1,5 +1,7 @@
+"use client";
 import { Code2, Server, Smartphone, Database } from "lucide-react";
 import { skills } from "@/lib/data";
+import { useEffect, useRef, useState } from "react";
 
 const skillsArray = [
   { icon: Code2, ...skills.frontend },
@@ -9,34 +11,84 @@ const skillsArray = [
 ];
 
 export const About = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="max-w-7xl mx-auto px-4 py-32 lg:py-50 pb-8" id="about">
+    <section
+      ref={sectionRef}
+      className="max-w-7xl mx-auto px-4 py-32 lg:py-50 pb-8"
+      id="about"
+    >
       <div className="text-center mb-12 md:mb-16">
-        <h1 className="text-3xl md:text-5xl font-bold tracking-wider mb-4">
+        <h1
+          className={`text-3xl md:text-5xl font-bold tracking-wider mb-4 transition-all duration-700 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           ABOUT
         </h1>
-        <div className="w-16 md:w-24 h-1 bg-green-500 mx-auto mb-6 md:mb-8" />
-        <p className="text-xs md:text-sm leading-relaxed max-w-2xl mx-auto text-foreground/70 px-2">
-          I'm a Full Stack Developer with expertise in building modern web and mobile applications. 
+        <div
+          className={`w-16 md:w-24 h-1 mx-auto mb-6 md:mb-8 rounded-full transition-all duration-700 delay-100 ${
+            isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+          }`}
+          style={{
+            background: "linear-gradient(90deg, transparent, #00ff88, transparent)",
+            boxShadow: "0 0 20px rgba(0, 255, 136, 0.5)",
+          }}
+        />
+        <p
+          className={`text-xs md:text-sm leading-relaxed max-w-2xl mx-auto text-foreground/70 px-2 transition-all duration-700 delay-200 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          }`}
+        >
+          I'm a Full Stack Developer with expertise in building modern web and mobile applications.
           From frontend interfaces to backend systems and DevOps, I create scalable solutions using cutting-edge technologies.
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-        {skillsArray.map(({ icon: Icon, title, description, tech }) => (
+        {skillsArray.map(({ icon: Icon, title, description, tech }, index) => (
           <div
-            className="relative overflow-hidden border border-foreground/30 p-4 md:p-6 text-center rounded-3xl group hover:border-foreground/50 transition-all duration-300"
+            className={`relative overflow-hidden border border-foreground/20 p-4 md:p-6 text-center rounded-3xl group transition-all duration-500 hover:border-[#00ff88]/50 hover:shadow-[0_0_30px_rgba(0,255,136,0.15)] ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+            style={{ transitionDelay: `${300 + index * 100}ms` }}
             key={title}
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-green-500/10 to-green-600/5 translate-y-full group-hover:translate-y-1/2 transition-transform duration-700 ease-out" />
+            {/* Animated gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#00ff88]/10 via-[#00ff88]/5 to-transparent translate-y-full group-hover:translate-y-0 transition-transform duration-700 ease-out" />
+
+            {/* Glow effect on hover */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-[#00ff88]/10 rounded-full blur-3xl" />
+            </div>
+
             <div className="relative z-10">
-              <div className="text-2xl md:text-3xl mb-3 text-foreground/80 flex justify-center">
-                <Icon />
+              <div className="text-2xl md:text-3xl mb-3 text-foreground/80 flex justify-center group-hover:text-[#00ff88] transition-colors duration-300">
+                <Icon className="group-hover:drop-shadow-[0_0_8px_rgba(0,255,136,0.5)]" />
               </div>
-              <h3 className="font-bold text-xs md:text-sm mb-2 tracking-wider">
+              <h3 className="font-bold text-xs md:text-sm mb-2 tracking-wider group-hover:text-[#00ff88] transition-colors duration-300">
                 {title}
               </h3>
-              <p className="text-xs text-foreground/60 mb-3">{tech}</p>
+              <p className="text-xs text-[#00ff88]/70 mb-3 font-medium">{tech}</p>
               <p className="text-xs text-foreground/60 leading-relaxed">
                 {description}
               </p>
