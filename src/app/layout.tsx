@@ -5,6 +5,8 @@ import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next"
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -18,6 +20,11 @@ export const metadata: Metadata = {
   keywords: ["Rana Dolui", "Full Stack Developer", "React Developer", "Next.js Developer", "Go Developer", "Python Developer", "JavaScript Expert", "TypeScript", "AI ML Developer", "Web Developer Kolkata", "Hire Full Stack Developer", "React Native", "FastAPI", "Docker", "AWS", "Kubernetes", "Software Engineer India", "Freelance Developer"],
   authors: [{ name: "Rana Dolui" }],
   creator: "Rana Dolui",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+
+  },
   robots: {
     index: true,
     follow: true,
@@ -45,8 +52,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@Ranad187",
-    creator: "@Ranad187",
+    site: "@jack718r",
+    creator: "@jack718r",
     title: "Rana Dolui - Full Stack Developer | React, Next.js, Go, Python Expert",
     description: "Experienced Full Stack Developer with 13+ production apps. Expert in React, Next.js, Go, Python, AI/ML, Docker, AWS.",
     images: ["https://ranadolui.me/logo.png"],
@@ -80,6 +87,7 @@ const structuredData = {
   workExample: [
     { "@type": "CreativeWork", name: "OmniAI", url: "https://github.com/Rana718/omniai" },
     { "@type": "CreativeWork", name: "CareerWise", url: "https://careerw-ise.vercel.app/" },
+    { "@type": "OpenSource", name: "FlashORM", url: "https://lumos-labs-hq.github.io/flash/" },
   ],
 };
 
@@ -103,6 +111,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );

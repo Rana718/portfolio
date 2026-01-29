@@ -15,7 +15,7 @@ import {
   SiRedux, SiSocketdotio, SiSelenium, SiHelm, SiArgo,
   SiRender, SiRailway, SiPnpm, SiGradle, SiVim,
   SiElectron, SiClerk, SiTrpc, SiDeno, SiExpo, SiBun,
-  SiAuth0, SiHono,
+  SiAuth0, SiHono, SiSvelte, SiFlutter, SiPhp, SiLaravel, SiElasticsearch,   
 } from 'react-icons/si';
 import {
   TbBrandReactNative, TbBrandFramerMotion, TbBrandGolang
@@ -31,7 +31,8 @@ const technologies = [
   { name: 'C++', icon: SiCplusplus, light: '#00599C', dark: '#00599C' },
   { name: 'Kotlin', icon: SiKotlin, light: '#7F52FF', dark: '#7F52FF' },
   { name: 'Rust', icon: SiRust, light: '#CE422B', dark: '#CE422B' },
-  { name: 'Solidity', icon: SiSolidity, light: '#363636', dark: '#A0A0A0' },
+  { name: 'PHP', icon: SiPhp, light: '#777BB4', dark: '#777BB4' },
+  // { name: 'Solidity', icon: SiSolidity, light: '#363636', dark: '#A0A0A0' },
   { name: 'Bash', icon: SiGnubash, light: '#4EAA25', dark: '#4EAA25' },
   { name: 'HTML', icon: SiHtml5, light: '#E34F26', dark: '#E34F26' },
   { name: 'CSS', icon: SiCss3, light: '#1572B6', dark: '#1572B6' },
@@ -39,9 +40,11 @@ const technologies = [
   // Frontend Frameworks
   { name: 'React', icon: SiReact, light: '#61DAFB', dark: '#61DAFB' },
   { name: 'Next.js', icon: SiNextdotjs, light: '#000000', dark: '#FFFFFF' },
+  { name: 'Svelte', icon: SiSvelte, light: '#FF3E00', dark: '#FF3E00' },
   { name: 'React Native', icon: TbBrandReactNative, light: '#61DAFB', dark: '#61DAFB' },
-  { name: 'Electron', icon: SiElectron, light: '#47848F', dark: '#47848F' },
+  { name: 'Flutter', icon: SiFlutter, light: '#02569B', dark: '#02569B' },
   { name: 'Expo', icon: SiExpo, light: '#000020', dark: '#FFFFFF' },
+  { name: 'Electron', icon: SiElectron, light: '#47848F', dark: '#47848F' },
   { name: 'TailwindCSS', icon: SiTailwindcss, light: '#06B6D4', dark: '#06B6D4' },
   { name: 'Bootstrap', icon: SiBootstrap, light: '#7952B3', dark: '#7952B3' },
   { name: 'Three.js', icon: SiThreedotjs, light: '#000000', dark: '#FFFFFF' },
@@ -49,6 +52,7 @@ const technologies = [
   { name: 'Framer Motion', icon: TbBrandFramerMotion, light: '#0055FF', dark: '#0055FF' },
   { name: 'Clerk', icon: SiClerk, light: '#6C47FF', dark: '#6C47FF' },
   { name: 'Auth0', icon: SiAuth0, light: '#EB5424', dark: '#EB5424' },
+  { name: 'Laravel', icon: SiLaravel, light: '#FF2D20', dark: '#FF2D20' },
 
   // Backend
   { name: 'Node.js', icon: SiNodedotjs, light: '#339933', dark: '#339933' },
@@ -70,6 +74,7 @@ const technologies = [
   { name: 'Firebase', icon: SiFirebase, light: '#FFCA28', dark: '#FFCA28' },
   { name: 'Supabase', icon: SiSupabase, light: '#3ECF8E', dark: '#3ECF8E' },
   { name: 'Prisma', icon: SiPrisma, light: '#2D3748', dark: '#CBD5E0' },
+  { name: 'Elasticsearch', icon: SiElasticsearch, light: '#005571', dark: '#005571' },
 
   // DevOps
   { name: 'Docker', icon: SiDocker, light: '#2496ED', dark: '#2496ED' },

@@ -138,6 +138,8 @@ export const Navbar = () => {
         <button
           onClick={() => setOpen(!isOpen)}
           className="md:hidden p-2 transition-all duration-300 rounded-full"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isOpen}
           style={{
             backgroundColor: "transparent",
           }}
@@ -150,7 +152,7 @@ export const Navbar = () => {
             e.currentTarget.style.boxShadow = "none";
           }}
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
+          {isOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
         </button>
       </div>
 

@@ -1,5 +1,6 @@
 "use client";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { SiX } from "react-icons/si";
 import { useTheme } from "@/lib/theme-provider";
 
 const quickLinks = [
@@ -12,7 +13,8 @@ const quickLinks = [
 
 const socials = [
   { icon: Github, label: "Github", url: "https://github.com/Rana718" },
-  { icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com/in/rana-dolui" },
+  { icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com/in/rana-dolui-89357728a/" },
+  { icon: SiX, label: "X", url: "https://x.com/jack718r" },
   { icon: Mail, label: "Mail", url: "mailto:ranadolui.dev@gmail.com" },
 ];
 

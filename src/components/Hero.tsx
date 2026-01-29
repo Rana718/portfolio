@@ -1,5 +1,6 @@
 "use client";
 import { ChevronDown, Github, Linkedin, Mail } from "lucide-react";
+import { SiX } from "react-icons/si";
 import { Typewriter } from "./Typewriter";
 import { ParticleBurst } from "./ParticleBurst";
 import { LiquidButton } from "./LiquidButton";
@@ -7,7 +8,8 @@ import { useTheme } from "@/lib/theme-provider";
 
 const socials = [
   { url: "https://github.com/Rana718", label: "Github", icon: Github },
-  { url: "https://linkedin.com/in/rana-dolui", label: "LinkedIn", icon: Linkedin },
+  { url: "https://linkedin.com/in/rana-dolui-89357728a/", label: "LinkedIn", icon: Linkedin },
+  { url: "https://x.com/jack718r", label: "X", icon: SiX },
   { url: "mailto:ranadolui.dev@gmail.com", label: "Mail", icon: Mail },
 ];
 

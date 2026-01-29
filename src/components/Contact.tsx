@@ -1,11 +1,13 @@
 "use client";
 import { Github, Linkedin, Mail } from "lucide-react";
+import { SiX } from "react-icons/si";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/lib/theme-provider";
 
 const socials = [
   { icon: Github, label: "Github", url: "https://github.com/Rana718" },
-  { icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com/in/rana-dolui" },
+  { icon: Linkedin, label: "LinkedIn", url: "https://linkedin.com/in/rana-dolui-89357728a/" },
+  { icon: SiX, label: "X", url: "https://x.com/jack718r" },
   { icon: Mail, label: "Mail", url: "mailto:ranadolui.dev@gmail.com" },
 ];
 
@@ -42,13 +44,13 @@ export const Contact = () => {
       id="contact"
     >
       <div className="mb-12 text-center sm:mb-16">
-        <h1
+        <h2
           className={`mb-4 text-3xl font-bold sm:text-5xl transition-all duration-700 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
         >
           CONTACT
-        </h1>
+        </h2>
         <div
           className={`w-16 md:w-24 h-1 mx-auto mb-6 md:mb-8 rounded-full transition-all duration-700 delay-100 ${
             isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
