@@ -78,23 +78,23 @@ export const Contact = () => {
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 80% 50% at 20% 40%, rgba(${accentRgb}, 0.15) 0%, transparent 50%),
-            radial-gradient(ellipse 60% 40% at 80% 20%, rgba(${accentRgb}, 0.1) 0%, transparent 50%),
-            radial-gradient(ellipse 70% 60% at 70% 80%, rgba(${accentRgb}, 0.12) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 30% at 30% 70%, rgba(${accentRgb}, 0.08) 0%, transparent 50%)
+            radial-gradient(ellipse 80% 50% at 20% 40%, rgba(${accentRgb}, 0.03) 0%, transparent 50%),
+            radial-gradient(ellipse 60% 40% at 80% 20%, rgba(${accentRgb}, 0.02) 0%, transparent 50%),
+            radial-gradient(ellipse 70% 60% at 70% 80%, rgba(${accentRgb}, 0.025) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 30% at 30% 70%, rgba(${accentRgb}, 0.02) 0%, transparent 50%)
           `,
           animation: "gradient-shift 8s ease-in-out infinite",
         }}
       />
 
-      {/* Second layer with different timing */}
+      {/* Second layer with different timing  */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           background: `
-            radial-gradient(ellipse 60% 40% at 50% 50%, rgba(${accentRgb}, 0.1) 0%, transparent 60%),
-            radial-gradient(ellipse 40% 50% at 10% 60%, rgba(${accentRgb}, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 40% at 90% 40%, rgba(${accentRgb}, 0.1) 0%, transparent 50%)
+            radial-gradient(ellipse 60% 40% at 50% 50%, rgba(${accentRgb}, 0.02) 0%, transparent 60%),
+            radial-gradient(ellipse 40% 50% at 10% 60%, rgba(${accentRgb}, 0.015) 0%, transparent 50%),
+            radial-gradient(ellipse 50% 40% at 90% 40%, rgba(${accentRgb}, 0.02) 0%, transparent 50%)
           `,
           animation: "gradient-shift-reverse 10s ease-in-out infinite",
         }}
@@ -163,8 +163,6 @@ export const Contact = () => {
           }}
         />
       </div>
-
-      {/* Animated lines */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ opacity: 0.3 }}>
         <defs>
           <linearGradient id={`line-gradient-${theme}`} x1="0%" y1="0%" x2="100%" y2="0%">
