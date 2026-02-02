@@ -59,6 +59,7 @@ interface ProjectCardProps {
     tech: string[];
     github: string;
     demo?: string | null;
+    category?: string;
   };
 }
 
@@ -66,6 +67,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const { theme } = useTheme();
   const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
   const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
+  const isMobileApp = project.category === "Mobile App";
 
   return (
     <div
@@ -80,27 +82,12 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
       }}
     >
       {/* Image container with overlay on hover */}
-      <div className="relative h-48 bg-foreground/5 overflow-hidden">
+      <div className={`relative h-48 overflow-hidden ${isMobileApp ? 'bg-linear-to-b from-foreground/5 to-foreground/10' : 'bg-foreground/5'}`}>
         <Image
           src={project.image}
           alt={project.title}
           fill
-          className="object-cover group-hover:scale-110 transition-transform duration-700"
-        />
-        {/* Gradient overlay on hover */}
-        <div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            background: `linear-gradient(to top, rgba(${accentRgb}, 0.2), transparent, transparent)`,
-          }}
-        />
-
-        {/* Top glow effect */}
-        <div
-          className="absolute top-0 left-0 right-0 h-1 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-          style={{
-            background: `linear-gradient(to right, transparent, ${accentColor}, transparent)`,
-          }}
+          className={`${isMobileApp ? 'object-contain p-2' : 'object-cover'} group-hover:scale-110 transition-transform duration-700`}
         />
       </div>
 
