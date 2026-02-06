@@ -82,7 +82,7 @@ export const projects = [
     category: "Backend",
     github: "https://github.com/Lumos-Labs-HQ/flash",
     demo: null,
-    image: "/projects/graft.png",
+    image: "/images/graftn.png",
     featured: true,
   },
   {
