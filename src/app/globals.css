@@ -275,6 +275,24 @@ html {
   }
 }
 
+@keyframes scroll-right-to-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+@keyframes scroll-left-to-right {
+  0% {
+    transform: translateX(-33.333%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
 /* Animation utility classes */
 .animate-fade-in {
   animation: fade-in 0.6s ease-out forwards;
@@ -389,3 +407,25 @@ html {
   z-index: 2;
 }
 
+/* Testimonials scroll animations */
+.scroll-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.scroll-content {
+  display: flex;
+  width: fit-content;
+}
+
+.scroll-right-to-left {
+  animation: scroll-right-to-left 40s linear infinite;
+}
+
+.scroll-left-to-right {
+  animation: scroll-left-to-right 40s linear infinite;
+}
+
+.scroll-content:hover {
+  animation-play-state: paused;
+}
