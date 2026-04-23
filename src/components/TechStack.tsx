@@ -7,21 +7,39 @@ import {
   SiPostgresql, SiMongodb, SiRedis, SiPrisma, SiMysql, SiSqlite,
   SiDocker, SiAmazonwebservices, SiApachekafka, SiKubernetes,
   SiNginx, SiGithubactions, SiGrafana, SiPrometheus, SiRabbitmq,
-  SiDjango, SiFirebase, SiSupabase, SiVercel, SiCloudflare,
-  SiGit, SiGithub, SiPostman, SiVite, SiFigma,
-  SiNeovim, SiAndroidstudio,
-  SiHtml5, SiCss3, SiGnubash, SiC, SiCplusplus,
+  SiDjango, SiFirebase, SiSupabase, SiCloudflare,
+  SiGit, SiGithub, SiVite, SiFigma,
+  SiHtml5, SiCss3, SiC, SiCplusplus,
   SiKotlin, SiRust, SiSolidity, SiBootstrap, SiThreedotjs,
   SiRedux, SiSocketdotio, SiSelenium, SiHelm, SiArgo,
-  SiRender, SiRailway, SiPnpm, SiGradle, SiVim,
-  SiElectron, SiClerk, SiTrpc, SiDeno, SiExpo, SiBun,
-  SiAuth0, SiHono, SiSvelte, SiFlutter, SiPhp, SiLaravel, SiElasticsearch,   
+  SiElectron, SiClerk, SiTrpc, SiExpo,
+  SiAuth0, SiHono, SiSvelte, SiFlutter, SiPhp, SiLaravel, SiElasticsearch,
+  SiLangchain, SiHuggingface,
 } from 'react-icons/si';
 import {
   TbBrandReactNative, TbBrandFramerMotion, TbBrandGolang
 } from 'react-icons/tb';
 
-const technologies = [
+// Pinecone inline SVG (no react-icons entry exists)
+const SiPinecone = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+    <path d="M11.982 0a.773.773 0 0 0-.531.203L8.498 2.83a.762.762 0 0 0-.03 1.09l.72.745-2.588 2.369-1.744-1.79a.762.762 0 0 0-1.09-.029L1.22 7.45a.762.762 0 0 0-.03 1.09l6.513 6.724a.762.762 0 0 0 1.09.029l2.544-2.464.72.744a.762.762 0 0 0 1.09.03l2.953-2.86a.762.762 0 0 0 .03-1.09l-1.745-1.79 2.589-2.368.72.744a.762.762 0 0 0 1.09.03l2.953-2.86a.762.762 0 0 0 .03-1.09L15.214.549A.762.762 0 0 0 14.605.3l-.031.001a.762.762 0 0 0-.512.22l-2.08 2.014V.762A.762.762 0 0 0 11.982 0zm.002 4.578 4.26 4.397-2.13 2.063-4.26-4.397zm-5.69 2.367 4.26 4.397-2.13 2.063-4.26-4.397z"/>
+  </svg>
+);
+
+// LangGraph inline SVG
+const SiLanggraph = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <circle cx="12" cy="5" r="2"/>
+    <circle cx="5" cy="17" r="2"/>
+    <circle cx="19" cy="17" r="2"/>
+    <line x1="12" y1="7" x2="6.5" y2="15.2"/>
+    <line x1="12" y1="7" x2="17.5" y2="15.2"/>
+    <line x1="7" y1="17" x2="17" y2="17"/>
+  </svg>
+);
+
+const technologies: { name: string; icon: React.ElementType; light: string; dark: string }[] = [
   // Languages
   { name: 'JavaScript', icon: SiJavascript, light: '#F7DF1E', dark: '#F7DF1E' },
   { name: 'TypeScript', icon: SiTypescript, light: '#3178C6', dark: '#3178C6' },
@@ -33,9 +51,14 @@ const technologies = [
   { name: 'Rust', icon: SiRust, light: '#CE422B', dark: '#CE422B' },
   { name: 'PHP', icon: SiPhp, light: '#777BB4', dark: '#777BB4' },
   // { name: 'Solidity', icon: SiSolidity, light: '#363636', dark: '#A0A0A0' },
-  { name: 'Bash', icon: SiGnubash, light: '#4EAA25', dark: '#4EAA25' },
   { name: 'HTML', icon: SiHtml5, light: '#E34F26', dark: '#E34F26' },
   { name: 'CSS', icon: SiCss3, light: '#1572B6', dark: '#1572B6' },
+
+  // AI / ML
+  { name: 'LangChain', icon: SiLangchain, light: '#1C3C3C', dark: '#00FF00' },
+  { name: 'LangGraph', icon: SiLanggraph, light: '#1C3C3C', dark: '#6EE7B7' },
+  { name: 'Pinecone', icon: SiPinecone, light: '#000000', dark: '#FFFFFF' },
+  { name: 'Hugging Face', icon: SiHuggingface, light: '#FFD21E', dark: '#FFD21E' },
 
   // Frontend Frameworks
   { name: 'React', icon: SiReact, light: '#61DAFB', dark: '#61DAFB' },
@@ -86,28 +109,15 @@ const technologies = [
   { name: 'Prometheus', icon: SiPrometheus, light: '#E6522C', dark: '#E6522C' },
   { name: 'GitHub Actions', icon: SiGithubactions, light: '#2088FF', dark: '#2088FF' },
   { name: 'AWS', icon: SiAmazonwebservices, light: '#FF9900', dark: '#FF9900' },
-  { name: 'Vercel', icon: SiVercel, light: '#000000', dark: '#FFFFFF' },
   { name: 'Cloudflare', icon: SiCloudflare, light: '#F38020', dark: '#F38020' },
-  { name: 'Render', icon: SiRender, light: '#46E3B7', dark: '#46E3B7' },
-  { name: 'Railway', icon: SiRailway, light: '#0B0D0E', dark: '#FFFFFF' },
   { name: 'Kafka', icon: SiApachekafka, light: '#231F20', dark: '#FFFFFF' },
   { name: 'RabbitMQ', icon: SiRabbitmq, light: '#FF6600', dark: '#FF6600' },
 
   // Tools
   { name: 'Git', icon: SiGit, light: '#F05032', dark: '#F05032' },
   { name: 'GitHub', icon: SiGithub, light: '#181717', dark: '#FFFFFF' },
-  { name: 'Postman', icon: SiPostman, light: '#FF6C37', dark: '#FF6C37' },
   { name: 'Vite', icon: SiVite, light: '#646CFF', dark: '#646CFF' },
-  { name: 'pnpm', icon: SiPnpm, light: '#F69220', dark: '#F69220' },
-  { name: 'Bun', icon: SiBun, light: '#000000', dark: '#FBF0DF' },
-  { name: 'Deno', icon: SiDeno, light: '#000000', dark: '#FFFFFF' },
   { name: 'Figma', icon: SiFigma, light: '#F24E1E', dark: '#F24E1E' },
-  { name: 'Gradle', icon: SiGradle, light: '#02303A', dark: '#02D9FF' },
-
-  // IDEs
-  { name: 'Neovim', icon: SiNeovim, light: '#57A143', dark: '#57A143' },
-  { name: 'Vim', icon: SiVim, light: '#019733', dark: '#019733' },
-  { name: 'Android Studio', icon: SiAndroidstudio, light: '#3DDC84', dark: '#3DDC84' },
 ];
 
 export const TechStack = () => {
@@ -174,6 +184,7 @@ export const TechStack = () => {
           >
             <div
               className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-xl border border-foreground/20 bg-background transition-all duration-300"
+              title={name}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.5)`;
                 e.currentTarget.style.boxShadow = `0 0 20px rgba(${accentRgb}, 0.2)`;

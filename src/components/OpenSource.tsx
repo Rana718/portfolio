@@ -1,9 +1,27 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { GitFork, Star } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 import { openSourceRepos } from "@/lib/data";
 import { LiquidButton } from "./LiquidButton";
+import {
+  SiJavascript, SiTypescript, SiPython, SiCplusplus,
+  SiRust, SiKotlin, SiSwift, SiDart, SiRuby, SiC,
+} from 'react-icons/si';
+import { TbBrandGolang } from 'react-icons/tb';
+
+const langIcons: Record<string, { icon: React.ElementType; light: string; dark: string }> = {
+  'Go':         { icon: TbBrandGolang, light: '#00ADD8', dark: '#00ADD8' },
+  'JavaScript': { icon: SiJavascript, light: '#F7DF1E', dark: '#F7DF1E' },
+  'TypeScript': { icon: SiTypescript, light: '#3178C6', dark: '#3178C6' },
+  'Python':     { icon: SiPython,     light: '#3776AB', dark: '#3776AB' },
+  'C++':        { icon: SiCplusplus,  light: '#00599C', dark: '#00599C' },
+  'C':          { icon: SiC,          light: '#555555', dark: '#A8B9CC' },
+  'Rust':       { icon: SiRust,       light: '#CE422B', dark: '#CE422B' },
+  'Kotlin':     { icon: SiKotlin,     light: '#7F52FF', dark: '#7F52FF' },
+  'Swift':      { icon: SiSwift,      light: '#F05138', dark: '#F05138' },
+  'Dart':       { icon: SiDart,       light: '#00B4AB', dark: '#00B4AB' },
+  'Ruby':       { icon: SiRuby,       light: '#CC342D', dark: '#CC342D' },
+};
 
 export const OpenSource = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -97,11 +115,33 @@ export const OpenSource = () => {
                 ))}
               </div>
 
-              {/* Footer stats */}
-              <div className="flex items-center justify-between pt-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[11px] text-foreground/60">{repo.language}</span>
-                </div>
+              {/* Language icons */}
+              <div className="flex items-center gap-1.5 pt-1">
+                {repo.language.map((lang) => {
+                  const entry = langIcons[lang];
+                  if (!entry) return null;
+                  const { icon: Icon, light, dark } = entry;
+                  return (
+                    <div
+                      key={lang}
+                      className="w-6 h-6 flex items-center justify-center rounded-md bg-foreground/5 transition-all duration-300"
+                      title={lang}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.12)`;
+                        e.currentTarget.style.boxShadow = `0 0 8px rgba(${accentRgb}, 0.2)`;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '';
+                        e.currentTarget.style.boxShadow = '';
+                      }}
+                    >
+                      <Icon
+                        className="w-3.5 h-3.5 transition-colors duration-300"
+                        style={{ color: theme === 'dark' ? dark : light }}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </a>
