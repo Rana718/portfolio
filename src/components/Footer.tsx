@@ -8,6 +8,8 @@ const quickLinks = [
   { href: "#about", label: "ABOUT" },
   { href: "#experience", label: "EXPERIENCE" },
   { href: "#projects", label: "PROJECTS" },
+  { href: "#opensource", label: "OPEN SOURCE" },
+  { href: "/blog", label: "BLOG" },
   { href: "#contact", label: "CONTACT" },
 ];
 

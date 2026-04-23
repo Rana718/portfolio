@@ -6,6 +6,7 @@ import { useTheme } from "@/lib/theme-provider";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
 const navItems = ["About", "Experience", "Projects", "Contact"];
+const navPages = [{ label: "Blog", href: "/blog" }];
 
 export const Navbar = () => {
   const [active, setActive] = useState("home");
@@ -44,9 +45,7 @@ export const Navbar = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-          }
+          if (entry.isIntersecting) setActive(entry.target.id);
         });
       },
       { root: null, threshold: 0.5 }
@@ -55,14 +54,11 @@ export const Navbar = () => {
     sections.forEach((section) => observer.observe(section));
 
     const handleScroll = () => {
-      if (window.scrollY < window.innerHeight * 0.2) {
-        setActive("home");
-      }
+      if (window.scrollY < window.innerHeight * 0.2) setActive("home");
       setScrolled(window.scrollY > 50);
     };
 
     window.addEventListener("scroll", handleScroll);
-
     return () => {
       observer.disconnect();
       window.removeEventListener("scroll", handleScroll);
@@ -100,6 +96,7 @@ export const Navbar = () => {
           </button>
         </div>
 
+        {/* Desktop nav */}
         <div className="hidden md:flex gap-7">
           {navItems.map((item) => (
             <button
@@ -111,28 +108,46 @@ export const Navbar = () => {
                 filter: active === item.toLowerCase() ? `drop-shadow(0 0 8px rgba(${accentRgb}, 0.5))` : "none",
               }}
               onMouseEnter={(e) => {
-                if (active !== item.toLowerCase()) {
-                  e.currentTarget.style.color = "inherit";
-                }
+                if (active !== item.toLowerCase()) e.currentTarget.style.color = "inherit";
               }}
               onMouseLeave={(e) => {
-                if (active !== item.toLowerCase()) {
-                  e.currentTarget.style.color = "rgba(128, 128, 128, 0.8)";
-                }
+                if (active !== item.toLowerCase()) e.currentTarget.style.color = "rgba(128, 128, 128, 0.8)";
               }}
             >
               {item.toUpperCase()}
               {active === item.toLowerCase() && (
                 <span
                   className="absolute -bottom-1 left-0 w-full h-0.5 rounded-full"
-                  style={{
-                    backgroundColor: accentColor,
-                    boxShadow: `0 0 10px rgba(${accentRgb}, 0.5)`,
-                  }}
+                  style={{ backgroundColor: accentColor, boxShadow: `0 0 10px rgba(${accentRgb}, 0.5)` }}
                 />
               )}
             </button>
           ))}
+          {/* {navPages.map(({ label, href }) => (
+            <button
+              key={label}
+              onClick={() => { router.push(href); setOpen(false); }}
+              className="text-xs font-semibold tracking-wide transition-all duration-300 relative"
+              style={{
+                color: pathname === href ? accentColor : "rgba(128, 128, 128, 0.8)",
+                filter: pathname === href ? `drop-shadow(0 0 8px rgba(${accentRgb}, 0.5))` : "none",
+              }}
+              onMouseEnter={(e) => {
+                if (pathname !== href) e.currentTarget.style.color = "inherit";
+              }}
+              onMouseLeave={(e) => {
+                if (pathname !== href) e.currentTarget.style.color = "rgba(128, 128, 128, 0.8)";
+              }}
+            >
+              {label.toUpperCase()}
+              {pathname === href && (
+                <span
+                  className="absolute -bottom-1 left-0 w-full h-0.5 rounded-full"
+                  style={{ backgroundColor: accentColor, boxShadow: `0 0 10px rgba(${accentRgb}, 0.5)` }}
+                />
+              )}
+            </button>
+          ))} */}
         </div>
 
         <button
@@ -140,9 +155,7 @@ export const Navbar = () => {
           className="md:hidden p-2 transition-all duration-300 rounded-full"
           aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={isOpen}
-          style={{
-            backgroundColor: "transparent",
-          }}
+          style={{ backgroundColor: "transparent" }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.1)`;
             e.currentTarget.style.boxShadow = `0 0 15px rgba(${accentRgb}, 0.2)`;
@@ -156,10 +169,10 @@ export const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile menu with animation */}
+      {/* Mobile menu */}
       <div
         className={`md:hidden backdrop-blur-md mt-2 border rounded-2xl overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-64 opacity-100" : "max-h-0 opacity-0"
+          isOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
         style={{
           backgroundColor: theme === "dark" ? "rgba(10, 10, 10, 0.95)" : "rgba(255, 254, 248, 0.95)",
@@ -195,6 +208,32 @@ export const Navbar = () => {
               {item}
             </button>
           ))}
+         { /* {navPages.map(({ label, href }) => (
+            <button
+              key={label}
+              onClick={() => { router.push(href); setOpen(false); }}
+              className="block w-full text-left text-sm font-semibold tracking-wide py-2 transition-all duration-300"
+              style={{
+                color: pathname === href ? accentColor : "rgba(128, 128, 128, 0.8)",
+                paddingLeft: pathname === href ? "1rem" : "0.5rem",
+                borderLeft: pathname === href ? `2px solid ${accentColor}` : "none",
+              }}
+              onMouseEnter={(e) => {
+                if (pathname !== href) {
+                  e.currentTarget.style.paddingLeft = "0.75rem";
+                  e.currentTarget.style.color = "inherit";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (pathname !== href) {
+                  e.currentTarget.style.paddingLeft = "0.5rem";
+                  e.currentTarget.style.color = "rgba(128, 128, 128, 0.8)";
+                }
+              }}
+            >
+              {label}
+            </button>
+          ))} */}
         </div>
       </div>
     </nav>

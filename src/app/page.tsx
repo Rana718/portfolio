@@ -3,6 +3,7 @@ import { About } from "@/components/About";
 import { TechStack } from "@/components/TechStack";
 import { Experience } from "@/components/Experience";
 import { Projects } from "@/components/Projects";
+import { OpenSource } from "@/components/OpenSource";
 import { Testimonials } from "@/components/Testimonials";
 import { Contact } from "@/components/Contact";
 import type { Metadata } from "next";
@@ -21,6 +22,7 @@ export default function Home() {
       <TechStack />
       <Experience />
       <Projects />
+      <OpenSource />
       <Testimonials />
       <Contact />
     </main>
