@@ -171,7 +171,7 @@ export const Navbar = () => {
 
       {/* Mobile menu */}
       <div
-        className={`md:hidden backdrop-blur-md mt-2 border rounded-2xl overflow-hidden transition-all duration-300 ${
+        className={`md:hidden backdrop-blur-md mt-2 border-2 rounded-2xl overflow-hidden transition-all duration-300 ${
           isOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
         style={{

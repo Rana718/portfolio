@@ -26,7 +26,7 @@ export const About = () => {
           setIsVisible(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (sectionRef.current) {
@@ -64,8 +64,9 @@ export const About = () => {
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
         >
-          I'm a Full Stack Developer with expertise in building modern web and mobile applications.
-          From frontend interfaces to backend systems and DevOps, I create scalable solutions using cutting-edge technologies.
+          I'm a Full Stack Developer with expertise in building modern web and
+          mobile applications. From frontend interfaces to backend systems and
+          DevOps, I create scalable solutions using cutting-edge technologies.
         </p>
       </div>
 
@@ -73,7 +74,9 @@ export const About = () => {
         {skillsArray.map(({ icon: Icon, title, description, tech }, index) => (
           <div
             className={`relative overflow-hidden border border-foreground/20 p-4 md:p-6 text-center rounded-3xl group transition-all duration-500 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              isVisible
+                ? "opacity-100 translate-y-0"
+                : "opacity-0 translate-y-8"
             }`}
             style={{
               transitionDelay: `${300 + index * 100}ms`,
@@ -116,14 +119,19 @@ export const About = () => {
                   style={{
                     ["--accent-glow" as string]: `rgba(${accentRgb}, 0.5)`,
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = accentColor}
-                  onMouseLeave={(e) => e.currentTarget.style.color = ""}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = accentColor)
+                  }
+                  onMouseLeave={(e) => (e.currentTarget.style.color = "")}
                 />
               </div>
               <h3 className="font-bold text-xs md:text-sm mb-2 tracking-wider group-hover:text-(--accent-color) transition-colors duration-300">
                 {title}
               </h3>
-              <p className="text-xs mb-3 font-medium" style={{ color: `rgba(${accentRgb}, 0.7)` }}>
+              <p
+                className="text-xs mb-3 font-medium"
+                style={{ color: `rgba(${accentRgb}, 0.7)` }}
+              >
                 {tech}
               </p>
               <p className="text-xs text-foreground/60 leading-relaxed">
