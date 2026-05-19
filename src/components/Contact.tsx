@@ -1,8 +1,10 @@
 "use client";
-import { Github, Linkedin, Mail, Send, Loader2 } from "lucide-react";
+import { Github, Linkedin, Mail, Send, Loader2, CheckCircle } from "lucide-react";
 import { SiX } from "react-icons/si";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "@/lib/theme-provider";
+import { motion, AnimatePresence } from "framer-motion";
+import { Confetti } from "./Confetti";
 
 const socials = [
   { icon: Github, label: "Github", url: "https://github.com/Rana718" },
@@ -11,14 +13,85 @@ const socials = [
   { icon: Mail, label: "Mail", url: "mailto:ranadolui.dev@gmail.com" },
 ];
 
+interface FloatingInputProps {
+  type?: string;
+  value: string;
+  onChange: (val: string) => void;
+  placeholder: string;
+  required?: boolean;
+  isTextarea?: boolean;
+  delay?: number;
+}
+
+const FloatingInput = ({
+  type = "text",
+  value,
+  onChange,
+  placeholder,
+  required,
+  isTextarea,
+  delay = 0,
+}: FloatingInputProps) => {
+  const { theme } = useTheme();
+  const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
+  const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
+  const [focused, setFocused] = useState(false);
+  const isActive = focused || value.length > 0;
+
+  const InputComponent = isTextarea ? "textarea" : "input";
+
+  return (
+    <motion.div
+      className="relative"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.5 }}
+    >
+      <InputComponent
+        type={isTextarea ? undefined : type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        rows={isTextarea ? 4 : undefined}
+        className={`w-full p-3 sm:p-4 rounded-2xl border bg-transparent text-sm sm:text-base placeholder:text-transparent focus:outline-none transition-all duration-300 ${
+          isTextarea ? "resize-none" : ""
+        }`}
+        style={{
+          borderColor: focused ? accentColor : "rgba(128,128,128,0.2)",
+          boxShadow: focused ? `0 0 15px rgba(${accentRgb}, 0.2)` : "none",
+        }}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        placeholder={placeholder}
+      />
+      <motion.label
+        className="absolute left-4 pointer-events-none text-foreground/40 text-sm transition-all duration-300"
+        style={{
+          top: isActive ? "-10px" : "50%",
+          transform: isActive ? "translateY(0) scale(0.85)" : "translateY(-50%) scale(1)",
+          backgroundColor: isActive ? (theme === "dark" ? "#0a0a0a" : "#fffef8") : "transparent",
+          padding: isActive ? "0 8px" : "0",
+          color: focused ? accentColor : "inherit",
+        }}
+      >
+        {placeholder}
+        {required && <span className="text-red-400 ml-0.5">*</span>}
+      </motion.label>
+    </motion.div>
+  );
+};
+
 export const Contact = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [isCardHovered, setIsCardHovered] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
-  const sectionRef = useRef<HTMLElement>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
   const { theme } = useTheme();
+
+  const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
+  const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,46 +107,25 @@ export const Contact = () => {
 
       if (res.ok) {
         setStatus("sent");
+        setShowConfetti(true);
         setEmail("");
         setMessage("");
-        setTimeout(() => setStatus("idle"), 2000);
+        setTimeout(() => setStatus("idle"), 3000);
       } else {
         setStatus("error");
-        setTimeout(() => setStatus("idle"), 2000);
+        setTimeout(() => setStatus("idle"), 3000);
       }
     } catch {
       setStatus("error");
-      setTimeout(() => setStatus("idle"), 2000);
+      setTimeout(() => setStatus("idle"), 3000);
     }
   };
 
-  const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
-  const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative w-full py-20 sm:py-32 overflow-hidden"
-      id="contact"
-    >
-      {/* Animated Background - Full width, no edges */}
+    <section className="relative w-full py-20 sm:py-32 overflow-hidden" id="contact">
+      <Confetti trigger={showConfetti} onComplete={() => setShowConfetti(false)} />
+
+      {/* Animated Background */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -100,368 +152,287 @@ export const Contact = () => {
         }}
       />
 
-      {/* Floating particles effect */}
+      {/* Floating particles effect - CSS only, 3 particles max */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
-          className="absolute w-2 h-2 rounded-full"
+          className="absolute w-2 h-2 rounded-full animate-float-particle"
           style={{
-            background: `rgba(${accentRgb}, 0.6)`,
-            boxShadow: `0 0 20px 10px rgba(${accentRgb}, 0.3)`,
+            background: `rgba(${accentRgb}, 0.5)`,
+            boxShadow: `0 0 15px 6px rgba(${accentRgb}, 0.25)`,
             left: "20%",
             top: "30%",
-            animation: "float-particle 6s ease-in-out infinite",
+            animationDuration: "7s",
+            animationDelay: "0s",
           }}
         />
         <div
-          className="absolute w-1.5 h-1.5 rounded-full"
-          style={{
-            background: `rgba(${accentRgb}, 0.5)`,
-            boxShadow: `0 0 15px 8px rgba(${accentRgb}, 0.25)`,
-            left: "70%",
-            top: "20%",
-            animation: "float-particle 8s ease-in-out 1s infinite",
-          }}
-        />
-        <div
-          className="absolute w-1 h-1 rounded-full"
-          style={{
-            background: `rgba(${accentRgb}, 0.7)`,
-            boxShadow: `0 0 12px 6px rgba(${accentRgb}, 0.3)`,
-            left: "80%",
-            top: "60%",
-            animation: "float-particle 7s ease-in-out 2s infinite",
-          }}
-        />
-        <div
-          className="absolute w-2 h-2 rounded-full"
+          className="absolute w-1.5 h-1.5 rounded-full animate-float-particle"
           style={{
             background: `rgba(${accentRgb}, 0.4)`,
-            boxShadow: `0 0 18px 9px rgba(${accentRgb}, 0.2)`,
-            left: "15%",
-            top: "70%",
-            animation: "float-particle 9s ease-in-out 0.5s infinite",
+            boxShadow: `0 0 12px 5px rgba(${accentRgb}, 0.2)`,
+            left: "70%",
+            top: "60%",
+            animationDuration: "9s",
+            animationDelay: "2s",
           }}
         />
         <div
-          className="absolute w-1.5 h-1.5 rounded-full"
-          style={{
-            background: `rgba(${accentRgb}, 0.5)`,
-            boxShadow: `0 0 15px 8px rgba(${accentRgb}, 0.25)`,
-            left: "50%",
-            top: "80%",
-            animation: "float-particle 7s ease-in-out 3s infinite",
-          }}
-        />
-        <div
-          className="absolute w-1 h-1 rounded-full"
+          className="absolute w-1 h-1 rounded-full animate-float-particle"
           style={{
             background: `rgba(${accentRgb}, 0.6)`,
-            boxShadow: `0 0 10px 5px rgba(${accentRgb}, 0.3)`,
-            left: "40%",
-            top: "15%",
-            animation: "float-particle 6s ease-in-out 4s infinite",
+            boxShadow: `0 0 10px 4px rgba(${accentRgb}, 0.3)`,
+            left: "45%",
+            top: "75%",
+            animationDuration: "8s",
+            animationDelay: "4s",
           }}
         />
       </div>
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ opacity: 0.3 }}>
-        <defs>
-          <linearGradient id={`line-gradient-${theme}`} x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="transparent" />
-            <stop offset="50%" stopColor={`rgba(${accentRgb}, 0.5)`} />
-            <stop offset="100%" stopColor="transparent" />
-          </linearGradient>
-        </defs>
-        <line
-          x1="0%" y1="25%" x2="100%" y2="25%"
-          stroke={`url(#line-gradient-${theme})`}
-          strokeWidth="1"
-          style={{ animation: "line-pulse 4s ease-in-out infinite" }}
-        />
-        <line
-          x1="0%" y1="75%" x2="100%" y2="75%"
-          stroke={`url(#line-gradient-${theme})`}
-          strokeWidth="1"
-          style={{ animation: "line-pulse 4s ease-in-out 2s infinite" }}
-        />
-      </svg>
-
-      {/* Keyframe Styles */}
-      <style jsx>{`
-        @keyframes gradient-shift {
-          0%, 100% {
-            opacity: 0.6;
-            transform: scale(1) translateX(0);
-          }
-          33% {
-            opacity: 0.8;
-            transform: scale(1.05) translateX(2%);
-          }
-          66% {
-            opacity: 0.5;
-            transform: scale(0.98) translateX(-2%);
-          }
-        }
-
-        @keyframes gradient-shift-reverse {
-          0%, 100% {
-            opacity: 0.5;
-            transform: scale(1) translateY(0);
-          }
-          50% {
-            opacity: 0.7;
-            transform: scale(1.03) translateY(-2%);
-          }
-        }
-
-        @keyframes float-particle {
-          0%, 100% {
-            transform: translate(0, 0);
-            opacity: 0.6;
-          }
-          25% {
-            transform: translate(20px, -30px);
-            opacity: 1;
-          }
-          50% {
-            transform: translate(-10px, -50px);
-            opacity: 0.8;
-          }
-          75% {
-            transform: translate(15px, -20px);
-            opacity: 0.9;
-          }
-        }
-
-        @keyframes line-pulse {
-          0%, 100% {
-            opacity: 0.1;
-          }
-          50% {
-            opacity: 0.4;
-          }
-        }
-      `}</style>
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-8">
-        <div className="mb-12 text-center sm:mb-16">
-        <h2
-          className={`mb-4 text-3xl font-bold sm:text-5xl transition-all duration-700 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <motion.div
+          className="mb-12 text-center sm:mb-16"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
         >
-          CONTACT
-        </h2>
-        <div
-          className={`w-16 md:w-24 h-1 mx-auto mb-6 md:mb-8 rounded-full transition-all duration-700 delay-100 ${
-            isVisible ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
-          }`}
-          style={{
-            background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
-            boxShadow: `0 0 20px rgba(${accentRgb}, 0.5)`,
-          }}
-        />
-        <p
-          className={`mx-auto max-w-2xl text-xs text-foreground/60 sm:text-sm transition-all duration-700 delay-200 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          Got an idea in mind? Let's collaborate and build something remarkable.
-        </p>
-      </div>
-
-      <div className="max-w-2xl mx-auto">
-        <div
-          className={`mb-8 transition-all duration-700 delay-300 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
-            GET IN TOUCH
+          <h2 className="mb-4 text-3xl font-bold sm:text-5xl">
+            CONTACT
           </h2>
-          <div className="flex flex-col gap-y-4">
-            <div
-              className="group flex items-center justify-between p-3 sm:p-4 rounded-2xl border border-foreground/20 transition-all duration-500"
-              onMouseEnter={(e) => {
-                setIsCardHovered(true);
-                e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.5)`;
-                e.currentTarget.style.boxShadow = `0 0 25px rgba(${accentRgb}, 0.2)`;
-                e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.05)`;
-              }}
-              onMouseLeave={(e) => {
-                setIsCardHovered(false);
-                e.currentTarget.style.borderColor = "";
-                e.currentTarget.style.boxShadow = "";
-                e.currentTarget.style.backgroundColor = "";
-              }}
-            >
-              <div className="flex gap-3 sm:gap-4 items-center">
-                <div
-                  className="p-2 rounded-xl transition-colors duration-300"
-                  style={{ backgroundColor: `rgba(${accentRgb}, 0.1)` }}
-                >
-                  <Mail
-                    className="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
-                    style={{ color: accentColor }}
-                  />
-                </div>
-                <div className="min-w-0">
-                  <p
-                    className="text-xs uppercase font-medium"
-                    style={{ color: `rgba(${accentRgb}, 0.7)` }}
-                  >
-                    EMAIL
-                  </p>
-                  <p
-                    className="truncate text-xs sm:text-sm transition-colors duration-300"
-                    style={{ color: isCardHovered ? accentColor : undefined }}
-                  >
-                    ranadolui.dev@gmail.com
-                  </p>
-                </div>
-              </div>
-              {/* Animated arrow on hover */}
-              <div className="opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                <span style={{ color: accentColor }}>→</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          <motion.div
+            className="w-16 md:w-24 h-1 mx-auto mb-6 md:mb-8 rounded-full"
+            style={{
+              background: `linear-gradient(90deg, transparent, ${accentColor}, transparent)`,
+              boxShadow: `0 0 20px rgba(${accentRgb}, 0.5)`,
+            }}
+            initial={{ scaleX: 0 }}
+            whileInView={{ scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          />
+          <p className="mx-auto max-w-2xl text-xs text-foreground/60 sm:text-sm">
+            Got an idea in mind? Let's collaborate and build something remarkable.
+          </p>
+        </motion.div>
 
-        {/* Contact Form */}
-        <form
-          onSubmit={handleSubmit}
-          className={`mb-8 transition-all duration-700 delay-350 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
-            SEND A MESSAGE
-          </h2>
-          <div className="flex flex-col gap-4">
-            <input
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full p-3 sm:p-4 rounded-2xl border border-foreground/20 bg-transparent text-sm sm:text-base placeholder:text-foreground/40 focus:outline-none transition-all duration-300"
-              style={{
-                ["--focus-color" as string]: accentColor,
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = accentColor;
-                e.currentTarget.style.boxShadow = `0 0 15px rgba(${accentRgb}, 0.2)`;
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "";
-                e.currentTarget.style.boxShadow = "";
-              }}
-            />
-            <textarea
-              placeholder="Your message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              required
-              rows={4}
-              className="w-full p-3 sm:p-4 rounded-2xl border border-foreground/20 bg-transparent text-sm sm:text-base placeholder:text-foreground/40 focus:outline-none transition-all duration-300 resize-none"
-              onFocus={(e) => {
-                e.currentTarget.style.borderColor = accentColor;
-                e.currentTarget.style.boxShadow = `0 0 15px rgba(${accentRgb}, 0.2)`;
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.borderColor = "";
-                e.currentTarget.style.boxShadow = "";
-              }}
-            />
-            <button
-              type="submit"
-              disabled={status === "sending"}
-              className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 rounded-2xl border border-foreground/20 font-medium text-sm sm:text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{
-                backgroundColor: status === "sent" ? `rgba(${accentRgb}, 0.2)` : "transparent",
-                borderColor: status === "sent" ? accentColor : undefined,
-              }}
-              onMouseEnter={(e) => {
-                if (status !== "sending") {
-                  e.currentTarget.style.borderColor = accentColor;
-                  e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.1)`;
-                  e.currentTarget.style.boxShadow = `0 0 20px rgba(${accentRgb}, 0.3)`;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (status !== "sent") {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.backgroundColor = "";
-                  e.currentTarget.style.boxShadow = "";
-                }
-              }}
-            >
-              {status === "sending" ? (
-                <>
-                  <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
-                  Sending...
-                </>
-              ) : status === "sent" ? (
-                <span style={{ color: accentColor }}>Message Sent!</span>
-              ) : status === "error" ? (
-                <span className="text-red-500">Failed to send. Try again.</span>
-              ) : (
-                <>
-                  <Send className="h-4 w-4 sm:h-5 sm:w-5" />
-                  Send Message
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-
-        <div
-          className={`transition-all duration-700 delay-400 ${
-            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          }`}
-        >
-          <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
-            SOCIAL LINKS
-          </h2>
-          <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
-            {socials.map(({ icon: Icon, label, url }, index) => (
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                key={label}
-                href={url}
-                className="group flex h-14 w-14 items-center justify-center rounded-full border border-foreground/20 p-3 transition-all duration-300 sm:h-16 sm:w-16 sm:p-4"
-                aria-label={label}
-                style={{ animationDelay: `${500 + index * 100}ms` }}
+        <div className="max-w-2xl mx-auto">
+          {/* Email Card */}
+          <motion.div
+            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+          >
+            <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
+              GET IN TOUCH
+            </h2>
+            <div className="flex flex-col gap-y-4">
+              <motion.div
+                className="group flex items-center justify-between p-3 sm:p-4 rounded-2xl border border-foreground/20 transition-all duration-500"
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = accentColor;
-                  e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.1)`;
-                  e.currentTarget.style.boxShadow = `0 0 25px rgba(${accentRgb}, 0.3)`;
+                  setIsCardHovered(true);
+                  e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.5)`;
+                  e.currentTarget.style.boxShadow = `0 0 25px rgba(${accentRgb}, 0.2)`;
+                  e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.05)`;
                 }}
                 onMouseLeave={(e) => {
+                  setIsCardHovered(false);
                   e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.backgroundColor = "";
                   e.currentTarget.style.boxShadow = "";
+                  e.currentTarget.style.backgroundColor = "";
+                }}
+                whileHover={{ x: 4 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <div className="flex gap-3 sm:gap-4 items-center">
+                  <div
+                    className="p-2 rounded-xl transition-colors duration-300"
+                    style={{ backgroundColor: `rgba(${accentRgb}, 0.1)` }}
+                  >
+                    <Mail
+                      className="h-5 w-5 shrink-0 sm:h-6 sm:w-6"
+                      style={{ color: accentColor }}
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p
+                      className="text-xs uppercase font-medium"
+                      style={{ color: `rgba(${accentRgb}, 0.7)` }}
+                    >
+                      EMAIL
+                    </p>
+                    <p
+                      className="truncate text-xs sm:text-sm transition-colors duration-300"
+                      style={{ color: isCardHovered ? accentColor : undefined }}
+                    >
+                      ranadolui.dev@gmail.com
+                    </p>
+                  </div>
+                </div>
+                <motion.div
+                  className="opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  initial={{ x: 8 }}
+                  whileHover={{ x: 0 }}
+                >
+                  <span style={{ color: accentColor }}>→</span>
+                </motion.div>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Contact Form with Floating Labels */}
+          <motion.form
+            onSubmit={handleSubmit}
+            className="mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
+              SEND A MESSAGE
+            </h2>
+            <div className="flex flex-col gap-5">
+              <FloatingInput
+                type="email"
+                value={email}
+                onChange={setEmail}
+                placeholder="Your email"
+                required
+                delay={0.1}
+              />
+              <FloatingInput
+                value={message}
+                onChange={setMessage}
+                placeholder="Your message"
+                required
+                isTextarea
+                delay={0.2}
+              />
+              <motion.button
+                type="submit"
+                disabled={status === "sending"}
+                className="flex items-center justify-center gap-2 w-full p-3 sm:p-4 rounded-2xl border border-foreground/20 font-medium text-sm sm:text-base transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden"
+                style={{
+                  backgroundColor: status === "sent" ? `rgba(${accentRgb}, 0.2)` : "transparent",
+                  borderColor: status === "sent" ? accentColor : undefined,
+                }}
+                whileHover={status !== "sending" ? { scale: 1.02 } : {}}
+                whileTap={status !== "sending" ? { scale: 0.98 } : {}}
+                onMouseEnter={(e) => {
+                  if (status !== "sending") {
+                    e.currentTarget.style.borderColor = accentColor;
+                    e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.1)`;
+                    e.currentTarget.style.boxShadow = `0 0 20px rgba(${accentRgb}, 0.3)`;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (status !== "sent") {
+                    e.currentTarget.style.borderColor = "";
+                    e.currentTarget.style.backgroundColor = "";
+                    e.currentTarget.style.boxShadow = "";
+                  }
                 }}
               >
-                <Icon
-                  className="h-6 w-6 text-foreground/70 transition-colors duration-300 sm:h-7 sm:w-7"
-                  style={{ ["--accent" as string]: accentColor }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = accentColor;
-                    e.currentTarget.style.filter = `drop-shadow(0 0 8px rgba(${accentRgb}, 0.5))`;
+                <AnimatePresence mode="wait">
+                  {status === "sending" ? (
+                    <motion.span
+                      key="sending"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex items-center gap-2"
+                    >
+                      <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
+                      Sending...
+                    </motion.span>
+                  ) : status === "sent" ? (
+                    <motion.span
+                      key="sent"
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.5 }}
+                      className="flex items-center gap-2"
+                      style={{ color: accentColor }}
+                    >
+                      <CheckCircle className="h-5 w-5" />
+                      Message Sent!
+                    </motion.span>
+                  ) : status === "error" ? (
+                    <motion.span
+                      key="error"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 10 }}
+                      className="text-red-500"
+                    >
+                      Failed to send. Try again.
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="idle"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center gap-2"
+                    >
+                      <Send className="h-4 w-4 sm:h-5 sm:w-5" />
+                      Send Message
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </motion.button>
+            </div>
+          </motion.form>
+
+          {/* Social Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+          >
+            <h2 className="mb-4 text-base font-bold sm:mb-6 sm:text-lg">
+              SOCIAL LINKS
+            </h2>
+            <div className="flex flex-wrap gap-3 sm:gap-4 justify-center">
+              {socials.map(({ icon: Icon, label, url }, index) => (
+                <motion.a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={label}
+                  href={url}
+                  className="group flex h-14 w-14 items-center justify-center rounded-full border border-foreground/20 p-3 transition-all duration-300 sm:h-16 sm:w-16 sm:p-4"
+                  aria-label={label}
+                  initial={{ opacity: 0, scale: 0 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    delay: 0.5 + index * 0.1,
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 20,
                   }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = "";
-                    e.currentTarget.style.filter = "";
+                  whileHover={{
+                    scale: 1.15,
+                    borderColor: accentColor,
+                    backgroundColor: `rgba(${accentRgb}, 0.1)`,
+                    boxShadow: `0 0 25px rgba(${accentRgb}, 0.3)`,
                   }}
-                />
-              </a>
-            ))}
-          </div>
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Icon
+                    className="h-6 w-6 text-foreground/70 transition-colors duration-300 sm:h-7 sm:w-7 group-hover:text-(--accent)"
+                    style={{ ["--accent" as string]: accentColor }}
+                  />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
         </div>
-      </div>
       </div>
     </section>
   );

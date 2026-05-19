@@ -4,6 +4,9 @@ import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ScrollProgress } from "@/components/ScrollProgress";
+import { MouseSpotlight } from "@/components/MouseSpotlight";
+import { BackToTop } from "@/components/BackToTop";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
@@ -106,11 +109,14 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
         <ThemeProvider>
+          <ScrollProgress />
+          <MouseSpotlight />
           <div className="flex justify-center">
             <Navbar />
           </div>
           {children}
           <Footer />
+          <BackToTop />
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />

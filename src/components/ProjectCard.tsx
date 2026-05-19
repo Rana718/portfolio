@@ -3,18 +3,20 @@ import { Code2, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import { LiquidButton } from "./LiquidButton";
 import { useTheme } from "@/lib/theme-provider";
+import { motion } from "framer-motion";
 import {
   SiReact, SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
   SiNodedotjs, SiExpress, SiGo, SiPython, SiFastapi, SiFlask,
   SiPostgresql, SiMongodb, SiRedis, SiPrisma, SiMysql,
   SiDocker, SiNginx, SiRabbitmq, SiApachekafka, SiClerk,
   SiFramer, SiSocketdotio, SiSelenium, SiFirebase, SiSupabase,
-  SiVite, SiFlutter
+  SiVite, SiFlutter, SiLangchain
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandGolang, TbBrandFramerMotion } from 'react-icons/tb';
 
 const techIcons: Record<string, any> = {
   'Next.js': SiNextdotjs,
+  'NextJS': SiNextdotjs,
   'React': SiReact,
   'TypeScript': SiTypescript,
   'JavaScript': SiJavascript,
@@ -48,6 +50,13 @@ const techIcons: Record<string, any> = {
   'gRPC': SiGo,
   'expo': TbBrandReactNative,
   'Zustand': SiReact,
+  'LangChain': SiLangchain,
+  'OpenAI': SiGo,
+  'Gemini': SiGo,
+  'Razorpay': SiGo,
+  'SQLAlchemy': SiPython,
+  'Convex': SiGo,
+  'Fiber': SiGo,
 };
 
 interface ProjectCardProps {
@@ -70,25 +79,41 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const isMobileApp = project.category === "Mobile App";
 
   return (
-    <div
-      className="group border border-foreground/20 overflow-hidden transition-all duration-500 rounded-2xl flex flex-col bg-background"
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.4)`;
-        e.currentTarget.style.boxShadow = `0 0 30px rgba(${accentRgb}, 0.1)`;
+    <motion.div
+      className="group border border-foreground/20 overflow-hidden transition-all duration-500 rounded-2xl flex flex-col bg-background h-full"
+      whileHover={{
+        y: -8,
+        boxShadow: `0 20px 40px rgba(${accentRgb}, 0.1)`,
+        borderColor: `rgba(${accentRgb}, 0.4)`,
       }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "";
-        e.currentTarget.style.boxShadow = "";
-      }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
       {/* Image container with overlay on hover */}
       <div className={`relative h-48 overflow-hidden ${isMobileApp ? 'bg-linear-to-b from-foreground/5 to-foreground/10' : 'bg-foreground/5'}`}>
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className={`${isMobileApp ? 'object-contain p-2' : 'object-cover'} group-hover:scale-110 transition-transform duration-700`}
-        />
+        <motion.div
+          className="w-full h-full"
+          whileHover={{ scale: 1.1 }}
+          transition={{ duration: 0.7 }}
+        >
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className={`${isMobileApp ? 'object-contain p-2' : 'object-cover'}`}
+          />
+        </motion.div>
+        {/* Category badge */}
+        {project.category && (
+          <div
+            className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-medium backdrop-blur-md"
+            style={{
+              backgroundColor: `rgba(${accentRgb}, 0.15)`,
+              color: accentColor,
+            }}
+          >
+            {project.category}
+          </div>
+        )}
       </div>
 
       <div className="p-5 flex flex-1 flex-col justify-between text-left">
@@ -109,10 +134,11 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           {[...new Set(project.tech)].slice(0, 8).map((tech) => {
             const Icon = techIcons[tech];
             return Icon ? (
-              <div
+              <motion.div
                 key={tech}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-foreground/5 transition-all duration-300"
+                className="w-7 h-7 flex items-center justify-center rounded-lg bg-foreground/5"
                 title={tech}
+                whileHover={{ scale: 1.2, y: -2 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.1)`;
                   e.currentTarget.style.boxShadow = `0 0 10px rgba(${accentRgb}, 0.2)`;
@@ -127,7 +153,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
                   onMouseEnter={(e: React.MouseEvent<SVGSVGElement>) => e.currentTarget.style.color = accentColor}
                   onMouseLeave={(e: React.MouseEvent<SVGSVGElement>) => e.currentTarget.style.color = ""}
                 />
-              </div>
+              </motion.div>
             ) : null;
           })}
           {[...new Set(project.tech)].length > 8 && (
@@ -162,6 +188,6 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

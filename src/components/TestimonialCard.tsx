@@ -1,89 +1,92 @@
 "use client";
-import { Quote, Star } from "lucide-react";
+
+import { motion } from "framer-motion";
+import { Quote } from "lucide-react";
 import { useTheme } from "@/lib/theme-provider";
 
+interface Testimonial {
+  id: number;
+  name: string;
+  content: string;
+  rating: number;
+  role?: string;
+  company?: string;
+}
+
 interface TestimonialCardProps {
-    testimonial: {
-        id: number;
-        name: string;
-        role?: string;
-        company?: string;
-        content: string;
-        rating: number;
-    };
+  testimonial: Testimonial;
 }
 
 export const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
-    const { theme } = useTheme();
-    const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
-    const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
+  const { theme } = useTheme();
+  const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
+  const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
 
-    return (
-        <div
-            className="group border border-foreground/20 overflow-hidden transition-all duration-500 rounded-xl flex flex-col justify-between bg-background p-5 min-w-85 max-w-85 h-45 relative"
-            onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.4)`;
-                e.currentTarget.style.boxShadow = `0 0 30px rgba(${accentRgb}, 0.1)`;
+  return (
+    <motion.div
+      className="relative min-w-85 max-w-85 h-45 p-6 rounded-2xl border border-foreground/10 bg-background/80 backdrop-blur-sm group cursor-default"
+      whileHover={{
+        scale: 1.03,
+        y: -4,
+        boxShadow: `0 0 30px rgba(${accentRgb}, 0.15)`,
+        borderColor: `rgba(${accentRgb}, 0.3)`,
+      }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+    >
+      {/* Quote icon */}
+      <Quote
+        size={24}
+        className="absolute top-4 right-4 opacity-10"
+        style={{ color: accentColor }}
+      />
+
+      {/* Stars */}
+      <div className="flex gap-1 mb-3">
+        {Array.from({ length: 5 }, (_, i) => (
+          <svg
+            key={i}
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill={i < testimonial.rating ? accentColor : "transparent"}
+            stroke={accentColor}
+            strokeWidth="1.5"
+            style={{
+              filter: i < testimonial.rating ? `drop-shadow(0 0 4px rgba(${accentRgb}, 0.5))` : "none",
             }}
-            onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "";
-                e.currentTarget.style.boxShadow = "";
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+        ))}
+      </div>
+
+      {/* Content */}
+      <p className="text-xs text-foreground/70 leading-relaxed line-clamp-4 mb-4">
+        "{testimonial.content}"
+      </p>
+
+      {/* Author */}
+      <div className="absolute bottom-4 left-6 right-6">
+        <div className="flex items-center gap-2">
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
+            style={{
+              backgroundColor: `rgba(${accentRgb}, 0.15)`,
+              color: accentColor,
             }}
-        >
-            {/* Header */}
-            <div>
-                <div className="flex items-start justify-between">
-                    {/* Left side: Stars and Company */}
-                    <div>
-                        <div className="flex gap-0.5 mb-1">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                                <Star
-                                    key={i}
-                                    size={14}
-                                    className="transition-colors duration-300"
-                                    style={{
-                                        fill: accentColor,
-                                        color: accentColor,
-                                        filter: `drop-shadow(0 0 3px rgba(${accentRgb}, 0.3))`
-                                    }}
-                                />
-                            ))}
-                        </div>
-                        {testimonial.company && (
-                            <p
-                                className="font-semibold text-xs tracking-wide transition-colors duration-300"
-                                style={{ color: accentColor }}
-                            >
-                                {testimonial.company}
-                            </p>
-                        )}
-                    </div>
-
-                    {/* Right side: Name and Role */}
-                    <div className="text-right">
-                        <h4 className="font-semibold text-sm tracking-wide mb-0.5">
-                            {testimonial.name}
-                        </h4>
-                        {testimonial.role && (
-                            <p className="text-foreground/50 text-[10px]">
-                                {testimonial.role}
-                            </p>
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            {/* Quote mark and Content */}
-            <div className="relative mt-4 flex-1">
-                <Quote
-                    className="absolute -top-0.5 left-0 size-8 opacity-20"
-                    style={{ color: accentColor }}
-                    aria-hidden
-                />
-                <p className="line-clamp-4 pt-2 text-[13px] leading-relaxed text-muted-foreground">
-                    {testimonial.content}
-                </p>
-            </div>
+          >
+            {testimonial.name.split(" ").map((n) => n[0]).join("")}
+          </div>
+          <div>
+            <p className="text-xs font-semibold">{testimonial.name}</p>
+            {(testimonial.role || testimonial.company) && (
+              <p className="text-[10px] text-foreground/40">
+                {testimonial.role}{testimonial.role && testimonial.company && ", "}{testimonial.company}
+              </p>
+            )}
+          </div>
         </div>
-    );
+      </div>
+    </motion.div>
+  );
 };
