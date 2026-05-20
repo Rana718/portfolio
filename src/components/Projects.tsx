@@ -76,7 +76,7 @@ export const Projects = () => {
 
       <div className="py-6 md:py-12 px-4 md:px-8">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence>
             {filteredProjects.map((project) => (
               <motion.div
                 key={project.id}
@@ -84,7 +84,7 @@ export const Projects = () => {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                transition={{ duration: 0.4, type: "spring", stiffness: 300, damping: 24 }}
+                transition={{ duration: 0.3, ease: "easeOut" as const }}
               >
                 <ProjectCard project={project} />
               </motion.div>

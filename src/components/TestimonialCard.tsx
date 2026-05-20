@@ -27,7 +27,6 @@ export const TestimonialCard = ({ testimonial }: TestimonialCardProps) => {
       className="relative min-w-85 max-w-85 h-45 p-6 rounded-2xl border border-foreground/10 bg-background/80 backdrop-blur-sm group cursor-default"
       whileHover={{
         scale: 1.03,
-        y: -4,
         boxShadow: `0 0 30px rgba(${accentRgb}, 0.15)`,
         borderColor: `rgba(${accentRgb}, 0.3)`,
       }}

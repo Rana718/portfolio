@@ -3,17 +3,15 @@ import { testimonials } from "@/lib/data";
 import { TestimonialCard } from "./TestimonialCard";
 import { motion } from "framer-motion";
 import { useTheme } from "@/lib/theme-provider";
-import { useRef, useState, useEffect } from "react";
+import { useState } from "react";
 
 export const Testimonials = () => {
   const { theme } = useTheme();
-  const [isPaused, setIsPaused] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [pausedRow, setPausedRow] = useState<number | null>(null);
 
   const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
   const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
 
-  // Split testimonials into two rows
   const firstRow = testimonials.slice(0, 5);
   const secondRow = testimonials.slice(5, 10);
 
@@ -57,17 +55,17 @@ export const Testimonials = () => {
       {/* First row - scrolling right to left */}
       <div
         className="relative mb-6"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseEnter={() => setPausedRow(1)}
+        onMouseLeave={() => setPausedRow(null)}
       >
         <div className="scroll-container">
           <div
             className="scroll-content scroll-right-to-left"
-            style={{ animationPlayState: isPaused ? "paused" : "running" }}
+            style={{ animationPlayState: pausedRow === 1 ? "paused" : "running" }}
           >
             {[...firstRow, ...firstRow, ...firstRow].map(
               (testimonial, index) => (
-                <div key={`${testimonial.id}-${index}`} className="px-3">
+                <div key={`${testimonial.id}-${index}`} className="px-3 py-2">
                   <TestimonialCard testimonial={testimonial} />
                 </div>
               ),
@@ -79,17 +77,17 @@ export const Testimonials = () => {
       {/* Second row - scrolling left to right */}
       <div
         className="relative"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        onMouseEnter={() => setPausedRow(2)}
+        onMouseLeave={() => setPausedRow(null)}
       >
         <div className="scroll-container">
           <div
             className="scroll-content scroll-left-to-right"
-            style={{ animationPlayState: isPaused ? "paused" : "running" }}
+            style={{ animationPlayState: pausedRow === 2 ? "paused" : "running" }}
           >
             {[...secondRow, ...secondRow, ...secondRow].map(
               (testimonial, index) => (
-                <div key={`${testimonial.id}-${index}`} className="px-3">
+                <div key={`${testimonial.id}-${index}`} className="px-3 py-2">
                   <TestimonialCard testimonial={testimonial} />
                 </div>
               ),

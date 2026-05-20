@@ -185,14 +185,14 @@ export const TechStack = () => {
       </motion.div>
 
       <div className="flex flex-wrap justify-center gap-3 md:gap-4 max-w-6xl mx-auto min-h-[200px]">
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence>
           {filteredTechs.map(({ name, icon: Icon, light, dark }) => (
             <motion.div
               key={name}
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.5 }}
-              transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 24 }}
+              transition={{ duration: 0.25, ease: "easeOut" as const }}
               className="group relative flex flex-col items-center gap-2"
             >
               <motion.div
