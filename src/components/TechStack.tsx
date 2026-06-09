@@ -217,11 +217,6 @@ export const TechStack = () => {
                   style={{ color: theme === 'dark' ? dark : light }}
                 />
               </motion.div>
-              <motion.span
-                className="text-[10px] text-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute -bottom-5 whitespace-nowrap"
-              >
-                {name}
-              </motion.span>
             </motion.div>
           ))}
         </AnimatePresence>

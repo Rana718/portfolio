@@ -82,18 +82,18 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
     <motion.div
       className="group border border-foreground/20 overflow-hidden transition-all duration-500 rounded-2xl flex flex-col bg-background h-full"
       whileHover={{
-        y: -8,
-        boxShadow: `0 20px 40px rgba(${accentRgb}, 0.1)`,
+        y: -6,
+        boxShadow: `0 16px 32px rgba(${accentRgb}, 0.1)`,
         borderColor: `rgba(${accentRgb}, 0.4)`,
       }}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
     >
-      {/* Image container with overlay on hover */}
-      <div className={`relative h-48 overflow-hidden ${isMobileApp ? 'bg-linear-to-b from-foreground/5 to-foreground/10' : 'bg-foreground/5'}`}>
+      {/* Image container */}
+      <div className={`relative h-40 overflow-hidden ${isMobileApp ? 'bg-linear-to-b from-foreground/5 to-foreground/10' : 'bg-foreground/5'}`}>
         <motion.div
           className="w-full h-full"
-          whileHover={{ scale: 1.1 }}
-          transition={{ duration: 0.7 }}
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5 }}
         >
           <Image
             src={project.image}
@@ -102,10 +102,9 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             className={`${isMobileApp ? 'object-contain p-2' : 'object-cover'}`}
           />
         </motion.div>
-        {/* Category badge */}
         {project.category && (
           <div
-            className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-medium backdrop-blur-md"
+            className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-medium backdrop-blur-md"
             style={{
               backgroundColor: `rgba(${accentRgb}, 0.15)`,
               color: accentColor,
@@ -116,32 +115,32 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
         )}
       </div>
 
-      <div className="p-5 flex flex-1 flex-col justify-between text-left">
+      <div className="p-4 flex flex-1 flex-col justify-between text-left">
         <div>
           <h3
-            className="font-bold text-lg mb-2 tracking-wide transition-colors duration-300"
+            className="font-bold text-base mb-1.5 tracking-wide transition-colors duration-300"
             style={{ ["--accent" as string]: accentColor }}
           >
             <span className="group-hover:text-(--accent)">{project.title}</span>
           </h3>
-          <p className="text-foreground/60 text-xs leading-relaxed mb-4">
+          <p className="text-foreground/60 text-xs leading-relaxed mb-3 line-clamp-2">
             {project.description}
           </p>
         </div>
 
-        {/* Tech icons with hover effect */}
-        <div className="flex flex-wrap gap-2 mb-4">
+        {/* Tech icons */}
+        <div className="flex flex-wrap gap-1.5 mb-3">
           {[...new Set(project.tech)].slice(0, 8).map((tech) => {
             const Icon = techIcons[tech];
             return Icon ? (
               <motion.div
                 key={tech}
-                className="w-7 h-7 flex items-center justify-center rounded-lg bg-foreground/5"
+                className="w-6 h-6 flex items-center justify-center rounded-md bg-foreground/5"
                 title={tech}
-                whileHover={{ scale: 1.2, y: -2 }}
+                whileHover={{ scale: 1.15, y: -2 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = `rgba(${accentRgb}, 0.1)`;
-                  e.currentTarget.style.boxShadow = `0 0 10px rgba(${accentRgb}, 0.2)`;
+                  e.currentTarget.style.boxShadow = `0 0 8px rgba(${accentRgb}, 0.2)`;
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = "";
@@ -149,7 +148,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
                 }}
               >
                 <Icon
-                  className="w-4 h-4 text-foreground/70 transition-colors duration-300"
+                  className="w-3.5 h-3.5 text-foreground/70 transition-colors duration-300"
                   onMouseEnter={(e: React.MouseEvent<SVGSVGElement>) => e.currentTarget.style.color = accentColor}
                   onMouseLeave={(e: React.MouseEvent<SVGSVGElement>) => e.currentTarget.style.color = ""}
                 />
@@ -157,21 +156,21 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             ) : null;
           })}
           {[...new Set(project.tech)].length > 8 && (
-            <div className="w-7 h-7 flex items-center justify-center rounded-lg bg-foreground/5 text-[10px] font-bold text-foreground/60">
+            <div className="w-6 h-6 flex items-center justify-center rounded-md bg-foreground/5 text-[10px] font-bold text-foreground/60">
               +{[...new Set(project.tech)].length - 8}
             </div>
           )}
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex gap-2">
           <LiquidButton
             href={project.github}
             target="_blank"
             rel="noopener noreferrer"
             variant="primary"
-            className="flex-1 rounded-xl py-2.5 px-4 text-xs"
+            className="flex-1 rounded-lg py-2 px-3 text-[11px]"
           >
-            <Code2 size={16} />
+            <Code2 size={14} />
             CODE
           </LiquidButton>
           {project.demo && (
@@ -180,9 +179,9 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
               target="_blank"
               rel="noopener noreferrer"
               variant="secondary"
-              className="flex-1 rounded-xl py-2.5 px-4 text-xs"
+              className="flex-1 rounded-lg py-2 px-3 text-[11px]"
             >
-              <ExternalLink size={16} />
+              <ExternalLink size={14} />
               DEMO
             </LiquidButton>
           )}

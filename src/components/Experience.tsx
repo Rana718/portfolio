@@ -60,116 +60,124 @@ export const Experience = () => {
           />
         </div>
 
-        <div className="space-y-8">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={index}
-              className="relative pl-12 md:pl-20"
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.15, duration: 0.5 }}
-            >
-              {/* Timeline dot */}
+        <div className="space-y-6">
+          {experiences.map((exp, index) => {
+            const isExpanded = expandedIndex === index;
+            return (
               <motion.div
-                className="absolute left-2 md:left-6 top-6 w-4 h-4 rounded-full border-2"
-                style={{
-                  borderColor: accentColor,
-                  backgroundColor: theme === "dark" ? "#0a0a0a" : "#fffef8",
-                  boxShadow: `0 0 10px rgba(${accentRgb}, 0.5)`,
-                }}
-                initial={{ scale: 0 }}
-                whileInView={{ scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.15 + 0.3, type: "spring", stiffness: 300 }}
-              />
-
-              {/* Card */}
-              <motion.div
-                className="relative border border-foreground/20 p-6 md:p-8 rounded-3xl transition-all duration-500 group cursor-pointer"
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.4)`;
-                  e.currentTarget.style.boxShadow = `0 0 30px rgba(${accentRgb}, 0.1)`;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.boxShadow = "";
-                }}
-                onClick={() => toggleExpand(index)}
-                whileHover={{ x: 4 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                key={index}
+                className="relative pl-12 md:pl-20"
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: index * 0.15, duration: 0.5 }}
               >
-                {/* Left accent line */}
-                <div
-                  className="absolute left-0 top-6 bottom-6 w-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                {/* Timeline dot */}
+                <motion.div
+                  className="absolute left-2 md:left-6 top-5 w-4 h-4 rounded-full border-2"
                   style={{
-                    background: `linear-gradient(to bottom, rgba(${accentRgb}, 0.5), ${accentColor}, rgba(${accentRgb}, 0.5))`,
+                    borderColor: accentColor,
+                    backgroundColor: theme === "dark" ? "#0a0a0a" : "#fffef8",
+                    boxShadow: `0 0 10px rgba(${accentRgb}, 0.5)`,
                   }}
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 + 0.3, type: "spring", stiffness: 300 }}
                 />
 
-                {/* Subtle glow on hover */}
-                <div
-                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    background: `linear-gradient(to right, rgba(${accentRgb}, 0.05), transparent)`,
+                {/* Card */}
+                <motion.div
+                  className="relative border border-foreground/20 p-5 md:p-6 rounded-2xl transition-all duration-500 group cursor-pointer"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = `rgba(${accentRgb}, 0.4)`;
+                    e.currentTarget.style.boxShadow = `0 0 30px rgba(${accentRgb}, 0.1)`;
                   }}
-                />
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "";
+                    e.currentTarget.style.boxShadow = "";
+                  }}
+                  onClick={() => toggleExpand(index)}
+                  whileHover={{ x: 3 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  {/* Left accent line */}
+                  <div
+                    className="absolute left-0 top-5 bottom-5 w-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: `linear-gradient(to bottom, rgba(${accentRgb}, 0.5), ${accentColor}, rgba(${accentRgb}, 0.5))`,
+                    }}
+                  />
 
-                <div className="relative z-10">
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-4">
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="p-2 rounded-xl hidden md:flex"
-                        style={{ backgroundColor: `rgba(${accentRgb}, 0.1)` }}
-                      >
-                        <Briefcase size={18} style={{ color: accentColor }} />
+                  {/* Subtle glow on hover */}
+                  <div
+                    className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{
+                      background: `linear-gradient(to right, rgba(${accentRgb}, 0.05), transparent)`,
+                    }}
+                  />
+
+                  <div className="relative z-10">
+                    <div className="flex flex-col md:flex-row md:justify-between md:items-start mb-3">
+                      <div className="flex items-start gap-3">
+                        <div
+                          className="p-2 rounded-xl hidden md:flex"
+                          style={{ backgroundColor: `rgba(${accentRgb}, 0.1)` }}
+                        >
+                          <Briefcase size={16} style={{ color: accentColor }} />
+                        </div>
+                        <div>
+                          <h3 className="text-base md:text-lg font-bold mb-0.5 transition-colors duration-300 group-hover:text-(--accent)" style={{ ["--accent" as string]: accentColor }}>
+                            {exp.title}
+                          </h3>
+                          <p className="text-sm text-foreground/70">{exp.company}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-lg md:text-xl font-bold mb-1 transition-colors duration-300 group-hover:text-(--accent)" style={{ ["--accent" as string]: accentColor }}>
-                          {exp.title}
-                        </h3>
-                        <p className="text-sm text-foreground/70">{exp.company}</p>
+                      <div className="flex items-center gap-2 mt-2 md:mt-0">
+                        <span
+                          className="text-xs md:text-sm font-semibold"
+                          style={{
+                            color: accentColor,
+                            filter: `drop-shadow(0 0 8px rgba(${accentRgb}, 0.3))`,
+                          }}
+                        >
+                          {exp.duration}
+                        </span>
+                        <motion.div
+                          animate={{ rotate: isExpanded ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ChevronDown size={16} className="text-foreground/40" />
+                        </motion.div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 mt-2 md:mt-0">
-                      <span
-                        className="text-xs md:text-sm font-semibold"
-                        style={{
-                          color: accentColor,
-                          filter: `drop-shadow(0 0 8px rgba(${accentRgb}, 0.3))`,
-                        }}
+
+                    {/* Description with smooth expand/collapse */}
+                    <div
+                      className="overflow-hidden transition-all duration-300 ease-in-out"
+                      style={{
+                        maxHeight: isExpanded ? "600px" : "2.8rem",
+                      }}
+                    >
+                      <p className={`text-xs md:text-sm text-foreground/60 leading-relaxed ${isExpanded ? "" : "line-clamp-2"}`}>
+                        {exp.description}
+                      </p>
+                    </div>
+
+                    {/* Expand/collapse hint */}
+                    <div className="mt-2 flex items-center gap-1 text-[10px] text-foreground/30 uppercase tracking-wider">
+                      <motion.span
+                        animate={{ opacity: isExpanded ? 0.6 : 0.4 }}
+                        className="transition-opacity"
                       >
-                        {exp.duration}
-                      </span>
-                      <motion.div
-                        animate={{ rotate: expandedIndex === index ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <ChevronDown size={18} className="text-foreground/40" />
-                      </motion.div>
+                        {isExpanded ? "Show less" : "Read more"}
+                      </motion.span>
                     </div>
                   </div>
-
-                  <motion.p
-                    className="text-xs md:text-sm text-foreground/60 leading-relaxed"
-                    animate={{
-                      maxHeight: expandedIndex === index ? 200 : 60,
-                      opacity: 1,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                      overflow: "hidden",
-                      display: "-webkit-box",
-                      WebkitLineClamp: expandedIndex === index ? undefined : 3,
-                      WebkitBoxOrient: "vertical",
-                    }}
-                  >
-                    {exp.description}
-                  </motion.p>
-                </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
