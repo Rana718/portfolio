@@ -6,19 +6,21 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/lib/theme-provider";
 
-const categories = ["All", "Web App", "Mobile App", "AI/ML", "Backend", "Game", "Creative Tool"];
+const categories = ["All", "Web App", "Mobile App", "AI/ML", "Tool"];
 
 export const Projects = () => {
-  const featuredProjects = projects.filter((p) => p.featured);
   const [activeCategory, setActiveCategory] = useState("All");
   const { theme } = useTheme();
 
   const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
   const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
 
-  const filteredProjects = activeCategory === "All"
-    ? featuredProjects
-    : featuredProjects.filter((p) => p.category === activeCategory);
+  const categoryFiltered = activeCategory === "All"
+    ? projects
+    : projects.filter((p) => (p.category as string[]).includes(activeCategory));
+
+  const filteredProjects = activeCategory === "All" ? categoryFiltered.slice(0, 6) : categoryFiltered;
+  const showViewAll = projects.length > 6 && activeCategory === "All";
 
   return (
     <section className="max-w-7xl mx-auto text-center py-20 lg:py-32 px-4 md:px-8" id="projects">
@@ -93,21 +95,23 @@ export const Projects = () => {
         </div>
       </div>
 
-      <motion.div
-        className="flex justify-center mt-1"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.5, duration: 0.5 }}
-      >
-        <LiquidButton
-          href="/projects"
-          variant="primary"
-          className="rounded-xl py-3 px-8 text-sm"
+      {showViewAll && (
+        <motion.div
+          className="flex justify-center mt-1"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5, duration: 0.5 }}
         >
-          VIEW ALL PROJECTS
-        </LiquidButton>
-      </motion.div>
+          <LiquidButton
+            href="/projects"
+            variant="primary"
+            className="rounded-xl py-3 px-8 text-sm"
+          >
+            VIEW ALL PROJECTS
+          </LiquidButton>
+        </motion.div>
+      )}
     </section>
   );
 };

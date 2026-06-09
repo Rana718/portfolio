@@ -152,41 +152,27 @@ export const Contact = () => {
         }}
       />
 
-      {/* Floating particles effect - CSS only, 3 particles max */}
+      {/* Floating particles */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute w-2 h-2 rounded-full animate-float-particle"
-          style={{
-            background: `rgba(${accentRgb}, 0.5)`,
-            boxShadow: `0 0 15px 6px rgba(${accentRgb}, 0.25)`,
-            left: "20%",
-            top: "30%",
-            animationDuration: "7s",
-            animationDelay: "0s",
-          }}
-        />
-        <div
-          className="absolute w-1.5 h-1.5 rounded-full animate-float-particle"
-          style={{
-            background: `rgba(${accentRgb}, 0.4)`,
-            boxShadow: `0 0 12px 5px rgba(${accentRgb}, 0.2)`,
-            left: "70%",
-            top: "60%",
-            animationDuration: "9s",
-            animationDelay: "2s",
-          }}
-        />
-        <div
-          className="absolute w-1 h-1 rounded-full animate-float-particle"
-          style={{
-            background: `rgba(${accentRgb}, 0.6)`,
-            boxShadow: `0 0 10px 4px rgba(${accentRgb}, 0.3)`,
-            left: "45%",
-            top: "75%",
-            animationDuration: "8s",
-            animationDelay: "4s",
-          }}
-        />
+        {[
+          { size: "w-2 h-2", opacity: 0.5, glow: 0.25, left: "20%", top: "30%", duration: "7s", delay: "0s" },
+          { size: "w-1.5 h-1.5", opacity: 0.4, glow: 0.2, left: "70%", top: "60%", duration: "9s", delay: "2s" },
+          { size: "w-1 h-1", opacity: 0.6, glow: 0.3, left: "45%", top: "75%", duration: "8s", delay: "4s" },
+          { size: "w-1.5 h-1.5", opacity: 0.35, glow: 0.2, left: "80%", top: "25%", duration: "11s", delay: "1s" },
+          { size: "w-2 h-2", opacity: 0.45, glow: 0.25, left: "10%", top: "65%", duration: "10s", delay: "3s" },
+        ].map((p, i) => (
+          <div
+            key={i}
+            className={`absolute rounded-full ${p.size}`}
+            style={{
+              background: `rgba(${accentRgb}, ${p.opacity})`,
+              boxShadow: `0 0 12px 5px rgba(${accentRgb}, ${p.glow})`,
+              left: p.left,
+              top: p.top,
+              animation: `float-particle ${p.duration} ease-in-out ${p.delay} infinite`,
+            }}
+          />
+        ))}
       </div>
 
       {/* Content */}

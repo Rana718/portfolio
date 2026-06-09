@@ -86,7 +86,7 @@ export const Hero = () => {
           >
             <span className="text-foreground/60">&gt; </span>
             <span style={{ color: accentColor }}>
-              <Typewriter text="FULL-STACK DEVELOPER" />
+              <Typewriter text="FULL-STACK DEV & AI ENGINEER" />
             </span>
             <span style={{ color: accentColor }} className="animate-pulse">_</span>
           </motion.p>
@@ -110,8 +110,8 @@ export const Hero = () => {
               >
                 Rana Dolui
               </motion.span>{" "}
-              — a Full Stack Developer passionate about building scalable web and mobile applications.
-              I specialize in React, Next.js, Go, and Python, creating solutions that are both powerful and user-friendly.
+              — a Full Stack Developer & AI Engineer passionate about building scalable web, mobile applications and intelligent agent systems.
+              I specialize in Next.js, Go, Python, and AI/ML, designing robust system architectures and creating solutions that are both powerful and user-friendly.
             </p>
           </motion.div>
 

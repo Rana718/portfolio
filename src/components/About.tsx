@@ -62,9 +62,8 @@ export const About = () => {
           transition={{ delay: 0.2, duration: 0.6 }}
         />
         <p className="text-xs md:text-sm leading-relaxed max-w-2xl mx-auto text-foreground/70 px-2">
-          I'm a Full Stack Developer with expertise in building modern web and
-          mobile applications. From frontend interfaces to backend systems and
-          DevOps, I create scalable solutions using cutting-edge technologies.
+          I'm a Full Stack Developer & AI Engineer with expertise in building modern web, mobile applications and intelligent agent systems.
+          From frontend interfaces to backend APIs, system design architecture, AI/ML pipelines, and DevOps — I create scalable end-to-end solutions using cutting-edge technologies.
         </p>
       </motion.div>
 

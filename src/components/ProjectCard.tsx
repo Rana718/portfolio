@@ -68,7 +68,7 @@ interface ProjectCardProps {
     tech: string[];
     github: string;
     demo?: string | null;
-    category?: string;
+    category?: string | string[];
   };
 }
 
@@ -76,7 +76,8 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
   const { theme } = useTheme();
   const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
   const accentRgb = theme === "dark" ? "0, 255, 136" : "255, 184, 0";
-  const isMobileApp = project.category === "Mobile App";
+  const categories = Array.isArray(project.category) ? project.category : project.category ? [project.category] : [];
+  const isMobileApp = categories.includes("Mobile App");
 
   return (
     <motion.div
@@ -102,15 +103,20 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
             className={`${isMobileApp ? 'object-contain p-2' : 'object-cover'}`}
           />
         </motion.div>
-        {project.category && (
-          <div
-            className="absolute top-2 right-2 px-2 py-0.5 rounded-full text-[10px] font-medium backdrop-blur-md"
-            style={{
-              backgroundColor: `rgba(${accentRgb}, 0.15)`,
-              color: accentColor,
-            }}
-          >
-            {project.category}
+        {categories.length > 0 && (
+          <div className="absolute top-2 right-2 flex flex-wrap gap-1 justify-end">
+            {categories.map((cat) => (
+              <div
+                key={cat}
+                className="px-2 py-0.5 rounded-full text-[10px] font-medium backdrop-blur-md"
+                style={{
+                  backgroundColor: `rgba(${accentRgb}, 0.15)`,
+                  color: accentColor,
+                }}
+              >
+                {cat}
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -123,7 +129,7 @@ export const ProjectCard = ({ project }: ProjectCardProps) => {
           >
             <span className="group-hover:text-(--accent)">{project.title}</span>
           </h3>
-          <p className="text-foreground/60 text-xs leading-relaxed mb-3 line-clamp-2">
+          <p className="text-foreground/60 text-xs leading-relaxed mb-3 line-clamp-3">
             {project.description}
           </p>
         </div>
