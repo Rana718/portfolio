@@ -1,6 +1,6 @@
 "use client";
 import { Github, Linkedin, Mail, Send, Loader2, CheckCircle } from "lucide-react";
-import { SiX } from "react-icons/si";
+import { SiX } from 'react-icons/si';
 import { useEffect, useState } from "react";
 import { useTheme } from "@/lib/theme-provider";
 import { motion, AnimatePresence } from "framer-motion";

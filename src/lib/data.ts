@@ -20,7 +20,8 @@ export const experiences = [
     company: "Telohive",
     type: "Part-time",
     duration: "DEC 2025 - Feb 2026",
-    description: "At Telo, I handle backend development and AI agent systems, primarily using FastAPI, Redis, and PostgreSQL. I build AI-driven features with LangChain and OpenAI to enable automation and intelligent workflows. I also manage deployments on VPS using Docker and GitHub Actions, ensuring system stability and reliability.",
+    description:
+      "At Telo, I handle backend development and AI agent systems, primarily using FastAPI, Redis, and PostgreSQL. I build AI-driven features with LangChain and OpenAI to enable automation and intelligent workflows. I also manage deployments on VPS using Docker and GitHub Actions, ensuring system stability and reliability.",
     image: "/company/telo.png",
   },
   {
@@ -64,6 +65,31 @@ export const projects = [
   },
   {
     id: 2,
+    title: "AssumioAI",
+    description:
+      "AI-powered startup idea validation platform that analyzes business ideas, market opportunities, risks, feasibility, and execution strategies through intelligent multi-agent workflows.",
+    fullDescription:
+      "AI-powered startup validation platform that helps founders analyze ideas through specialized AI agents, evaluating market opportunities, competition, feasibility, risks, and execution strategies before investing time and money.",
+    tech: [
+      "Next.js",
+      "TypeScript",
+      "TailwindCSS",
+      "Node.js",
+      "PostgreSQL",
+      "Prisma",
+      "OpenAI",
+      "LangGraph",
+      "Redis",
+      "Framer Motion",
+    ],
+    category: ["Web App", "AI/ML"],
+    github: "https://github.com/Rana718/AssumioAI",
+    demo: "https://assumioai.ranadolui.me/",
+    image: "/projects/assumioai.png",
+    featured: true,
+  },
+  {
+    id: 3,
     title: "CareerWise",
     description:
       "AI interview prep with mock sessions, feedback, and guidance. Built with Next.js, prisma and Gemini.",
@@ -85,7 +111,7 @@ export const projects = [
     featured: true,
   },
   {
-    id: 3,
+    id: 4,
     title: "AI Resume Builder",
     description:
       "Built AI resume builder with automated CV generation, cover letter creation, payment integration, user management, and analytics dashboard for subscription-based service.",
@@ -113,9 +139,8 @@ export const projects = [
     featured: true,
     status: "completed",
   },
-
   {
-    id: 4,
+    id: 5,
     title: "KhelRatna",
     description:
       "Cricket tournament management platform with live score tracking and YouTube match streaming.",
@@ -197,6 +222,20 @@ export const projects = [
   },
   {
     id: 9,
+    title: "Music Mixer",
+    description:
+      "Advanced PipeWire audio mixer with per-app controls and real-time routing.",
+    fullDescription:
+      "Music Mixer is a native Linux desktop application built in Rust and GPUI for managing PipeWire audio streams. It enables per-application volume control, mute management, dynamic output routing, and live monitoring of PipeWire nodes, ports, and links. The application automatically restores routing configurations when devices are connected and safely resets audio state on exit. Designed with a modern custom GUI, KernelPilot provides a powerful alternative to traditional Linux audio mixers.",
+    tech: ["Rust", "Linux"],
+    category: ["Tool"],
+    github: "https://github.com/Lumos-Labs-HQ/volume-mixer.git",
+    demo: "",
+    image: "/projects/mixer.png",
+    featured: true,
+  },
+  {
+    id: 10,
     title: "Snipity",
     description:
       "Minimal code editor for creating and sharing snippets easily. Built with Next.js, Convex, Zustand, and Framer Motion.",
@@ -210,7 +249,21 @@ export const projects = [
     featured: false,
   },
   {
-    id: 10,
+    id: 11,
+    title: "Trainer",
+    description:
+      "Linux CLI tool that launches Windows trainers through the exact Proton version and Wine prefix used by a Steam game.",
+    fullDescription:
+      "Trainer is a lightweight Linux utility that removes the hassle of running Windows game trainers under Proton. It automatically discovers Steam compatdata prefixes, detects the Proton version assigned to a game, and launches trainers inside the correct environment without manual configuration. Features include interactive game selection, native file picker support, detached launching, DPI scaling management, and compatibility with official Proton, GE-Proton, CachyOS Proton, and other custom builds.",
+    tech: ["Go", "Steam", "Proton", "Wine", "Linux"],
+    category: ["Tool"],
+    github: "https://github.com/Rana718/trainer",
+    demo: "",
+    image: "/projects/trainer.png",
+    featured: false,
+  },
+  {
+    id: 12,
     title: "URL Shortener",
     description:
       "Fast, in-memory URL shortener using BigCache for quick link generation. Built with React, Go, and Docker.",
@@ -224,7 +277,7 @@ export const projects = [
     featured: false,
   },
   {
-    id: 11,
+    id: 13,
     title: "Pinglo",
     description:
       "Real-time chat application with modern UI and seamless messaging experience.",
@@ -246,7 +299,7 @@ export const projects = [
     featured: false,
   },
   {
-    id: 12,
+    id: 14,
     title: "AI App",
     description:
       "A simple AI app where user can generate images and text using Gemini.",
@@ -267,7 +320,7 @@ export const projects = [
     featured: false,
   },
   {
-    id: 13,
+    id: 15,
     title: "Magic Pad",
     description:
       "A creative drawing tool inspired by Apple's calculator sketchpad. Built for fun and interaction.",
@@ -281,7 +334,7 @@ export const projects = [
     featured: false,
   },
   {
-    id: 14,
+    id: 16,
     title: "Tic Tac Toe Game",
     description:
       "Modern Tic Tac Toe with bot, offline, and online multiplayer using Socket.IO and Redis.",
@@ -295,7 +348,7 @@ export const projects = [
     featured: false,
   },
   {
-    id: 15,
+    id: 17,
     title: "Fitly",
     description:
       "AI-powered web app that helps users find the best jobs based on their skills and interests.",
@@ -438,6 +491,5 @@ export const openSourceRepos = [
     isrelease: true,
     language: ["C++", "Python"],
     topics: ["ai", "api", "framework", "C++", "Fastapi"],
-  }
+  },
 ];
-

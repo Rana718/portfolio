@@ -1,6 +1,6 @@
 "use client";
 import { Github, Linkedin, Mail } from "lucide-react";
-import { SiX } from "react-icons/si";
+import { SiX } from 'react-icons/si';
 import { useTheme } from "@/lib/theme-provider";
 
 const quickLinks = [
@@ -9,7 +9,7 @@ const quickLinks = [
   { href: "#experience", label: "EXPERIENCE" },
   { href: "#projects", label: "PROJECTS" },
   { href: "#opensource", label: "OPEN SOURCE" },
-  { href: "/blog", label: "BLOG" },
+  // { href: "/blog", label: "BLOG" },
   { href: "#contact", label: "CONTACT" },
 ];
 

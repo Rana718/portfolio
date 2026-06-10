@@ -17,9 +17,7 @@ import {
   SiAuth0, SiHono, SiSvelte, SiFlutter, SiPhp, SiLaravel, SiElasticsearch,
   SiLangchain, SiHuggingface,
 } from 'react-icons/si';
-import {
-  TbBrandReactNative, TbBrandFramerMotion, TbBrandGolang
-} from 'react-icons/tb';
+import { TbBrandReactNative, TbBrandFramerMotion, TbBrandGolang } from 'react-icons/tb';
 
 // Pinecone inline SVG
 const SiPinecone = (props: React.SVGProps<SVGSVGElement>) => (

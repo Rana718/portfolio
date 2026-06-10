@@ -51,7 +51,7 @@ export const Projects = () => {
 
       {/* Category Filter */}
       <motion.div
-        className="flex flex-wrap justify-center gap-2 mb-10 max-w-3xl mx-auto"
+        className="flex flex-wrap justify-center gap-2 mb-2 max-w-3xl mx-auto"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

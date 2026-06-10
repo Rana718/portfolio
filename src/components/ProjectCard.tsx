@@ -9,10 +9,20 @@ import {
   SiNodedotjs, SiExpress, SiGo, SiPython, SiFastapi, SiFlask,
   SiPostgresql, SiMongodb, SiRedis, SiPrisma, SiMysql,
   SiDocker, SiNginx, SiRabbitmq, SiApachekafka, SiClerk,
-  SiFramer, SiSocketdotio, SiSelenium, SiFirebase, SiSupabase,
-  SiVite, SiFlutter, SiLangchain
+  SiSocketdotio, SiSelenium, SiFirebase, SiSupabase,
+  SiVite, SiFlutter, SiLangchain, SiSvelte,
+  SiOpenai, SiRazorpay, SiLinux, SiSteam, SiWine, SiRust,
 } from 'react-icons/si';
 import { TbBrandReactNative, TbBrandGolang, TbBrandFramerMotion } from 'react-icons/tb';
+
+// Inline SVGs for icons not in react-icons
+const SiGemini = (p: React.SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 24A14.304 14.304 0 0 0 0 12 14.304 14.304 0 0 0 12 0a14.304 14.304 0 0 0 12 12 14.304 14.304 0 0 0-12 12"/></svg>;
+const SiPinecone = (p: React.SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M11.982 0a.773.773 0 0 0-.531.203L8.498 2.83a.762.762 0 0 0-.03 1.09l.72.745-2.588 2.369-1.744-1.79a.762.762 0 0 0-1.09-.029L1.22 7.45a.762.762 0 0 0-.03 1.09l6.513 6.724a.762.762 0 0 0 1.09.029l2.544-2.464.72.744a.762.762 0 0 0 1.09.03l2.953-2.86a.762.762 0 0 0 .03-1.09l-1.745-1.79 2.589-2.368.72.744a.762.762 0 0 0 1.09.03l2.953-2.86a.762.762 0 0 0 .03-1.09L15.214.549A.762.762 0 0 0 14.605.3l-.031.001a.762.762 0 0 0-.512.22l-2.08 2.014V.762A.762.762 0 0 0 11.982 0z"/></svg>;
+const SiLanggraph = (p: React.SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="5" r="2"/><circle cx="5" cy="17" r="2"/><circle cx="19" cy="17" r="2"/><line x1="12" y1="7" x2="6.5" y2="15.2"/><line x1="12" y1="7" x2="17.5" y2="15.2"/><line x1="7" y1="17" x2="17" y2="17"/></svg>;
+const SiGrpc = (p: React.SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>;
+const SiConvex = (p: React.SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>;
+const SiFiber = (p: React.SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 3a7 7 0 1 1 0 14A7 7 0 0 1 12 5zm0 2a5 5 0 1 0 0 10A5 5 0 0 0 12 7z"/></svg>;
+const SiProton = (p: React.SVGProps<SVGSVGElement>) => <svg viewBox="0 0 24 24" fill="currentColor" {...p}><path d="M3 3h8c4.4 0 8 3.6 8 8s-3.6 8-8 8H3V3zm4 4v8h4c2.2 0 4-1.8 4-4s-1.8-4-4-4H7z"/></svg>;
 
 const techIcons: Record<string, any> = {
   'Next.js': SiNextdotjs,
@@ -38,6 +48,7 @@ const techIcons: Record<string, any> = {
   'RabbitMQ': SiRabbitmq,
   'Kafka': SiApachekafka,
   'Clerk': SiClerk,
+  'clerk': SiClerk,
   'Framer Motion': TbBrandFramerMotion,
   'Socket.IO': SiSocketdotio,
   'Selenium': SiSelenium,
@@ -47,16 +58,27 @@ const techIcons: Record<string, any> = {
   'React Native': TbBrandReactNative,
   'Flutter': SiFlutter,
   'WebSocket': SiSocketdotio,
-  'gRPC': SiGo,
+  'gRPC': SiGrpc,
   'expo': TbBrandReactNative,
   'Zustand': SiReact,
   'LangChain': SiLangchain,
-  'OpenAI': SiGo,
-  'Gemini': SiGo,
-  'Razorpay': SiGo,
+  'LangGraph': SiLanggraph,
+  'OpenAI': SiOpenai,
+  'Gemini': SiGemini,
+  'Razorpay': SiRazorpay,
   'SQLAlchemy': SiPython,
-  'Convex': SiGo,
-  'Fiber': SiGo,
+  'Convex': SiConvex,
+  'Fiber': SiFiber,
+  'SvelteKit': SiSvelte,
+  'Pinecone': SiPinecone,
+  'Linux': SiLinux,
+  'Steam': SiSteam,
+  'Wine': SiWine,
+  'Proton': SiProton,
+  'Rust': SiRust,
+  'PipeWire': SiLinux,
+  'NewsAPI': SiReact,
+  'GPUI': SiRust,
 };
 
 interface ProjectCardProps {

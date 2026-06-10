@@ -1,6 +1,6 @@
 "use client";
 import { ChevronDown, Github, Linkedin, Mail } from "lucide-react";
-import { SiX } from "react-icons/si";
+import { SiX } from 'react-icons/si';
 import { motion } from "framer-motion";
 import { Typewriter } from "./Typewriter";
 import { ParticleBurst } from "./ParticleBurst";
