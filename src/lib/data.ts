@@ -184,9 +184,30 @@ export const projects = [
       image: "/projects/passman.png",
       featured: true,
       status: "completed",
+   }, {
+      id: 7,
+      title: "CPM",
+      description: "A fast, isolated C/C++ package manager powered by Nix. Like uv for Python, but for C and C++.",
+      fullDescription: "CPM is a C/C++ package manager built around complete isolation using Nix as the backend for reproducible builds. It supports\n" +
+        "header-only and compiled system libraries, parallel downloads, auto-resolves latest GitHub tags, and generates compile_commands.json for\n" +
+        "editor LSP. Never pollutes the system — all artifacts stay in .cpm/ and ~/.cpm/cache/.",
+      tech: [
+         "C++",
+         "CMake",
+         "Nix",
+         "TOML",
+         "Bash",
+         "Ninja",
+      ],
+      category: ["Tool"],
+      github: "https://github.com/Rana718/cpm",
+      demo: "https://cpm.ranadolui.me/",
+      image: "/projects/cpm.png",
+      featured: false,
+      status: "completed",
    },
    {
-      id: 7,
+      id: 8,
       title: "PeerDrop",
       description:
          "Instant, secure file sharing via peer-to-peer tech with end-to-end encryption. Built with React, Go, and WebSockets.",
@@ -205,9 +226,10 @@ export const projects = [
       demo: "https://peerdrop-theta.vercel.app/",
       image: "/projects/peerdrop.png",
       featured: false,
+      status: "completed",
    },
    {
-      id: 8,
+      id: 9,
       title: "NewsApp",
       description:
          "A news aggregator app that fetches the latest news from various sources using NewsAPI.",
@@ -219,9 +241,10 @@ export const projects = [
       demo: null,
       image: "/projects/newsapp.jpg",
       featured: false,
+      status: "completed",
    },
    {
-      id: 9,
+      id: 10,
       title: "Music Mixer",
       description:
          "Advanced PipeWire audio mixer with per-app controls and real-time routing.",
@@ -235,7 +258,7 @@ export const projects = [
       featured: true,
    },
    {
-      id: 10,
+      id: 11,
       title: "Snipity",
       description:
          "Minimal code editor for creating and sharing snippets easily. Built with Next.js, Convex, Zustand, and Framer Motion.",
@@ -249,7 +272,7 @@ export const projects = [
       featured: false,
    },
    {
-      id: 11,
+      id: 12,
       title: "Trainer",
       description:
          "Linux CLI tool that launches Windows trainers through the exact Proton version and Wine prefix used by a Steam game.",
@@ -261,9 +284,10 @@ export const projects = [
       demo: "",
       image: "/projects/trainer.png",
       featured: false,
+      status: "completed",
    },
    {
-      id: 12,
+      id: 13,
       title: "URL Shortener",
       description:
          "Fast, in-memory URL shortener using BigCache for quick link generation. Built with React, Go, and Docker.",
@@ -275,9 +299,10 @@ export const projects = [
       demo: "https://shortify-link-shortener.vercel.app/",
       image: "/projects/urlshort.png",
       featured: false,
+      status: "completed",
    },
    {
-      id: 13,
+      id: 14,
       title: "Pinglo",
       description:
          "Real-time chat application with modern UI and seamless messaging experience.",
@@ -299,7 +324,7 @@ export const projects = [
       featured: false,
    },
    {
-      id: 14,
+      id: 15,
       title: "AI App",
       description:
          "A simple AI app where user can generate images and text using Gemini.",
@@ -318,9 +343,10 @@ export const projects = [
       demo: null,
       image: "/projects/aiapp.jpg",
       featured: false,
+      status: "completed",
    },
    {
-      id: 15,
+      id: 16,
       title: "Magic Pad",
       description:
          "A creative drawing tool inspired by Apple's calculator sketchpad. Built for fun and interaction.",
@@ -332,20 +358,7 @@ export const projects = [
       demo: "https://magic-pad.vercel.app/",
       image: "/projects/megic.png",
       featured: false,
-   },
-   {
-      id: 16,
-      title: "Tic Tac Toe Game",
-      description:
-         "Modern Tic Tac Toe with bot, offline, and online multiplayer using Socket.IO and Redis.",
-      fullDescription:
-         "A modern take on the classic Tic Tac Toe game featuring multiple game modes including AI bot, offline play, and real-time online multiplayer. Built with React and Socket.IO for seamless real-time gameplay, Redis for session management, and beautiful animations with Framer Motion.",
-      tech: ["React", "Vite", "Framer Motion", "Socket.IO", "Express"],
-      category: ["Tool"],
-      github: "https://github.com/Rana718/tic-tac-toe",
-      demo: null,
-      image: "/projects/tic-tac-toe.png",
-      featured: false,
+      status: "completed",
    },
    {
       id: 17,
