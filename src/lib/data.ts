@@ -134,7 +134,7 @@ export const projects = [
       ],
       category: ["Web App", "AI/ML"],
       github: "https://github.com/Rana718/cvbuilder",
-      demo: 'https://cvbuilder.ranadolui.me/',
+      demo: "https://cvbuilder.ranadolui.me/",
       image: "/projects/aicv.png",
       featured: true,
       status: "completed",
@@ -180,25 +180,21 @@ export const projects = [
       ],
       category: ["Web App"],
       github: "https://github.com/Rana718/passman",
-      demo: 'https://passman-sandy-seven.vercel.app/',
+      demo: "https://passman-sandy-seven.vercel.app/",
       image: "/projects/passman.png",
       featured: true,
       status: "completed",
-   }, {
+   },
+   {
       id: 7,
       title: "CPM",
-      description: "A fast, isolated C/C++ package manager powered by Nix. Like uv for Python, but for C and C++.",
-      fullDescription: "CPM is a C/C++ package manager built around complete isolation using Nix as the backend for reproducible builds. It supports\n" +
-        "header-only and compiled system libraries, parallel downloads, auto-resolves latest GitHub tags, and generates compile_commands.json for\n" +
-        "editor LSP. Never pollutes the system — all artifacts stay in .cpm/ and ~/.cpm/cache/.",
-      tech: [
-         "C++",
-         "CMake",
-         "Nix",
-         "TOML",
-         "Bash",
-         "Ninja",
-      ],
+      description:
+         "A fast, isolated C/C++ package manager powered by Nix. Like uv for Python, but for C and C++.",
+      fullDescription:
+         "CPM is a C/C++ package manager built around complete isolation using Nix as the backend for reproducible builds. It supports\n" +
+         "header-only and compiled system libraries, parallel downloads, auto-resolves latest GitHub tags, and generates compile_commands.json for\n" +
+         "editor LSP. Never pollutes the system — all artifacts stay in .cpm/ and ~/.cpm/cache/.",
+      tech: ["C++", "CMake", "Nix", "TOML", "Bash", "Ninja"],
       category: ["Tool"],
       github: "https://github.com/Rana718/cpm",
       demo: "https://cpm.ranadolui.me/",
@@ -482,6 +478,298 @@ export const testimonials = [
          "Deep knowledge of modern web technologies and best practices. The real-time features and state management implementation were perfectly executed.",
       rating: 5,
    },
+];
+
+export const services = [
+   {
+      id: 1,
+      title: "Full-Stack Web Apps",
+      description:
+         "End-to-end development with Next.js, React, Go, and Python. I build fast, scalable web applications with modern architectures.",
+      icon: "Globe",
+      features: [
+         "Responsive UI/UX",
+         "REST & GraphQL APIs",
+         "Database Design",
+         "Cloud Deployment",
+      ],
+   },
+   {
+      id: 2,
+      title: "AI/ML Integration",
+      description:
+         "Integrate LLMs, RAG systems, and AI agents to automate workflows and build intelligent features into your products.",
+      icon: "Brain",
+      features: [
+         "LangChain & LangGraph",
+         "OpenAI / Gemini",
+         "Vector Databases",
+         "Agent Systems",
+      ],
+   },
+   {
+      id: 3,
+      title: "Mobile Apps",
+      description:
+         "Cross-platform mobile apps built with React Native and Flutter. Fast, native-feeling experiences for iOS and Android.",
+      icon: "Smartphone",
+      features: [
+         "iOS & Android",
+         "Expo / RN CLI",
+         "Push Notifications",
+         "App Store Deploy",
+      ],
+   },
+   {
+      id: 4,
+      title: "DevOps & Infrastructure",
+      description:
+         "Docker, Kubernetes, CI/CD pipelines, and monitoring — I handle infrastructure so you can focus on building.",
+      icon: "Server",
+      features: [
+         "Docker & K8s",
+         "AWS / GCP",
+         "GitHub Actions",
+         "Grafana & Prometheus",
+      ],
+   },
+];
+
+export const technologies = [
+   {
+      name: "TypeScript",
+      category: "Languages",
+      icon: "SiTypescript",
+      color: "#3178C6",
+   },
+   {
+      name: "JavaScript",
+      category: "Languages",
+      icon: "SiJavascript",
+      color: "#F7DF1E",
+   },
+   {
+      name: "Python",
+      category: "Languages",
+      icon: "SiPython",
+      color: "#3776AB",
+   },
+   { name: "Go", category: "Languages", icon: "SiGo", color: "#00ADD8" },
+   { name: "Rust", category: "Languages", icon: "SiRust", color: "#000000" },
+   {
+      name: "C++",
+      category: "Languages",
+      icon: "SiCplusplus",
+      color: "#00599C",
+   },
+   {
+      name: "Kotlin",
+      category: "Languages",
+      icon: "SiKotlin",
+      color: "#7F52FF",
+   },
+   { name: "Bash", category: "Languages", icon: "SiGnubash", color: "#4EAA25" },
+   { name: "React", category: "Frontend", icon: "SiReact", color: "#61DAFB" },
+   {
+      name: "Next.js",
+      category: "Frontend",
+      icon: "SiNextdotjs",
+      color: "#000000",
+   },
+   {
+      name: "SvelteKit",
+      category: "Frontend",
+      icon: "SiSvelte",
+      color: "#FF3E00",
+   },
+   { name: "Vite", category: "Frontend", icon: "SiVite", color: "#646CFF" },
+   {
+      name: "TailwindCSS",
+      category: "Frontend",
+      icon: "SiTailwindcss",
+      color: "#06B6D4",
+   },
+   {
+      name: "Framer Motion",
+      category: "Frontend",
+      icon: "SiFramer",
+      color: "#0055FF",
+   },
+   {
+      name: "Zustand",
+      category: "Frontend",
+      icon: "SiZustand",
+      color: "currentColor",
+   },
+   {
+      name: "Node.js",
+      category: "Backend",
+      icon: "SiNodedotjs",
+      color: "#339933",
+   },
+   {
+      name: "Express",
+      category: "Backend",
+      icon: "SiExpress",
+      color: "#000000",
+   },
+   {
+      name: "FastAPI",
+      category: "Backend",
+      icon: "SiFastapi",
+      color: "#009688",
+   },
+   { name: "Flask", category: "Backend", icon: "SiFlask", color: "#000000" },
+   { name: "Go Fiber", category: "Backend", icon: "SiGo", color: "#00ADD8" },
+   {
+      name: "Socket.IO",
+      category: "Backend",
+      icon: "SiSocketdotio",
+      color: "#010101",
+   },
+   { name: "gRPC", category: "Backend", icon: "SiGrpc", color: "currentColor" },
+   {
+      name: "GraphQL",
+      category: "Backend",
+      icon: "SiGraphql",
+      color: "#E10098",
+   },
+   {
+      name: "RabbitMQ",
+      category: "Backend",
+      icon: "SiRabbitmq",
+      color: "#FF6600",
+   },
+   {
+      name: "PostgreSQL",
+      category: "Database",
+      icon: "SiPostgresql",
+      color: "#4169E1",
+   },
+   {
+      name: "MongoDB",
+      category: "Database",
+      icon: "SiMongodb",
+      color: "#47A248",
+   },
+   { name: "Redis", category: "Database", icon: "SiRedis", color: "#DC382D" },
+   { name: "Prisma", category: "Database", icon: "SiPrisma", color: "#2D3748" },
+   {
+      name: "SQLAlchemy",
+      category: "Database",
+      icon: "SiSqlalchemy",
+      color: "#D71F00",
+   },
+   {
+      name: "Firebase",
+      category: "Database",
+      icon: "SiFirebase",
+      color: "#DD2C00",
+   },
+   { name: "Convex", category: "Database", icon: "SiConvex", color: "#EE342F" },
+   { name: "Docker", category: "DevOps", icon: "SiDocker", color: "#2496ED" },
+   {
+      name: "Kubernetes",
+      category: "DevOps",
+      icon: "SiKubernetes",
+      color: "#326CE5",
+   },
+   {
+      name: "AWS",
+      category: "DevOps",
+      icon: "SiAmazonwebservices",
+      color: "#232F3E",
+   },
+   { name: "Nginx", category: "DevOps", icon: "SiNginx", color: "#009639" },
+   {
+      name: "GitHub Actions",
+      category: "DevOps",
+      icon: "SiGithubactions",
+      color: "#2088FF",
+   },
+   { name: "Grafana", category: "DevOps", icon: "SiGrafana", color: "#F46800" },
+   {
+      name: "Prometheus",
+      category: "DevOps",
+      icon: "SiPrometheus",
+      color: "#E6522C",
+   },
+   {
+      name: "Kafka",
+      category: "DevOps",
+      icon: "SiApachekafka",
+      color: "#231F20",
+   },
+   { name: "Sentry", category: "DevOps", icon: "SiSentry", color: "#362D59" },
+   { name: "OpenAI", category: "AI/ML", icon: "SiOpenai", color: "#412991" },
+   {
+      name: "LangChain",
+      category: "AI/ML",
+      icon: "SiLangchain",
+      color: "currentColor",
+   },
+   {
+      name: "Gemini",
+      category: "AI/ML",
+      icon: "SiGooglegemini",
+      color: "currentColor",
+   },
+   {
+      name: "Pinecone",
+      category: "AI/ML",
+      icon: "SiPinecone",
+      color: "currentColor",
+   },
+   {
+      name: "LangGraph",
+      category: "AI/ML",
+      icon: "SiLangchain",
+      color: "currentColor",
+   },
+   {
+      name: "React Native",
+      category: "Mobile",
+      icon: "SiReact",
+      color: "#61DAFB",
+   },
+   { name: "Expo", category: "Mobile", icon: "SiExpo", color: "#000020" },
+   { name: "Flutter", category: "Mobile", icon: "SiFlutter", color: "#02569B" },
+   { name: "Clerk", category: "Tools", icon: "SiClerk", color: "currentColor" },
+   {
+      name: "Razorpay",
+      category: "Tools",
+      icon: "SiRazorpay",
+      color: "#02042B",
+   },
+   { name: "CMake", category: "Tools", icon: "SiCmake", color: "#064F8C" },
+   { name: "Nix", category: "Tools", icon: "SiNixos", color: "#5277C3" },
+   {
+      name: "NewsAPI",
+      category: "Tools",
+      icon: "SiNewspaper",
+      color: "currentColor",
+   },
+   { name: "Linux", category: "Tools", icon: "SiLinux", color: "#FCC624" },
+   {
+      name: "PipeWire",
+      category: "Tools",
+      icon: "SiPipewire",
+      color: "currentColor",
+   },
+   {
+      name: "Proton",
+      category: "Tools",
+      icon: "SiProton",
+      color: "currentColor",
+   },
+   {
+      name: "Selenium",
+      category: "Tools",
+      icon: "SiSelenium",
+      color: "#43B02A",
+   },
+   { name: "Wine", category: "Tools", icon: "SiWine", color: "currentColor" },
+   { name: "Steam", category: "Tools", icon: "SiSteam", color: "#000000" },
 ];
 
 export const openSourceRepos = [
