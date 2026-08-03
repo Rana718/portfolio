@@ -4,7 +4,7 @@ import { SiX } from "react-icons/si";
 import { motion } from "framer-motion";
 import { Typewriter } from "./Typewriter";
 import { ParticleBurst } from "./ParticleBurst";
-import { LiquidButton } from "./LiquidButton";
+import { GlassButton } from "./ui/GlassButton";
 import { TextScramble } from "./TextScramble";
 import { StatCounter } from "./StatCounter";
 import { useTheme } from "@/lib/theme-provider";
@@ -153,21 +153,21 @@ export function HeroSection() {
                      },
                   }}
                >
-                  <LiquidButton
+                  <GlassButton
                      href="#work"
-                     variant="primary"
-                     className="rounded-3xl px-[4vw] md:px-6 py-[1.2vw] md:py-2.5 text-[2.2vw] md:text-xs"
+                     variant="accent"
+                     className="px-[4vw] md:px-6 py-[1.2vw] md:py-2.5 text-[2.2vw] md:text-xs"
                   >
                      VIEW PROJECTS
-                  </LiquidButton>
-                  <LiquidButton
+                  </GlassButton>
+                  <GlassButton
                      href="/Rana_Dolui.pdf"
                      download
-                     variant="secondary"
-                     className="rounded-3xl px-[4vw] md:px-6 py-[1.2vw] md:py-2.5 text-[2.2vw] md:text-xs"
+                     variant="outline"
+                     className="px-[4vw] md:px-6 py-[1.2vw] md:py-2.5 text-[2.2vw] md:text-xs"
                   >
                      DOWNLOAD CV
-                  </LiquidButton>
+                  </GlassButton>
                </motion.div>
 
                {/* Social links */}
@@ -183,17 +183,17 @@ export function HeroSection() {
                   }}
                >
                   {socials.map(({ url, label, icon: Icon }) => (
-                     <LiquidButton
+                     <GlassButton
                         key={label}
                         href={url}
                         target="_blank"
-                        rel="noopener noreferrer"
-                        variant="secondary"
-                        className="rounded-full p-[1.8vw] md:p-2.5"
+                        variant="glass"
+                        icon
+                        className="h-[9vw] w-[9vw] md:h-11 md:w-11"
                         aria-label={label}
                      >
                         <Icon size={18} />
-                     </LiquidButton>
+                     </GlassButton>
                   ))}
                </motion.div>
             </motion.div>

@@ -1,105 +1,159 @@
 "use client";
 
-import { Github, Linkedin, Mail } from "lucide-react";
+import { motion } from "framer-motion";
+import { Calendar, Download, Github, Linkedin, Mail } from "lucide-react";
 import { SiX } from "react-icons/si";
-import { useTheme } from "@/lib/theme-provider";
 import { Container } from "./ui/Container";
+import { GlassButton } from "./ui/GlassButton";
+import { ContributionHeatmap } from "./ContributionHeatmap";
 
-const quickLinks = [
-   { href: "#home", label: "HOME" },
-   { href: "#experience", label: "EXPERIENCE" },
-   { href: "#work", label: "WORK" },
-   { href: "#skills", label: "SKILLS" },
-   { href: "#services", label: "SERVICES" },
-   { href: "#contact", label: "CONTACT" },
+const GITHUB_USERNAME = "Rana718";
+
+const actions = [
+   {
+      href: "mailto:ranadolui.dev@gmail.com",
+      icon: Mail,
+      label: "ranadolui.dev@gmail.com",
+      variant: "accent" as const,
+   },
+   {
+      href: "https://cal.com/rana-dolui-0l0osz/15min?overlayCalendar=true",
+      icon: Calendar,
+      label: "Book a call",
+      variant: "glass" as const,
+   },
+   {
+      href: "/Rana_Dolui.pdf",
+      icon: Download,
+      label: "Resume",
+      variant: "outline" as const,
+      download: true,
+   },
 ];
 
 const socials = [
-   { icon: Github, label: "Github", url: "https://github.com/Rana718" },
+   { href: "https://github.com/Rana718", label: "GitHub" },
+   { href: "https://x.com/jack718r", label: "Twitter" },
    {
+      href: "https://linkedin.com/in/rana-dolui-89357728a/",
+      label: "LinkedIn",
+   },
+];
+
+const socialIcons = [
+   { href: "https://github.com/Rana718", icon: Github, label: "GitHub" },
+   {
+      href: "https://linkedin.com/in/rana-dolui-89357728a/",
       icon: Linkedin,
       label: "LinkedIn",
-      url: "https://linkedin.com/in/rana-dolui-89357728a/",
    },
-   { icon: SiX, label: "X", url: "https://x.com/jack718r" },
-   { icon: Mail, label: "Mail", url: "mailto:ranadolui.dev@gmail.com" },
+   { href: "https://x.com/jack718r", icon: SiX, label: "X" },
 ];
 
 export function FooterSection() {
-   const { theme } = useTheme();
-   const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
-
    return (
-      <footer className="relative overflow-hidden border-t border-border-primary">
-         <Container className="py-[8vw] md:py-12">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-[6vw] md:gap-10">
-               <div>
-                  <h3
-                     className="font-black text-[4vw] md:text-base mb-[1.5vw] md:mb-2"
-                     style={{ color: accentColor }}
+      <footer className="relative flex min-h-[80vh] flex-col justify-between overflow-hidden border-t border-border-primary pt-[8vw] md:pt-16">
+         <Container>
+            <div className="flex flex-col gap-[12vw] md:gap-12">
+               {/* Heading + contribution graph */}
+               <div className="grid grid-cols-1 items-center gap-[8vw] md:grid-cols-12 md:gap-8">
+                  <motion.div
+                     initial={{ opacity: 0, x: -30 }}
+                     whileInView={{ opacity: 1, x: 0 }}
+                     viewport={{ once: true }}
+                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                     className="col-span-1 md:col-span-4"
                   >
-                     RANA DOLUI
-                  </h3>
-                  <p className="text-[2.5vw] md:text-xs text-fg-muted leading-relaxed">
-                     Full Stack Developer & AI Engineer building
-                     production-grade solutions.
-                  </p>
-                  <div className="flex items-center gap-[1.5vw] md:gap-2 mt-[2.5vw] md:mt-3">
-                     <span
-                        className="h-1.25 w-1.25 rounded-full animate-pulse"
-                        style={{ backgroundColor: accentColor }}
-                     />
-                     <span className="font-mono text-[2vw] md:text-[10px] uppercase tracking-widest text-accent">
-                        Available for work
+                     <span className="mb-[3vw] md:mb-4 block text-center font-mono text-[2.5vw] md:text-base uppercase tracking-widest text-fg-secondary md:text-left">
+                        <span className="text-fg-primary/30">08 /</span> Connect
                      </span>
-                  </div>
-               </div>
-               <div>
-                  <h4 className="font-mono text-[2.5vw] md:text-[11px] uppercase tracking-widest text-fg-muted mb-[2.5vw] md:mb-3">
-                     Quick Links
-                  </h4>
-                  <div className="grid grid-cols-2 gap-[1.5vw] md:gap-1.5">
-                     {quickLinks.map((link) => (
-                        <a
-                           key={link.label}
-                           href={link.href}
-                           className="font-mono text-[2vw] md:text-[10px] uppercase tracking-widest text-fg-secondary hover:text-fg-primary transition-colors"
-                        >
-                           {link.label}
-                        </a>
-                     ))}
-                  </div>
-               </div>
-               <div>
-                  <h4 className="font-mono text-[2.5vw] md:text-[11px] uppercase tracking-widest text-fg-muted mb-[2.5vw] md:mb-3">
-                     Connect
-                  </h4>
-                  <div className="flex gap-[2vw] md:gap-2">
-                     {socials.map(({ icon: Icon, label, url }) => (
-                        <a
-                           key={label}
-                           href={url}
-                           target="_blank"
-                           rel="noopener noreferrer"
-                           aria-label={label}
-                           className="flex h-[8vw] w-[8vw] md:h-9 md:w-9 items-center justify-center rounded-full border border-border-primary transition-all hover:border-accent hover:text-accent"
-                        >
-                           <Icon size={14} />
-                        </a>
-                     ))}
-                  </div>
-               </div>
-            </div>
+                     <h2 className="text-center font-black text-[16vw] md:text-8xl lg:text-[9rem] uppercase leading-[0.75] tracking-tighter md:text-left">
+                        Let&apos;s
+                        <br />
+                        <span className="text-accent">Talk.</span>
+                     </h2>
 
-            <div className="mt-[6vw] md:mt-10 pt-[3vw] md:pt-5 border-t border-border-primary flex flex-col sm:flex-row items-center justify-between gap-[1.5vw] md:gap-3">
-               <p className="font-mono text-[2vw] md:text-[10px] text-fg-muted">
-                  © {new Date().getFullYear()} Rana Dolui. All rights reserved.
-               </p>
-               <p className="font-mono text-[2vw] md:text-[10px] text-fg-muted">
-                  Built with Next.js & TypeScript
-               </p>
+                     <div className="mt-[6vw] md:mt-8 flex justify-center gap-[3vw] md:gap-3 md:justify-start">
+                        {socialIcons.map(({ href, icon: Icon, label }) => (
+                           <GlassButton
+                              key={label}
+                              href={href}
+                              icon
+                              variant="glass"
+                              aria-label={label}
+                              className="h-[11vw] w-[11vw] md:h-12 md:w-12"
+                           >
+                              <Icon className="h-[4.5vw] w-[4.5vw] md:h-5 md:w-5" />
+                           </GlassButton>
+                        ))}
+                     </div>
+                  </motion.div>
+
+                  <motion.div
+                     initial={{ opacity: 0, scale: 0.95 }}
+                     whileInView={{ opacity: 1, scale: 1 }}
+                     viewport={{ once: true }}
+                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                     className="col-span-1 mt-[8vw] md:col-span-8 md:mt-0 md:ml-8"
+                  >
+                     <ContributionHeatmap username={GITHUB_USERNAME} />
+                  </motion.div>
+               </div>
+
+               {/* Action row */}
+               <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.15, duration: 0.6 }}
+                  className="flex w-full flex-wrap items-center justify-center gap-[3vw] md:flex-nowrap md:gap-3"
+               >
+                  {actions.map(
+                     ({ href, icon: Icon, label, variant, download }) => (
+                        <GlassButton
+                           key={label}
+                           href={href}
+                           variant={variant}
+                           download={download}
+                        >
+                           <Icon className="h-[4.5vw] w-[4.5vw] md:h-5 md:w-5" />
+                           {label}
+                        </GlassButton>
+                     ),
+                  )}
+               </motion.div>
             </div>
          </Container>
+
+         <Container className="flex items-end justify-between pt-[6vw] md:pt-10 font-mono text-[2.5vw] md:text-sm uppercase text-fg-secondary">
+            <span>© {new Date().getFullYear()} Rana Dolui</span>
+            <div className="flex gap-[4vw] md:gap-4">
+               {socials.map(({ href, label }) => (
+                  <a
+                     key={label}
+                     href={href}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="relative transition-colors hover:text-accent after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-accent after:transition-all after:duration-300 hover:after:w-full"
+                  >
+                     {label}
+                  </a>
+               ))}
+            </div>
+         </Container>
+
+         {/* Watermark — decorative, scales with the viewport. */}
+         <div className="pointer-events-none mt-[12vw] md:mt-8 flex w-full select-none items-end justify-center overflow-hidden">
+            <motion.span
+               initial={{ opacity: 0, y: 50 }}
+               whileInView={{ opacity: 0.3, y: 16 }}
+               viewport={{ once: true }}
+               transition={{ duration: 1.2, ease: "easeOut" }}
+               className="bg-linear-to-b from-fg-primary to-transparent bg-clip-text font-black text-[22vw] uppercase leading-[0.7] tracking-tighter whitespace-nowrap text-transparent"
+            >
+               Rana Dolui
+            </motion.span>
+         </div>
       </footer>
    );
 }

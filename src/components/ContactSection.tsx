@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Confetti } from "./Confetti";
 import { Container } from "./ui/Container";
 import { SectionHeading } from "./ui/SectionHeading";
+import { GlassButton } from "./ui/GlassButton";
 
 const socials = [
    { icon: Github, label: "Github", url: "https://github.com/Rana718" },
@@ -132,46 +133,42 @@ export function ContactSection() {
          <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw] md:gap-10">
             <div>
                <h3 className="font-black text-[5vw] md:text-xl mb-[2vw] md:mb-3">
-                  Let's Talk
+                  Send a message
                </h3>
                <p className="text-[3vw] md:text-sm text-fg-secondary leading-relaxed mb-[3vw] md:mb-5">
                   Got an idea in mind? Let's collaborate and build something
                   remarkable.
                </p>
                <div className="flex flex-wrap items-center gap-[2vw] md:gap-3">
-                  <a
+                  <GlassButton
                      href="mailto:ranadolui.dev@gmail.com"
-                     className="inline-flex items-center gap-[2vw] md:gap-2 rounded-xl border border-border-primary bg-bg-secondary/40 p-[3vw] md:p-4 transition-all hover:border-accent"
+                     variant="glass"
+                     className="px-[4vw] md:px-5 py-[2vw] md:py-3 text-[2.2vw] md:text-xs normal-case tracking-normal"
                   >
-                     <Mail className="h-[4vw] w-[4vw] md:h-4 md:w-4 text-accent" />
-                     <span className="font-mono text-[2.5vw] md:text-xs text-fg-secondary">
-                        ranadolui.dev@gmail.com
-                     </span>
-                  </a>
-                  <a
+                     <Mail className="h-[4vw] w-[4vw] md:h-4 md:w-4" />
+                     ranadolui.dev@gmail.com
+                  </GlassButton>
+                  <GlassButton
                      href="https://cal.com/rana-dolui-0l0osz/15min?overlayCalendar=true"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     className="inline-flex items-center gap-[2vw] md:gap-2 rounded-xl border border-border-primary bg-accent/10 p-[3vw] md:p-4 transition-all hover:border-accent hover:bg-accent/15"
+                     variant="accent"
+                     className="px-[4vw] md:px-5 py-[2vw] md:py-3 text-[2.2vw] md:text-xs"
                   >
-                     <span className="font-mono text-[2.5vw] md:text-xs text-accent font-semibold">
-                        Book a call →
-                     </span>
-                  </a>
+                     Book a call →
+                  </GlassButton>
                </div>
 
                <div className="flex gap-[2vw] md:gap-3 mt-[5vw] md:mt-6">
                   {socials.map(({ icon: Icon, label, url }) => (
-                     <a
+                     <GlassButton
                         key={label}
                         href={url}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        icon
+                        variant="glass"
                         aria-label={label}
-                        className="flex h-[8vw] w-[8vw] md:h-10 md:w-10 items-center justify-center rounded-full border border-border-primary transition-all hover:border-accent hover:text-accent"
+                        className="h-[9vw] w-[9vw] md:h-11 md:w-11"
                      >
                         <Icon size={16} />
-                     </a>
+                     </GlassButton>
                   ))}
                </div>
             </div>
@@ -197,52 +194,56 @@ export function ContactSection() {
                <button
                   type="submit"
                   disabled={status === "sending"}
-                  className="flex items-center justify-center gap-2 rounded-xl border border-border-primary p-[3.5vw] md:p-3.5 font-mono text-[2.5vw] md:text-xs uppercase tracking-widest transition-all disabled:opacity-50 hover:border-accent hover:bg-accent/10"
+                  className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border-primary p-[3.5vw] md:p-3.5 font-mono text-[2.5vw] md:text-xs uppercase tracking-widest transition-[border-color,box-shadow] duration-500 hover:border-accent hover:shadow-[0_0_25px_-4px_var(--accent-glow)] disabled:opacity-50"
                >
-                  <AnimatePresence mode="wait">
-                     {status === "sending" ? (
-                        <motion.span
-                           key="send"
-                           initial={{ opacity: 0, y: 8 }}
-                           animate={{ opacity: 1, y: 0 }}
-                           exit={{ opacity: 0, y: -8 }}
-                           className="flex items-center gap-2"
-                        >
-                           <Loader2 className="h-3.5 w-3.5 animate-spin" />{" "}
-                           Sending...
-                        </motion.span>
-                     ) : status === "sent" ? (
-                        <motion.span
-                           key="done"
-                           initial={{ opacity: 0, scale: 0.5 }}
-                           animate={{ opacity: 1, scale: 1 }}
-                           exit={{ opacity: 0, scale: 0.5 }}
-                           className="flex items-center gap-2 text-accent"
-                        >
-                           <CheckCircle size={16} /> Message Sent!
-                        </motion.span>
-                     ) : status === "error" ? (
-                        <motion.span
-                           key="err"
-                           initial={{ opacity: 0 }}
-                           animate={{ opacity: 1 }}
-                           exit={{ opacity: 0 }}
-                           className="text-red-500"
-                        >
-                           Failed. Try again.
-                        </motion.span>
-                     ) : (
-                        <motion.span
-                           key="idle"
-                           initial={{ opacity: 0 }}
-                           animate={{ opacity: 1 }}
-                           exit={{ opacity: 0 }}
-                           className="flex items-center gap-2"
-                        >
-                           <Send size={14} /> Send Message
-                        </motion.span>
-                     )}
-                  </AnimatePresence>
+                  {/* Accent flood, rising on hover — matches GlassButton. */}
+                  <span className="pointer-events-none absolute inset-0 translate-y-full bg-accent transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)] group-hover:translate-y-0" />
+                  <span className="relative z-10 flex items-center gap-2 transition-colors duration-500 group-hover:text-bg-primary">
+                     <AnimatePresence mode="wait">
+                        {status === "sending" ? (
+                           <motion.span
+                              key="send"
+                              initial={{ opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: -8 }}
+                              className="flex items-center gap-2"
+                           >
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />{" "}
+                              Sending...
+                           </motion.span>
+                        ) : status === "sent" ? (
+                           <motion.span
+                              key="done"
+                              initial={{ opacity: 0, scale: 0.5 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.5 }}
+                              className="flex items-center gap-2 text-accent"
+                           >
+                              <CheckCircle size={16} /> Message Sent!
+                           </motion.span>
+                        ) : status === "error" ? (
+                           <motion.span
+                              key="err"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="text-red-500"
+                           >
+                              Failed. Try again.
+                           </motion.span>
+                        ) : (
+                           <motion.span
+                              key="idle"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              className="flex items-center gap-2"
+                           >
+                              <Send size={14} /> Send Message
+                           </motion.span>
+                        )}
+                     </AnimatePresence>
+                  </span>
                </button>
             </form>
          </div>

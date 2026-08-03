@@ -6,6 +6,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { Preloader } from "@/components/Preloader";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { MouseSpotlight } from "@/components/MouseSpotlight";
+import { CustomCursor } from "@/components/CustomCursor";
 import { BackToTop } from "@/components/BackToTop";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
@@ -160,6 +161,7 @@ export default function RootLayout({
                <Preloader />
                <ScrollProgress />
                <MouseSpotlight />
+               <CustomCursor />
                {children}
                <BottomNav />
                <BackToTop />

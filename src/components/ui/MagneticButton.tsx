@@ -1,65 +1,64 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 interface MagneticButtonProps {
    children: React.ReactNode;
    className?: string;
    onClick?: () => void;
-   href?: string;
    strength?: number;
+   hoverScale?: number;
 }
 
 export function MagneticButton({
    children,
-   className,
+   className = "",
    onClick,
-   href,
    strength = 0.15,
+   hoverScale = 1.05,
 }: MagneticButtonProps) {
    const ref = useRef<HTMLDivElement>(null);
+   const [position, setPosition] = useState({ x: 0, y: 0 });
+   const [isHovered, setIsHovered] = useState(false);
 
    const handleMouseMove = (e: React.MouseEvent) => {
       if (!ref.current) return;
-      const rect = ref.current.getBoundingClientRect();
-      const x = (e.clientX - rect.left - rect.width / 2) * strength;
-      const y = (e.clientY - rect.top - rect.height / 2) * strength;
-      ref.current.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
+      const { left, top, width, height } = ref.current.getBoundingClientRect();
+      setPosition({
+         x: (e.clientX - (left + width / 2)) * strength,
+         y: (e.clientY - (top + height / 2)) * strength,
+      });
    };
 
-   const handleMouseLeave = () => {
-      if (!ref.current) return;
-      ref.current.style.transform = "translate(0px, 0px) scale(1)";
+   const reset = () => {
+      setPosition({ x: 0, y: 0 });
+      setIsHovered(false);
    };
-
-   const Comp = href ? "a" : "div";
 
    return (
-      <Comp
-         href={href}
-         target={href ? "_blank" : undefined}
-         rel={href ? "noopener noreferrer" : undefined}
-         className={className}
+      <motion.div
+         ref={ref}
+         className={`relative inline-flex ${className}`}
+         style={{ isolation: "isolate" }}
+         onMouseMove={handleMouseMove}
+         onMouseEnter={() => setIsHovered(true)}
+         onMouseLeave={reset}
          onClick={onClick}
-         onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-               e.preventDefault();
-               onClick?.();
-            }
+         animate={{
+            x: position.x,
+            y: position.y,
+            scale: isHovered ? hoverScale : 1,
+         }}
+         transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 20,
+            mass: 0.5,
+            scale: { duration: 0.2, ease: "easeOut" },
          }}
       >
-         <motion.div
-            ref={ref}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            style={{
-               transition: "transform 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
-            }}
-            className="inline-block"
-         >
-            {children}
-         </motion.div>
-      </Comp>
+         {children}
+      </motion.div>
    );
 }
