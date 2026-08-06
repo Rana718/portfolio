@@ -1,6 +1,6 @@
 "use client";
 import { ChevronDown, Github, Linkedin, Mail } from "lucide-react";
-import { SiX } from "react-icons/si";
+import { XIcon } from "./ui/XIcon";
 import { motion } from "framer-motion";
 import { Typewriter } from "./Typewriter";
 import { ParticleBurst } from "./ParticleBurst";
@@ -17,7 +17,7 @@ const socials = [
       label: "LinkedIn",
       icon: Linkedin,
    },
-   { url: "https://x.com/jack718r", label: "X", icon: SiX },
+   { url: "https://x.com/jack718r", label: "X", icon: XIcon },
    { url: "mailto:ranadolui.dev@gmail.com", label: "Mail", icon: Mail },
 ];
 
@@ -38,7 +38,7 @@ export function HeroSection() {
                   hidden: { opacity: 0 },
                   visible: {
                      opacity: 1,
-                     transition: { staggerChildren: 0.15, delayChildren: 0.5 },
+                     transition: { staggerChildren: 0.1, delayChildren: 0.2 },
                   },
                }}
             >
@@ -54,7 +54,7 @@ export function HeroSection() {
                      },
                   }}
                >
-                  <TextScramble text="RANA DOLUI" delay={500} duration={1500} />
+                  <TextScramble text="RANA DOLUI" delay={200} duration={900} />
                </motion.h1>
 
                {/* Accent line */}
@@ -114,10 +114,14 @@ export function HeroSection() {
                      },
                   }}
                >
-                  Full Stack Developer & AI Engineer building scalable web,
-                  mobile apps, and intelligent agent systems. I ship
-                  production-grade solutions with Next.js, Go, Python, and
-                  AI/ML.
+                  Full Stack & Backend Systems Engineer with experience building
+                  0→1 products in fast-paced startups. I specialize in scalable
+                  web applications, distributed systems, high-performance
+                  backend infrastructure, and AI-powered platforms using Rust,
+                  Go, Python, TypeScript, React, Next.js, FastAPI, PostgreSQL,
+                  Redis, Docker, and AWS. Passionate about low-level
+                  optimization, concurrency, system design, and open-source
+                  software.
                </motion.p>
 
                {/* Stats row */}

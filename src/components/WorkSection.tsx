@@ -10,8 +10,10 @@ interface WorkSectionProps {
    onProjectClick: (project: (typeof projects)[number]) => void;
 }
 
+// Computed once at module load.
+const featuredProjects = projects.filter((p) => p.featured);
+
 export function WorkSection({ onProjectClick }: WorkSectionProps) {
-   const featuredProjects = projects.filter((p) => p.featured);
 
    return (
       <Container size="narrow" className="py-[12vw] md:py-20">

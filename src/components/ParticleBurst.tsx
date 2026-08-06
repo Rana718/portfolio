@@ -79,12 +79,27 @@ export const ParticleBurst = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
 
+      // Defer canvas init by ~150ms so the hero text (LCP) paints first
+      // before the particle setup competes for the main thread.
+      let outerCleanup: (() => void) | undefined;
+      const deferTimer = setTimeout(() => {
+         outerCleanup = startCanvas(canvas);
+      }, 150);
+
+      return () => {
+         clearTimeout(deferTimer);
+         outerCleanup?.();
+      };
+
+      function startCanvas(canvas: HTMLCanvasElement) {
+
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      let animationId: number;
+      let animationId = 0;
       let time = 0;
       let isVisible = true;
+      let rafScheduled = false;
 
       const resize = () => {
          const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -170,8 +185,10 @@ export const ParticleBurst = () => {
          ];
 
          const animateDark = () => {
+            rafScheduled = false;
             if (!isVisible) {
                animationId = requestAnimationFrame(animateDark);
+               rafScheduled = true;
                return;
             }
             time += 1;
@@ -179,7 +196,7 @@ export const ParticleBurst = () => {
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
             // Draw soft glow orbs
-            glowOrbs.forEach((orb) => {
+            for (const orb of glowOrbs) {
                orb.pulsePhase += orb.pulseSpeed;
                const pulse = Math.sin(orb.pulsePhase) * 0.5 + 0.5;
                const currentOpacity = orb.opacity * (0.7 + pulse * 0.3);
@@ -206,10 +223,10 @@ export const ParticleBurst = () => {
                ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
                ctx.fillStyle = gradient;
                ctx.fill();
-            });
+            }
 
             // Draw twinkling stars
-            stars.forEach((star) => {
+            for (const star of stars) {
                star.twinklePhase += star.twinkleSpeed;
                const twinkle = Math.sin(star.twinklePhase) * 0.5 + 0.5;
                const currentOpacity = star.opacity * (0.4 + twinkle * 0.6);
@@ -237,7 +254,7 @@ export const ParticleBurst = () => {
                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
                ctx.fillStyle = `rgba(${neonColor.r}, ${neonColor.g}, ${neonColor.b}, ${currentOpacity})`;
                ctx.fill();
-            });
+            }
 
             // Shooting stars
             if (Math.random() < 0.02) {
@@ -303,6 +320,7 @@ export const ParticleBurst = () => {
             }
 
             animationId = requestAnimationFrame(animateDark);
+            rafScheduled = true;
          };
 
          animateDark();
@@ -409,7 +427,7 @@ export const ParticleBurst = () => {
 
          const drawCloud = (cloud: Cloud) => {
             ctx.save();
-            cloud.puffs.forEach((puff) => {
+            for (const puff of cloud.puffs) {
                const puffX = cloud.x + puff.offsetX;
                const puffY = cloud.y + puff.offsetY;
                const cloudGradient = ctx.createRadialGradient(
@@ -438,13 +456,15 @@ export const ParticleBurst = () => {
                ctx.arc(puffX, puffY, puff.radius, 0, Math.PI * 2);
                ctx.fillStyle = cloudGradient;
                ctx.fill();
-            });
+            }
             ctx.restore();
          };
 
          const animateLight = () => {
+            rafScheduled = false;
             if (!isVisible) {
                animationId = requestAnimationFrame(animateLight);
+               rafScheduled = true;
                return;
             }
             time += 1;
@@ -461,7 +481,7 @@ export const ParticleBurst = () => {
             ctx.fillStyle = skyGradient;
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
-            floatingOrbs.forEach((orb) => {
+            for (const orb of floatingOrbs) {
                orb.phase += 0.01;
                orb.x += orb.speedX + Math.sin(orb.phase) * 0.2;
                orb.y += orb.speedY + Math.cos(orb.phase) * 0.2;
@@ -496,7 +516,7 @@ export const ParticleBurst = () => {
                ctx.arc(orb.x, orb.y, orb.radius, 0, Math.PI * 2);
                ctx.fillStyle = gradient;
                ctx.fill();
-            });
+            }
 
             const beamCount = 5;
             for (let i = 0; i < beamCount; i++) {
@@ -540,7 +560,7 @@ export const ParticleBurst = () => {
                ctx.fill();
             }
 
-            sunRays.forEach((ray) => {
+            for (const ray of sunRays) {
                ray.phase += ray.speed;
                const pulse = Math.sin(ray.phase) * 0.3 + 0.7;
                const currentLength = ray.length * pulse;
@@ -574,7 +594,7 @@ export const ParticleBurst = () => {
                ctx.lineWidth = ray.width * pulse;
                ctx.lineCap = "round";
                ctx.stroke();
-            });
+            }
 
             const outerGlow = ctx.createRadialGradient(
                sunX,
@@ -655,13 +675,13 @@ export const ParticleBurst = () => {
             ctx.fillStyle = innerHighlight;
             ctx.fill();
 
-            clouds.forEach((cloud) => {
+            for (const cloud of clouds) {
                cloud.x += cloud.speed;
                if (cloud.x > window.innerWidth + cloud.width) {
                   cloud.x = -cloud.width * 2;
                }
                drawCloud(cloud);
-            });
+            }
 
             if (Math.random() < 0.18) {
                createLightParticle();
@@ -723,19 +743,23 @@ export const ParticleBurst = () => {
             }
 
             animationId = requestAnimationFrame(animateLight);
+            rafScheduled = true;
          };
 
          animateLight();
       }
 
-      window.addEventListener("resize", resize);
+      const handleResize = () => resize();
+      window.addEventListener("resize", handleResize, { passive: true });
 
       return () => {
          cancelAnimationFrame(animationId);
          observer.disconnect();
          document.removeEventListener("visibilitychange", onVis);
-         window.removeEventListener("resize", resize);
+         window.removeEventListener("resize", handleResize);
+         void rafScheduled;
       };
+      } // end startCanvas
    }, [theme]);
 
    const gridColor =
@@ -756,7 +780,7 @@ export const ParticleBurst = () => {
          <canvas
             ref={canvasRef}
             className="absolute inset-0 pointer-events-none"
-            style={{ width: "100%", height: "100%" }}
+            style={{ width: "100%", height: "100%", willChange: "transform" }}
          />
          <div
             className="absolute inset-0 pointer-events-none"

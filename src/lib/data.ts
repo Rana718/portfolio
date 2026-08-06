@@ -3,32 +3,32 @@ export const experiences = [
       title: "Freelance Developer",
       company: "Self-Employed",
       type: "Freelance",
-      duration: "NOV 2025 - Present",
+      duration: "APR 2025 - Present",
       description: `As a freelance developer, I build full-stack web and mobile applications for clients across various industries. I specialize in creating scalable, production-ready solutions using modern technologies like Next.js, React Native, FastAPI, and Go.`,
       image: "/company/frees.png",
    },
    {
-      title: "Python Developer",
-      company: "Telohive",
-      type: "Part-time",
-      duration: "DEC 2025 - Feb 2026",
-      description:
-         "At Telo, I handle backend development and AI agent systems, primarily using FastAPI, Redis, and PostgreSQL. I build AI-driven features with LangChain and OpenAI to enable automation and intelligent workflows. I also manage deployments on VPS using Docker and GitHub Actions, ensuring system stability and reliability.",
-      image: "/company/telo.png",
-   },
-   {
-      title: "Full Stack Developer",
+      title: "Full Stack Engineer",
       type: "Full-time",
       company: "Saciva",
-      duration: "JAN 2025 - NOV 2025",
-      description: `At Saciva, I work as a Full Stack Developer handling frontend, backend, and DevOps. The frontend (Next.js + DuckDB) is deployed on Vercel, and the backend (Express.js) is hosted on Hostinger with zero-downtime updates. I containerized the app with Docker, set up Nginx for scalability, and implemented monitoring using Sentry, Grafana, and Prometheus.`,
+      duration: "DEC 2024 - APR 2026",
+      description: `Built and maintained production-ready full-stack applications using React, Next.js, Node.js, FastAPI, and PostgreSQL. Developed scalable REST APIs, optimized databases, implemented real-time notifications, and built a Typesense-powered recommendation system with AI-based content classification. Designed microservices, automated CI/CD with GitHub Actions, deployed applications on AWS (EC2, S3, RDS), and collaborated in a fast-paced startup environment to deliver features from development to production.`,
       image: "/company/saciva.png",
+   },
+   {
+      title: "Backend Engineer",
+      company: "Telohive",
+      type: "Part-time",
+      duration: "DEC 2025 - MAR 2026",
+      description:
+         "Designed and developed production-grade backend services and AI-powered applications using FastAPI, PostgreSQL, and Redis. Built AI agent workflows with LangChain and OpenAI, implemented secure REST APIs, optimized performance, and managed end-to-end deployments using Docker, GitHub Actions, and VPS infrastructure.",
+      image: "/company/telo.png",
    },
    {
       title: "React Native Intern",
       type: "Internship",
       company: "HumanEra Intelligence",
-      duration: "SEP 2024 - DEC 2024",
+      duration: "SEP 2024 - NOV 2024",
       description: `Developed a cross-platform mobile app using React Native and Expo. Implemented user authentication with Clerk and managed state using Zustand for a seamless user experience. Adopted a local-first approach and integrated GraphQL for efficient data handling.`,
       image: "/company/hui.png",
    },
@@ -598,7 +598,7 @@ export const technologies = [
    {
       name: "Zustand",
       category: "Frontend",
-      icon: "SiZustand",
+      icon: "",
       color: "currentColor",
    },
    {
@@ -627,7 +627,7 @@ export const technologies = [
       icon: "SiSocketdotio",
       color: "#010101",
    },
-   { name: "gRPC", category: "Backend", icon: "SiGrpc", color: "currentColor" },
+   { name: "gRPC", category: "Backend", icon: "", color: "currentColor" },
    {
       name: "GraphQL",
       category: "Backend",
@@ -666,7 +666,7 @@ export const technologies = [
       icon: "SiFirebase",
       color: "#DD2C00",
    },
-   { name: "Convex", category: "Database", icon: "SiConvex", color: "#EE342F" },
+   { name: "Convex", category: "Database", icon: "", color: "#EE342F" },
    { name: "Docker", category: "DevOps", icon: "SiDocker", color: "#2496ED" },
    {
       name: "Kubernetes",

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Calendar, Download, Github, Linkedin, Mail } from "lucide-react";
-import { SiX } from "react-icons/si";
+import { XIcon } from "./ui/XIcon";
 import { Container } from "./ui/Container";
 import { GlassButton } from "./ui/GlassButton";
 import { ContributionHeatmap } from "./ContributionHeatmap";
@@ -47,8 +47,11 @@ const socialIcons = [
       icon: Linkedin,
       label: "LinkedIn",
    },
-   { href: "https://x.com/jack718r", icon: SiX, label: "X" },
+   { href: "https://x.com/jack718r", icon: XIcon, label: "X" },
 ];
+
+// Evaluated once at module load — no need to recompute on every render.
+const currentYear = new Date().getFullYear();
 
 export function FooterSection() {
    return (
@@ -126,7 +129,7 @@ export function FooterSection() {
          </Container>
 
          <Container className="flex items-end justify-between pt-[6vw] md:pt-10 font-mono text-[2.5vw] md:text-sm uppercase text-fg-secondary">
-            <span>© {new Date().getFullYear()} Rana Dolui</span>
+            <span>© {currentYear} Rana Dolui</span>
             <div className="flex gap-[4vw] md:gap-4">
                {socials.map(({ href, label }) => (
                   <a

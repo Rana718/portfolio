@@ -10,7 +10,8 @@ export function Preloader() {
    const accentColor = theme === "dark" ? "#00ff88" : "#FFB800";
 
    useEffect(() => {
-      const timer = setTimeout(() => setLoading(false), 1000);
+      // Reduced from 1000ms to 400ms — the preloader was delaying LCP by ~1s
+      const timer = setTimeout(() => setLoading(false), 400);
       return () => clearTimeout(timer);
    }, []);
 

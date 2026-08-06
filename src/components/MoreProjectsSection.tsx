@@ -12,14 +12,16 @@ interface MoreProjectsSectionProps {
    onProjectClick: (project: (typeof projects)[number]) => void;
 }
 
+// Computed once at module load — these never change at runtime.
+const nonFeatured = projects.filter((p) => !p.featured);
+const allCategories = [
+   "All",
+   ...new Set(nonFeatured.flatMap((p) => p.category)),
+];
+
 export function MoreProjectsSection({
    onProjectClick,
 }: MoreProjectsSectionProps) {
-   const nonFeatured = projects.filter((p) => !p.featured);
-   const allCategories = [
-      "All",
-      ...new Set(nonFeatured.flatMap((p) => p.category)),
-   ];
    const [activeCategory, setActiveCategory] = useState("All");
    const [showAll, setShowAll] = useState(false);
 

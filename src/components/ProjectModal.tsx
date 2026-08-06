@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Github, ExternalLink } from "lucide-react";
+import Image from "next/image";
 import { projects } from "@/lib/data";
 
 type Project = (typeof projects)[number];
@@ -15,11 +16,13 @@ interface ProjectModalProps {
 }
 
 export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
-   const [mounted, setMounted] = useState(false);
    const [imgLoaded, setImgLoaded] = useState(false);
+   const portalRef = useRef<Element | null>(null);
+   const [, forceRender] = useState(0);
 
    useEffect(() => {
-      setMounted(true);
+      portalRef.current = document.body;
+      forceRender((n) => n + 1);
    }, []);
 
    useEffect(() => {
@@ -35,14 +38,15 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
    }, [isOpen]);
 
    useEffect(() => {
+      if (!isOpen) return;
       const handleEsc = (e: KeyboardEvent) => {
          if (e.key === "Escape") onClose();
       };
-      if (isOpen) window.addEventListener("keydown", handleEsc);
+      window.addEventListener("keydown", handleEsc);
       return () => window.removeEventListener("keydown", handleEsc);
    }, [isOpen, onClose]);
 
-   if (!mounted || !project) return null;
+   if (!portalRef.current || !project) return null;
 
    const modal = (
       <AnimatePresence>
@@ -92,11 +96,13 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                               <div className="w-8 h-8 border-4 border-fg-primary/20 border-t-accent rounded-full animate-spin" />
                            </div>
                         )}
-                        <img
+                        <Image
                            src={project.image}
                            alt={project.title}
+                           fill
+                           className={`object-cover transition-opacity duration-500 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
                            onLoad={() => setImgLoaded(true)}
-                           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+                           sizes="(max-width: 768px) 100vw, 58vw"
                         />
                      </div>
 
@@ -160,5 +166,5 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
       </AnimatePresence>
    );
 
-   return createPortal(modal, document.body);
+   return createPortal(modal, portalRef.current);
 }

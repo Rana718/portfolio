@@ -137,8 +137,14 @@ export function CustomCursor() {
    }, [schedule]);
 
    const addDot = useCallback((x: number, y: number, size: number) => {
-      const dot = { id: paintIdRef.current++, x, y, size };
-      setPaintDots((prev) => [...prev, dot]);
+      const dot: PaintDot = { id: paintIdRef.current++, x, y, size };
+      // Append without spreading the entire array — use functional updater
+      // with a single push to avoid O(n) copy on every mouse move pixel.
+      setPaintDots((prev) => {
+         const next = prev.slice(); // shallow copy only once per dot
+         next.push(dot);
+         return next;
+      });
       strokeRef.current.push(dot);
       lastPaintPos.current = { x, y };
    }, []);
@@ -225,14 +231,14 @@ export function CustomCursor() {
       const onDocEnter = () => setIsVisible(true);
       const onDragStart = (e: DragEvent) => e.preventDefault();
 
-      window.addEventListener("mousemove", onMouseMove);
+      window.addEventListener("mousemove", onMouseMove, { passive: true });
       window.addEventListener("mousedown", onMouseDown);
-      window.addEventListener("mouseup", onMouseUp);
+      window.addEventListener("mouseup", onMouseUp, { passive: true });
       window.addEventListener("dragstart", onDragStart);
-      document.addEventListener("mouseover", onOver);
-      document.addEventListener("mouseout", onOut);
-      document.documentElement.addEventListener("mouseleave", onDocLeave);
-      document.documentElement.addEventListener("mouseenter", onDocEnter);
+      document.addEventListener("mouseover", onOver, { passive: true });
+      document.addEventListener("mouseout", onOut, { passive: true });
+      document.documentElement.addEventListener("mouseleave", onDocLeave, { passive: true });
+      document.documentElement.addEventListener("mouseenter", onDocEnter, { passive: true });
 
       return () => {
          window.removeEventListener("mousemove", onMouseMove);

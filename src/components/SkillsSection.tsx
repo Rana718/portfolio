@@ -1,16 +1,132 @@
 "use client";
 
 import { motion } from "framer-motion";
-import * as SiIcons from "react-icons/si";
+import {
+   SiAmazonwebservices,
+   SiApachekafka,
+   SiClerk,
+   SiCmake,
+   SiCplusplus,
+   SiDocker,
+   SiExpo,
+   SiExpress,
+   SiFastapi,
+   SiFirebase,
+   SiFlask,
+   SiFlutter,
+   SiFramer,
+   SiGithubactions,
+   SiGnubash,
+   SiGo,
+   SiGooglegemini,
+   SiGrafana,
+   SiGraphql,
+   SiJavascript,
+   SiKotlin,
+   SiKubernetes,
+   SiLangchain,
+   SiLinux,
+   SiMongodb,
+   SiNextdotjs,
+   SiNginx,
+   SiNixos,
+   SiNodedotjs,
+   SiOpenai,
+   SiPostgresql,
+   SiPrisma,
+   SiPrometheus,
+   SiProton,
+   SiPython,
+   SiRabbitmq,
+   SiRazorpay,
+   SiReact,
+   SiRedis,
+   SiRust,
+   SiSelenium,
+   SiSentry,
+   SiSocketdotio,
+   SiSqlalchemy,
+   SiSteam,
+   SiSvelte,
+   SiTailwindcss,
+   SiTypescript,
+   SiVite,
+   SiWine,
+} from "react-icons/si";
 import { technologies } from "@/lib/data";
 import { Container } from "./ui/Container";
 import { SectionHeading } from "./ui/SectionHeading";
 
 type IconComponent = React.ComponentType<{ size?: number; className?: string }>;
 
+// Explicit map — only the icons actually used in data.ts.
+// This lets the bundler tree-shake the ~3,000 other react-icons/si icons.
+// Icons marked null are absent from this react-icons version; those
+// skill badges will render text-only (no icon), which is intentional.
+const SI_ICONS: Record<string, IconComponent | null> = {
+   SiAmazonwebservices,
+   SiApachekafka,
+   SiClerk,
+   SiCmake,
+   SiConvex: null,      // not in installed react-icons version
+   SiCplusplus,
+   SiDocker,
+   SiExpo,
+   SiExpress,
+   SiFastapi,
+   SiFirebase,
+   SiFlask,
+   SiFlutter,
+   SiFramer,
+   SiGithubactions,
+   SiGnubash,
+   SiGo,
+   SiGooglegemini,
+   SiGrafana,
+   SiGraphql,
+   SiGrpc: null,        // not in installed react-icons version
+   SiJavascript,
+   SiKotlin,
+   SiKubernetes,
+   SiLangchain,
+   SiLinux,
+   SiMongodb,
+   SiNewspaper: null,   // not in installed react-icons version
+   SiNextdotjs,
+   SiNginx,
+   SiNixos,
+   SiNodedotjs,
+   SiOpenai,
+   SiPinecone: null,    // not in installed react-icons version
+   SiPipewire: null,    // not in installed react-icons version
+   SiPostgresql,
+   SiPrisma,
+   SiPrometheus,
+   SiProton,
+   SiPython,
+   SiRabbitmq,
+   SiRazorpay,
+   SiReact,
+   SiRedis,
+   SiRust,
+   SiSelenium,
+   SiSentry,
+   SiSocketdotio,
+   SiSqlalchemy,
+   SiSteam,
+   SiSvelte,
+   SiTailwindcss,
+   SiTypescript,
+   SiVite,
+   SiWine,
+   SiZustand: null,     // not in installed react-icons version
+};
+
 function getIcon(name: string): IconComponent | null {
+   if (!name) return null;
    const normalized = name.startsWith("Si") ? name : `Si${name}`;
-   return (SiIcons as Record<string, IconComponent>)[normalized] ?? null;
+   const icon = SI_ICONS[normalized];
+   return icon ?? null;
 }
 
 function brandColor(color: string) {

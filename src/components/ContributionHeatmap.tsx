@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
 
 interface Day {
    date: string;
@@ -252,15 +251,8 @@ export function ContributionHeatmap({ username }: ContributionHeatmapProps) {
                                     const opacity =
                                        LEVEL_OPACITY[day.level] ?? 0;
                                     return (
-                                       <motion.div
+                                       <div
                                           key={day.date}
-                                          initial={{ opacity: 0, scale: 0.4 }}
-                                          whileInView={{ opacity: 1, scale: 1 }}
-                                          viewport={{ once: true }}
-                                          transition={{
-                                             duration: 0.3,
-                                             delay: Math.min(w * 0.006, 0.4),
-                                          }}
                                           title={`${day.count} contribution${
                                              day.count === 1 ? "" : "s"
                                           } on ${day.date}`}

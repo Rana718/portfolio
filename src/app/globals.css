@@ -428,3 +428,19 @@ html {
       display: none !important;
    }
 }
+
+.will-change-transform {
+   will-change: transform;
+}
+
+section {
+   content-visibility: auto;
+   contain-intrinsic-size: 0 600px;
+}
+
+section#home,
+section.fixed,
+.fixed {
+   content-visibility: visible;
+   contain-intrinsic-size: unset;
+}
