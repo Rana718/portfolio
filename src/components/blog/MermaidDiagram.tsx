@@ -22,7 +22,13 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 			theme: document.documentElement.classList.contains("dark")
 				? "dark"
 				: "default",
-			flowchart: { htmlLabels: false, useMaxWidth: true },
+			flowchart: {
+				htmlLabels: true,
+				useMaxWidth: false,
+				wrappingWidth: 240,
+				nodeSpacing: 48,
+				rankSpacing: 56,
+			},
 		});
 
 		mermaid

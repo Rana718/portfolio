@@ -553,10 +553,21 @@ section.fixed,
 
 .mermaid-diagram svg {
   display: block;
-  width: 100%;
-  min-width: 36rem;
+  width: max-content;
+  min-width: 42rem;
+  max-width: none;
   height: auto;
   margin-inline: auto;
+}
+
+.mermaid-diagram {
+  padding: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .mermaid-diagram {
+    padding: 1rem;
+  }
 }
 
 /* Scrollbar inside code blocks */

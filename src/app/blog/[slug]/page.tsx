@@ -145,7 +145,7 @@ export default async function BlogPostPage({
 				dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
 			/>
 			<main className="min-h-screen bg-[var(--background)] px-4 py-24 sm:px-8">
-				<div className="mx-auto max-w-3xl">
+				<div className="mx-auto max-w-4xl">
 					{/* Back */}
 					<Link
 						href="/blog"
