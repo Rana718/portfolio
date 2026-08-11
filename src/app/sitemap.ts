@@ -6,9 +6,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 	const blogEntries: MetadataRoute.Sitemap = blogs.map((blog) => ({
 		url: `https://ranadolui.me/blog/${blog.slug}`,
-		lastModified: new Date(blog.date),
+		lastModified: new Date(blog.updated ?? blog.date),
 		changeFrequency: "monthly",
-		priority: 0.7,
+		priority: 0.8,
 	}));
 
 	return [

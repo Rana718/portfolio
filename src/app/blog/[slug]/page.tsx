@@ -23,25 +23,53 @@ export async function generateMetadata({
 	if (!blog) return {};
 
 	const url = `https://ranadolui.me/blog/${slug}`;
-	const image = blog.cover
-		? `https://ranadolui.me${blog.cover}`
-		: "https://ranadolui.me/logo.png";
+	const image = `${url}/opengraph-image`;
+	const publishedTime = new Date(blog.date).toISOString();
+	const modifiedTime = new Date(blog.updated ?? blog.date).toISOString();
+	const keywords = Array.from(
+		new Set([
+			...blog.tags,
+			blog.category,
+			blog.language,
+			blog.level,
+			"Rana Dolui",
+			"software engineering",
+			"technical blog",
+		].filter((value): value is string => Boolean(value))),
+	);
 
 	return {
-		title: `${blog.title} — Rana Dolui`,
+		title: blog.title,
 		description: blog.description,
-		keywords: [...blog.tags, "Rana Dolui", "blog", "technical writing"],
-		authors: [{ name: blog.author }],
+		keywords,
+		authors: [{ name: blog.author, url: "https://ranadolui.me" }],
+		creator: blog.author,
+		publisher: "Rana Dolui",
+		category: blog.category,
+		robots: {
+			index: true,
+			follow: true,
+			googleBot: {
+				index: true,
+				follow: true,
+				"max-image-preview": "large",
+				"max-snippet": -1,
+				"max-video-preview": -1,
+			},
+		},
 		alternates: { canonical: url },
 		openGraph: {
 			type: "article",
 			url,
 			title: blog.title,
 			description: blog.description,
-			publishedTime: new Date(blog.date).toISOString(),
+			locale: "en_US",
+			publishedTime,
+			modifiedTime,
 			authors: [blog.author],
 			tags: blog.tags,
-			siteName: "Rana Dolui Portfolio",
+			section: blog.category ?? "Software Engineering",
+			siteName: "Rana Dolui Engineering Blog",
 			images: [{ url: image, width: 1200, height: 630, alt: blog.title }],
 		},
 		twitter: {
@@ -50,7 +78,7 @@ export async function generateMetadata({
 			creator: "@jack718r",
 			title: blog.title,
 			description: blog.description,
-			images: [image],
+			images: [{ url: image, alt: blog.title }],
 		},
 	};
 }
@@ -64,32 +92,49 @@ export default async function BlogPostPage({
 	const blog = getBlogBySlug(slug);
 	if (!blog) notFound();
 
+	const url = `https://ranadolui.me/blog/${slug}`;
+	const image = `${url}/opengraph-image`;
 	const structuredData = {
 		"@context": "https://schema.org",
-		"@type": "BlogPosting",
-		headline: blog.title,
-		description: blog.description,
-		datePublished: new Date(blog.date).toISOString(),
-		dateModified: new Date(blog.date).toISOString(),
-		author: {
-			"@type": "Person",
-			name: blog.author,
-			url: "https://ranadolui.me",
-		},
-		publisher: {
-			"@type": "Person",
-			name: "Rana Dolui",
-			url: "https://ranadolui.me",
-		},
-		url: `https://ranadolui.me/blog/${slug}`,
-		image: blog.cover
-			? `https://ranadolui.me${blog.cover}`
-			: "https://ranadolui.me/logo.png",
-		keywords: blog.tags.join(", "),
-		mainEntityOfPage: {
-			"@type": "WebPage",
-			"@id": `https://ranadolui.me/blog/${slug}`,
-		},
+		"@graph": [
+			{
+				"@type": "BlogPosting",
+				"@id": `${url}#article`,
+				headline: blog.title,
+				description: blog.description,
+				datePublished: new Date(blog.date).toISOString(),
+				dateModified: new Date(blog.updated ?? blog.date).toISOString(),
+				inLanguage: "en-US",
+				articleSection: blog.category ?? "Software Engineering",
+				keywords: blog.tags.join(", "),
+				wordCount: blog.content.trim().split(/\s+/).length,
+				timeRequired: `PT${Math.max(1, Number.parseInt(blog.readingTime, 10))}M`,
+				image: { "@type": "ImageObject", url: image, width: 1200, height: 630 },
+				author: {
+					"@type": "Person",
+					"@id": "https://ranadolui.me/#person",
+					name: blog.author,
+					url: "https://ranadolui.me",
+				},
+				publisher: {
+					"@type": "Person",
+					"@id": "https://ranadolui.me/#person",
+					name: "Rana Dolui",
+					url: "https://ranadolui.me",
+				},
+				isPartOf: { "@id": "https://ranadolui.me/blog#blog" },
+				mainEntityOfPage: { "@type": "WebPage", "@id": url },
+			},
+			{
+				"@type": "BreadcrumbList",
+				"@id": `${url}#breadcrumb`,
+				itemListElement: [
+					{ "@type": "ListItem", position: 1, name: "Home", item: "https://ranadolui.me" },
+					{ "@type": "ListItem", position: 2, name: "Blog", item: "https://ranadolui.me/blog" },
+					{ "@type": "ListItem", position: 3, name: blog.title, item: url },
+				],
+			},
+		],
 	};
 
 	return (

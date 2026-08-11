@@ -10,6 +10,7 @@ export interface BlogMeta {
 	title: string;
 	description: string;
 	date: string;
+	updated?: string;
 	tags: string[];
 	author: string;
 	category?: string;
@@ -35,6 +36,7 @@ function parseBlogFile(filename: string): Blog {
 		title: data.title as string,
 		description: data.description as string,
 		date: data.date as string,
+		updated: data.updated as string | undefined,
 		tags: (data.tags as string[]) || [],
 		author: (data.author as string) || "Rana Dolui",
 		category: data.category as string | undefined,
