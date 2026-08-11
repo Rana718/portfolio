@@ -16,25 +16,17 @@ Most concurrent hash maps in the wild use a single `RwLock` or a per-bucket `Mut
 
 The design splits into three independent layers:
 
-```
-┌────────────────────────────────────────────────────────────────┐
-│                        CustomMap<V>                            │
-│                                                                │
-│   hasher: RandomState    shift: u32    shard_mask: usize       │
-│   key_count: AtomicUsize                                       │
-│                                                                │
-│   ┌──────────┐ ┌──────────┐ ┌──────────┐      ┌──────────┐   │
-│   │ Shard[0] │ │ Shard[1] │ │ Shard[2] │ ···  │ Shard[N] │   │
-│   └────┬─────┘ └────┬─────┘ └────┬─────┘      └────┬─────┘   │
-│        │            │            │                  │          │
-│   ┌────▼─────┐ ┌────▼─────┐ ┌───▼──────┐      ┌───▼──────┐   │
-│   │SlotTable │ │SlotTable │ │SlotTable │      │SlotTable │   │
-│   │ (array   │ │ (array   │ │ (array   │      │ (array   │   │
-│   │ of       │ │ of       │ │ of       │      │ of       │   │
-│   │Atomic    │ │Atomic    │ │Atomic    │      │Atomic    │   │
-│   │Ptr<Entry>│ │Ptr<Entry>│ │Ptr<Entry>│      │Ptr<Entry>│   │
-│   └──────────┘ └──────────┘ └──────────┘      └──────────┘   │
-└────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    M["CustomMap&lt;V&gt;<br/>hasher · shift · shard_mask · key_count"]
+    M --> S0["Shard 0"]
+    M --> S1["Shard 1"]
+    M --> S2["Shard 2"]
+    M --> SN["Shard N"]
+    S0 --> T0["SlotTable<br/>AtomicPtr&lt;Entry&gt; array"]
+    S1 --> T1["SlotTable<br/>AtomicPtr&lt;Entry&gt; array"]
+    S2 --> T2["SlotTable<br/>AtomicPtr&lt;Entry&gt; array"]
+    SN --> TN["SlotTable<br/>AtomicPtr&lt;Entry&gt; array"]
 ```
 
 The three layers:
@@ -57,15 +49,12 @@ fn locate(&self, key: &str) -> (u64, usize) {
 
 The **top bits** of the hash select the shard, and the **lower bits** are used for slot indexing inside that shard. This spreads load evenly across all shards.
 
-```
- hash (64-bit)
- ┌─────────────────────────────────────────────┐
- │  top bits (shard index) │ lower bits (slot) │
- └──────────────────────────────────────────────┘
-         │                          │
-         ▼                          ▼
-   shard = hash >> shift      slot = hash & mask
-      & shard_mask
+```mermaid
+flowchart LR
+    H["64-bit hash"] --> TOP["Top bits"]
+    H --> LOW["Lower bits"]
+    TOP --> SHARD["shard = hash &gt;&gt; shift<br/>&amp; shard_mask"]
+    LOW --> SLOT["slot = hash &amp; mask"]
 ```
 
 Using `foldhash::fast::RandomState` gives us randomised hashing — preventing hash-flooding attacks.
@@ -76,13 +65,10 @@ Using `foldhash::fast::RandomState` gives us randomised hashing — preventing h
 
 Each `Shard` holds a `SlotTable`: a boxed slice of `AtomicPtr<Entry<V>>`. Slots default to `null`.
 
-```
-SlotTable (capacity = 8, threshold = 5)
-
-index:  0       1       2       3       4       5       6       7
-       ┌───────┬───────┬───────┬───────┬───────┬───────┬───────┬───────┐
-       │ null  │"foo"  │ null  │"bar"  │"baz"  │ null  │ null  │"qux"  │
-       └───────┴───────┴───────┴───────┴───────┴───────┴───────┴───────┘
+```mermaid
+flowchart LR
+    I0["0<br/>null"] --- I1["1<br/>foo"] --- I2["2<br/>null"] --- I3["3<br/>bar"]
+    I3 --- I4["4<br/>baz"] --- I5["5<br/>null"] --- I6["6<br/>null"] --- I7["7<br/>qux"]
 ```
 
 **Linear Probing** — if slot `i` is taken, try `i+1`, `i+2`, etc. (modulo capacity).
@@ -119,16 +105,20 @@ The solution is **Epoch-Based Reclamation (EBR)**, implemented in `ebr.rs`.
 
 ### How Epochs Work
 
-```
-Global Epoch: 5
-
-Thread 1 (epoch 5):  [active ──────────────]  reading ptr
-Thread 2 (epoch 5):  [active ──] removes key → retires ptr at epoch 5
-Thread 3 (inactive): [        ]
-
-Garbage: ptr retired at epoch 5
-→ safe to free when Global Epoch ≥ epoch + 2
-  (i.e., all threads that could have seen it are gone)
+```mermaid
+sequenceDiagram
+    participant T1 as Thread 1
+    participant E as Global Epoch
+    participant T2 as Thread 2
+    participant G as Garbage Queue
+    T1->>E: pin at epoch 5
+    T1->>T1: read pointer
+    T2->>E: pin at epoch 5
+    T2->>G: retire pointer at epoch 5
+    T1->>E: unpin
+    T2->>E: unpin
+    E->>E: advance to epoch 7
+    E->>G: pointer is now safe to free
 ```
 
 Every thread registers a `Participant` with its own `local` epoch:
@@ -164,48 +154,44 @@ When it unpins, it stores `INACTIVE`. The collector only advances the global epo
 
 Let's trace four threads hitting the map simultaneously.
 
+```mermaid
+flowchart LR
+    M["CustomMap"] --> S0["Shard 0"] --> U42["user:42"] --> A["Alice"]
+    M --> S1["Shard 1"] --> U99["user:99"] --> B["Bob"]
 ```
-Map: shard[0] → "user:42" → ValueBox("Alice")
-     shard[1] → "user:99" → ValueBox("Bob")
-```
 
-```
-Thread 1 (read "user:42"):
-  locate("user:42") → shard=0
-  ebr::pin()           ← snaps to epoch 7
-  entry.value.load(Acquire) → ptr to ValueBox("Alice")
-  clone "Alice"
-  ebr::unpin()
-
-Thread 2 (write "user:42" = "Alicia"):
-  locate("user:42") → shard=0
-  find existing entry ✓
-  new_ptr = alloc ValueBox("Alicia")
-  old_ptr = entry.value.swap(new_ptr, AcqRel)
-  ebr::retire_value(old_ptr)   ← queued for epoch 7+2=9
-
-Thread 3 (write "user:99" = "Bobby"):
-  locate("user:99") → shard=1   ← DIFFERENT shard, zero contention
-  same swap pattern
-
-Thread 4 (read "user:42"):
-  pin epoch 7 → sees new_ptr (Thread 2's write already released)
-  reads "Alicia"
+```mermaid
+sequenceDiagram
+    participant T1 as Thread 1 (read)
+    participant S0 as Shard 0
+    participant T2 as Thread 2 (write)
+    participant T3 as Thread 3 (write)
+    participant S1 as Shard 1
+    participant T4 as Thread 4 (read)
+    T1->>S0: pin and load user:42
+    S0-->>T1: Alice
+    T2->>S0: swap Alice for Alicia
+    S0-->>T2: retire Alice at epoch 9
+    T3->>S1: swap Bob for Bobby
+    T4->>S0: pin and load user:42
+    S0-->>T4: Alicia
 ```
 
 Key insight: **Threads 1 and 2 both access shard[0], but neither blocks the other.** Thread 1's read is atomic — it either sees the old value or the new one, never a torn write. Thread 2's `swap` is a single CAS on the `AtomicPtr` — no lock needed.
 
-```
-Timeline:
-         T1 read        T2 write          T4 read
-         │              │                 │
-epoch 7: ├──pin─────────┤                 │
-         │  load ptr ───┤─── swap(new) ───┤── pin
-         │  clone "Alice"                 │   load new_ptr
-         ├──unpin        retire(old)      │   clone "Alicia"
-                                          ├──unpin
-
-Old ValueBox("Alice") freed at epoch 9 (after T1 is long gone)
+```mermaid
+sequenceDiagram
+    participant T1 as T1 reader
+    participant V as Atomic value
+    participant T2 as T2 writer
+    participant T4 as T4 reader
+    T1->>V: load at epoch 7
+    V-->>T1: Alice
+    T2->>V: atomic swap(Alicia)
+    T2->>T2: retire Alice for epoch 9
+    T4->>V: load at epoch 7
+    V-->>T4: Alicia
+    Note over T1,T4: Alice is freed only after old readers leave
 ```
 
 ---
@@ -228,9 +214,10 @@ if slot.compare_exchange(
 
 Two threads racing to insert different keys at the same slot:
 
-```
-Thread A:  CAS(null → entryA) ✓ wins
-Thread B:  CAS(null → entryB) ✗ fails → probe i+1
+```mermaid
+flowchart LR
+    A["Thread A: CAS null to entryA"] -->|wins| S["slot i = entryA"]
+    B["Thread B: CAS null to entryB"] -->|fails| P["probe slot i + 1"]
 ```
 
 No lost inserts. No corruption. Pure atomics.

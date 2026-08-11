@@ -1,25 +1,65 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
-import rehypePrettyCode from "rehype-pretty-code";
 import type { Options as PrettyCodeOptions } from "rehype-pretty-code";
+import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
+import { MermaidDiagram } from "./MermaidDiagram";
 
 const prettyCodeOptions: PrettyCodeOptions = {
-	theme: {
-		dark: "tokyo-night",
-		light: "github-light",
-	},
+	theme: "tokyo-night",
 	keepBackground: false,
-	defaultLang: "plaintext",
-	// Output CSS custom properties so both themes work via class toggle
-	cssVariables: {
-		light: ".light",
-		dark: ".dark",
-		defaultColor: "dark",
+	defaultLang: {
+		block: "text",
+		inline: "text",
+	},
+	grid: true,
+	// Keep blank lines at their full height after Shiki tokenises the block.
+	onVisitLine(element) {
+		if (element.children.length === 0) {
+			element.children.push({ type: "text", value: " " });
+		}
 	},
 };
 
+type MdastNode = {
+	type: string;
+	lang?: string;
+	value?: string;
+	children?: MdastNode[];
+};
+
+function remarkMermaid() {
+	return (tree: MdastNode) => {
+		const transform = (node: MdastNode) => {
+			if (!node.children) return;
+
+			node.children = node.children.map((child) => {
+				if (child.type === "code" && child.lang === "mermaid") {
+					return {
+						type: "mdxJsxFlowElement",
+						name: "Mermaid",
+						attributes: [
+							{
+								type: "mdxJsxAttribute",
+								name: "chart",
+								value: child.value ?? "",
+							},
+						],
+						children: [],
+					} as MdastNode;
+				}
+
+				transform(child);
+				return child;
+			});
+		};
+
+		transform(tree);
+	};
+}
+
 // Custom MDX components — all server-safe (no hooks)
 const components = {
+	Mermaid: MermaidDiagram,
 	h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
 		<h1
 			className="mt-12 mb-5 scroll-mt-24 text-3xl font-bold text-[var(--foreground)]"
@@ -94,16 +134,13 @@ const components = {
 	),
 	pre: (props: React.HTMLAttributes<HTMLPreElement>) => (
 		<pre
-			className="overflow-x-auto p-5 text-sm leading-6 [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-inherit"
+			className="overflow-x-auto p-5 text-sm leading-6 [&>code]:block [&>code]:min-w-max [&>code]:bg-transparent [&>code]:p-0"
 			{...props}
 		/>
 	),
 	// Inline code (not inside a pre block)
 	code: (props: React.HTMLAttributes<HTMLElement>) => (
-		<code
-			className="rounded-md bg-[var(--muted)] px-1.5 py-0.5 font-mono text-sm text-[var(--foreground)]"
-			{...props}
-		/>
+		<code {...props} />
 	),
 	table: (props: React.HTMLAttributes<HTMLTableElement>) => (
 		<div className="my-6 overflow-x-auto rounded-xl border border-[var(--border)]">
@@ -149,7 +186,7 @@ export async function MDXContent({ source }: MDXContentProps) {
 				components={components}
 				options={{
 					mdxOptions: {
-						remarkPlugins: [remarkGfm],
+						remarkPlugins: [remarkGfm, remarkMermaid],
 						rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
 					},
 				}}

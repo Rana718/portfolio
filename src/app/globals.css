@@ -448,22 +448,26 @@ section.fixed,
 /* ─── MDX Blog Content ──────────────────────────────────────────────── */
 
 .mdx-content {
-  /* Ensure shiki tokens render their colours */
   --shiki-color-background: transparent;
-}
-
-/* shiki puts colour via inline style="color: …" on each span.
-   Make sure those spans are visible and don't get overridden. */
-.mdx-content [data-rehype-pretty-code-figure] span {
-  color: inherit;
 }
 
 /* Code block: the <pre> inside a figure */
 .mdx-content [data-rehype-pretty-code-figure] pre {
   margin: 0;
+  padding: 1.25rem;
   border-radius: 0;
   border: none;
+  box-shadow: none;
   background: #1a1b26; /* tokyo-night base */
+}
+
+.mdx-content [data-rehype-pretty-code-figure] pre > code {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 /* Light-mode override */
@@ -526,9 +530,33 @@ section.fixed,
 
 /* ASCII diagram pre blocks (no language annotation = plaintext) */
 .mdx-content [data-rehype-pretty-code-figure] pre code {
+  display: grid;
   font-family: var(--font-geist-mono);
   font-size: 0.82rem;
   line-height: 1.7;
+  tab-size: 2;
+  white-space: pre;
+}
+
+/* Unlabelled fences are diagrams/text, not source code. Preserve every box
+   drawing character and use a readable neutral colour in both themes. */
+.mdx-content [data-rehype-pretty-code-figure] code[data-language="text"],
+.mdx-content [data-rehype-pretty-code-figure] code[data-language="plaintext"] {
+  color: #c0caf5;
+  font-variant-ligatures: none;
+}
+
+:root:not(.dark) .mdx-content [data-rehype-pretty-code-figure] code[data-language="text"],
+:root:not(.dark) .mdx-content [data-rehype-pretty-code-figure] code[data-language="plaintext"] {
+  color: #24292f;
+}
+
+.mermaid-diagram svg {
+  display: block;
+  width: 100%;
+  min-width: 36rem;
+  height: auto;
+  margin-inline: auto;
 }
 
 /* Scrollbar inside code blocks */
