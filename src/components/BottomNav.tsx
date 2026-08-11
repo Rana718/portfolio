@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 const SECTIONS = [
@@ -13,6 +15,9 @@ const SECTIONS = [
 
 export function BottomNav() {
    const [activeSection, setActiveSection] = useState("home");
+   const pathname = usePathname();
+   const isHomePage = pathname === "/";
+   const isBlogPage = pathname.startsWith("/blog");
 
    const scrollTo = useCallback((id: string) => {
       if (id === "home") {
@@ -52,19 +57,20 @@ export function BottomNav() {
    return (
       <nav className="fixed bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-[96vw]">
          <div className="flex items-center gap-0.5 md:gap-1 rounded-full border border-border-primary bg-bg-primary/80 backdrop-blur-xl px-1.5 md:px-2 py-1.5 md:py-2 text-fg-primary overflow-x-auto scrollbar-none">
-            <button
-               onClick={() => scrollTo("home")}
+            <Link
+               href="/"
                className={`rounded-full shrink-0 px-2 md:px-3 py-1 md:py-1.5 font-mono text-[10px] md:text-xs uppercase tracking-widest transition-colors ${
-                  activeSection === "home"
+                  isHomePage && activeSection === "home"
                      ? "bg-accent/20 text-accent"
                      : "text-fg-muted hover:text-fg-primary"
                }`}
             >
                Home
-            </button>
-            {SECTIONS.map(({ id, label, shortLabel }) => (
+            </Link>
+            {isHomePage && SECTIONS.map(({ id, label, shortLabel }) => (
                <button
                   key={id}
+                  type="button"
                   onClick={() => scrollTo(id)}
                   className={`rounded-full shrink-0 px-2 md:px-3 py-1 md:py-1.5 font-mono text-[10px] md:text-xs uppercase tracking-widest transition-colors ${
                      activeSection === id
@@ -76,6 +82,16 @@ export function BottomNav() {
                   <span className="hidden sm:inline">{label}</span>
                </button>
             ))}
+            <Link
+               href="/blog"
+               className={`rounded-full shrink-0 px-2 md:px-3 py-1 md:py-1.5 font-mono text-[10px] md:text-xs uppercase tracking-widest transition-colors ${
+                  isBlogPage
+                     ? "bg-accent/20 text-accent"
+                     : "text-fg-muted hover:text-fg-primary"
+               }`}
+            >
+               Blog
+            </Link>
             <div className="w-px h-4 md:h-5 mx-0.5 md:mx-1 bg-border-primary shrink-0" />
             <AnimatedThemeToggler />
          </div>
