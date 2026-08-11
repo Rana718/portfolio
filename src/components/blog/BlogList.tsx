@@ -100,6 +100,16 @@ export function BlogList({ blogs }: BlogListProps) {
 							>
 								{/* Tags */}
 								<div className="mb-4 flex flex-wrap gap-2">
+									{blog.category && (
+										<span className="rounded-full bg-[var(--primary)]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-[var(--primary)]">
+											{blog.category}
+										</span>
+									)}
+									{blog.language && (
+										<span className="rounded-full border border-[var(--border)] px-3 py-1 text-[10px] font-medium text-[var(--muted-foreground)]">
+											{blog.language}
+										</span>
+									)}
 									{blog.tags.slice(0, 3).map((tag) => (
 										<span
 											key={tag}

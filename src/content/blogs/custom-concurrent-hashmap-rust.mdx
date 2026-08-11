@@ -2,15 +2,42 @@
 title: "Building a Lock-Free Concurrent HashMap in Rust from Scratch"
 description: "A deep dive into designing a high-performance, sharded, lock-free HashMap in Rust using atomic operations, open-addressing, and Epoch-Based Reclamation (EBR) — with architecture diagrams and multi-thread access examples."
 date: "2026-08-11"
-tags: ["Rust", "Concurrency", "Data Structures", "Lock-Free", "Systems Programming"]
+tags:
+   [
+      "Rust",
+      "Concurrency",
+      "Data Structures",
+      "Lock-Free",
+      "Systems Programming",
+   ]
 author: "Rana Dolui"
 slug: "custom-concurrent-hashmap-rust"
+category: "Systems Engineering"
+language: "Rust"
+level: "Advanced"
 cover: "/blog/customhash-cover.svg"
 ---
 
-# Building a Lock-Free Concurrent HashMap in Rust from Scratch
+Most concurrent hash maps begin with a sensible design: put an `RwLock` around a normal map, or divide the table into buckets protected by smaller locks. That approach is easy to reason about and is often fast enough. It becomes less attractive when a read-heavy workload needs predictable latency while many threads update unrelated keys.
 
-Most concurrent hash maps in the wild use a single `RwLock` or a per-bucket `Mutex`. They're fine — until they're not. Under high contention, lock acquisition becomes a bottleneck that kills throughput. This post walks through building `CustomMap`: a **sharded, lock-free concurrent HashMap** in Rust that multiple threads can read and write *simultaneously* without ever blocking each other on reads.
+This article studies the real `customhash` crate used in the project—not a simplified textbook map. It combines **sharding**, **open addressing**, **atomic pointer publication**, **compare-and-swap updates**, and **epoch-based reclamation (EBR)**. Reads avoid mutexes. Normal inserts and updates coordinate through atomics. Resizing is deliberately different: writers serialize table growth with one mutex per shard.
+
+> “Lock-free” does not mean that every operation completes in a fixed number of steps. It means system-wide progress continues even if one participating thread pauses. This implementation also contains stronger read paths, but resizing and cloning values still have real costs.
+
+## What We Are Building
+
+`CustomMap<V>` is a concurrent `String -> V` map where `V: Clone + Send + Sync + 'static`. Its public surface supports cloned reads, guarded borrowed reads, conditional insertion, CAS-loop updates, logical deletion, iteration, retention, and explicit capacity inspection.
+
+The design optimizes for these properties:
+
+- reads do not acquire a mutex;
+- unrelated shards update independently;
+- an existing value can be replaced with one atomic pointer swap;
+- removed values are reclaimed only after old readers are gone;
+- shard metadata is cache-line separated to reduce false sharing;
+- the table stays below a 70% load factor to keep probe chains short.
+
+It does **not** promise snapshot iteration, immediate physical deletion, wait-free writes, or reclamation of old table shells after a resize.
 
 ## Architecture Overview
 
@@ -33,7 +60,57 @@ The three layers:
 
 1. **`CustomMap`** — the public facade. Computes the hash, routes to the right shard.
 2. **`Shard`** — owns one `SlotTable`. Has a `grow_lock` only used during resize (not reads).
-3. **`SlotTable`** — a flat array of `AtomicPtr<Entry<V>>`. Open-addressing with linear probing. Completely lock-free for reads and writes.
+3. **`SlotTable`** — a flat array of `AtomicPtr<Entry<V>>`. It uses open addressing and linear probing. Reads and ordinary updates use atomics; shard growth is serialized.
+
+### The Actual Memory Layout
+
+The map stores entries and values separately. A slot points to a stable `Entry<V>`, while the entry contains another atomic pointer to the replaceable value:
+
+```rust
+struct Entry<V> {
+    hash: u64,
+    value: AtomicPtr<ValueBox<V>>,
+    key: String,
+}
+
+struct SlotTable<V> {
+    slots: Box<[AtomicPtr<Entry<V>>]>,
+    mask: usize,
+    threshold: usize,
+}
+
+#[repr(align(128))]
+struct Shard<V> {
+    table: AtomicPtr<SlotTable<V>>,
+    len: CachePadded<AtomicUsize>,
+    grow_lock: Mutex<()>,
+}
+```
+
+```mermaid
+flowchart LR
+    SLOT["Atomic slot pointer"] --> ENTRY["Stable Entry<br/>hash + key"]
+    ENTRY --> VALUE["Atomic value pointer"]
+    VALUE --> V1["ValueBox V"]
+    WRITER["Writer"] -. "swap pointer" .-> VALUE
+    READER["Pinned reader"] -. "Acquire load" .-> VALUE
+```
+
+This extra indirection is intentional. Updating a value does not move the key, hash, or table slot. The writer allocates a new `ValueBox`, swaps one pointer, and retires the old box. That keeps the probing structure stable for concurrent readers.
+
+The `#[repr(align(128))]` shard alignment and `CachePadded<AtomicUsize>` reduce false sharing. Threads modifying the length counter of shard 0 should not constantly invalidate the cache line containing shard 1's hot metadata.
+
+### Capacity Is Always a Power of Two
+
+`SlotTable::new` rounds capacity upward and stores `mask = capacity - 1`. That turns modulo operations into a cheap bitwise AND:
+
+```rust
+let cap = cap.next_power_of_two().max(8);
+let mask = cap - 1;
+let threshold = cap * 7 / 10;
+```
+
+At a capacity of 1,024, growth begins at 716 live reservations. The empty space is not waste: it bounds average probe length and guarantees that a lookup can eventually encounter a null slot.
 
 ---
 
@@ -95,6 +172,28 @@ fn find(&self, key: &str, hash: u64) -> Option<&Entry<V>> {
 
 `Acquire` load ensures we see all writes to the entry that happened before the `Release` store that put the pointer there. **No mutex, no lock, no spin on a lock word.**
 
+### Three Read APIs, Three Ownership Trade-offs
+
+The crate exposes more than `get`:
+
+| API               | Returned data     | Pin lifetime               | Best use                                     |
+| ----------------- | ----------------- | -------------------------- | -------------------------------------------- |
+| `get(key)`        | cloned `V`        | only during the clone      | simple ownership and short critical sections |
+| `get_ref(key)`    | `ValueRef<'_, V>` | until the guard is dropped | avoid cloning a large value                  |
+| `with_entry(...)` | closure result    | while the closure runs     | precomputed hash/shard and controlled access |
+
+`get_ref` ties the borrowed pointer to an EBR guard:
+
+```rust
+pub struct ValueRef<'a, V> {
+    ptr: *const ValueBox<V>,
+    _guard: ebr::Guard,
+    _map: PhantomData<&'a CustomMap<V>>,
+}
+```
+
+The guard is not decoration. Its `Drop` implementation unpins the thread. As long as the `ValueRef` exists, reclamation cannot recycle the pointed-to value. Holding it for a long time is safe, but it can delay reclamation for every retired value waiting on that epoch.
+
 ---
 
 ## Layer 3 — EBR: Safe Memory Reclamation Without GC
@@ -146,7 +245,36 @@ fn pin(&mut self) {
 }
 ```
 
-When it unpins, it stores `INACTIVE`. The collector only advances the global epoch if **every active thread** is on the current epoch — proving no one holds an old pointer.
+When it unpins, it stores `INACTIVE`. The collector only advances the global epoch if **every active thread** has caught up — proving no active participant is still protected by an older epoch.
+
+### What the Collector Actually Stores
+
+Retired values are not dropped immediately. Each thread has a thread-local `Local` record containing its participant pointer, nesting depth, retired garbage, and a small typed allocation pool:
+
+```rust
+struct Local {
+    participant: *const Participant,
+    garbage: Vec<Garbage>,
+    depth: usize,
+    retires: usize,
+    pool: Vec<(*mut u8, unsafe fn(*mut u8), TypeId)>,
+    initialized: bool,
+}
+```
+
+Collection runs every 512 retirements. An item retired at epoch `e` becomes reclaimable when the observed safe epoch satisfies `e + 2 <= safe`. Reclaimable `ValueBox` allocations enter a per-thread pool with a limit of 1,024 entries. A later replacement of the same Rust type can reuse that allocation instead of calling the allocator again.
+
+```mermaid
+flowchart LR
+    SWAP["Atomic swap"] --> RETIRE["Retire old ValueBox<br/>with epoch + TypeId"]
+    RETIRE -->|"every 512 retires"| SCAN["Scan participants"]
+    SCAN -->|"old reader active"| WAIT["Keep in garbage queue"]
+    SCAN -->|"epoch + 2 is safe"| POOL["Typed local pool"]
+    POOL -->|"same V type"| REUSE["Drop old V in place<br/>write new V"]
+    POOL -->|"pool full"| FREE["Free allocation"]
+```
+
+Nested reads are supported with `depth`. Only the outermost pin publishes an epoch, and only the final unpin marks the participant inactive. This avoids accidentally leaving a nested operation unprotected.
 
 ---
 
@@ -198,7 +326,7 @@ sequenceDiagram
 
 ## The `insert` Path with CAS Loop
 
-When inserting a *new* key, we need to atomically claim a slot. The CAS loop:
+When inserting a _new_ key, we need to atomically claim a slot. The CAS loop:
 
 ```rust
 if slot.compare_exchange(
@@ -222,11 +350,87 @@ flowchart LR
 
 No lost inserts. No corruption. Pure atomics.
 
+### Why Insertion Reserves Length Before Publishing
+
+When an empty slot is found, the implementation first reserves capacity by incrementing the shard length with `compare_exchange_weak`. Only then does it publish the entry pointer into the slot. This prevents many racing writers from all passing the load-factor check and overfilling the table.
+
+There is another race to handle: after allocating an entry, a writer may discover that another thread inserted the same key. In that case it swaps its freshly allocated value into the existing entry, releases any reserved length, frees the unused entry shell, and retires the replaced value.
+
+```mermaid
+flowchart TD
+    START["Insert key"] --> FIND{"Key already present?"}
+    FIND -->|yes| REPLACE["Atomic value replacement"]
+    FIND -->|no| LIMIT{"At 70% threshold?"}
+    LIMIT -->|yes| GROW["Grow shard and retry"]
+    LIMIT -->|no| RESERVE["CAS shard len + 1"]
+    RESERVE --> CLAIM{"CAS null slot to entry"}
+    CLAIM -->|success| DONE["New key published"]
+    CLAIM -->|lost same-key race| MERGE["Swap into existing entry<br/>undo reservation"]
+    CLAIM -->|collision| PROBE["Probe next slot"]
+    PROBE --> CLAIM
+```
+
+## Updating Without Lost Writes
+
+`update` is a read-modify-write operation implemented as a CAS loop. The closure receives the currently observed value and produces a replacement plus a caller-defined result:
+
+```rust
+loop {
+    let old_ptr = entry.value.load(Ordering::Acquire);
+    if old_ptr.is_null() {
+        return None;
+    }
+
+    let (new_val, result) = f(unsafe { &(*old_ptr).0 });
+    let new_ptr = new_value(new_val);
+
+    match entry.value.compare_exchange(
+        old_ptr,
+        new_ptr,
+        Ordering::AcqRel,
+        Ordering::Acquire,
+    ) {
+        Ok(_) => {
+            unsafe { ebr::retire_value(old_ptr) };
+            return Some(result);
+        }
+        Err(_) => unsafe { free_value(new_ptr) },
+    }
+}
+```
+
+If another writer wins first, the CAS fails, the speculative allocation is freed, and the closure runs again against the new current value. Because of that retry behavior, the closure must not perform irreversible side effects such as sending a payment, writing a file, or emitting a non-idempotent message.
+
+`try_update` adds one more branch: the closure can return `None` to cancel the update after inspecting the value.
+
+## Removal Is Logical, Not Structural
+
+Deletion swaps the value pointer to null but leaves the `Entry` in its slot:
+
+```rust
+let old = entry.value.swap(ptr::null_mut(), Ordering::AcqRel);
+if !old.is_null() {
+    self.key_count.fetch_sub(1, Ordering::Relaxed);
+    unsafe { ebr::retire_value(old) };
+}
+```
+
+```mermaid
+flowchart LR
+    BEFORE["slot → Entry → ValueBox"] --> SWAP["swap value pointer to null"]
+    SWAP --> AFTER["slot → Entry → null"]
+    SWAP --> RETIRED["old ValueBox in EBR queue"]
+    REINSERT["insert same key"] --> AFTER
+    AFTER -->|"CAS null to new value"| LIVE["slot → Entry → new ValueBox"]
+```
+
+Keeping the entry shell is essential for the current probing algorithm. Turning the slot itself back into null could break a collision chain and cause lookups for later keys to stop too early. The same key can be resurrected by CAS-ing its null value pointer, but an unrelated key does not reuse that occupied entry slot until a growth rehash omits logically deleted entries.
+
 ---
 
 ## Resizing — The One Lock
 
-Growing the table is the *only* place we use a mutex, and only to serialise concurrent resize attempts — readers are never blocked:
+Growing the table is the _only_ place we use a mutex, and only to serialise concurrent resize attempts — readers are never blocked:
 
 ```rust
 fn grow(&self) {
@@ -241,19 +445,66 @@ fn grow(&self) {
 }
 ```
 
-Readers loading `self.table` with `Acquire` will immediately see the new table pointer after this store. Old table memory leaks briefly until the EBR collector reclaims it (not yet implemented — but the slot pointers remain valid since entries are never freed during resize, only the table shell changes).
+Readers loading `self.table` with `Acquire` will see the new table pointer after publication. Readers that loaded the previous pointer just before the swap can safely finish against the old table because its entries remain stable.
+
+That last limitation deserves precise wording: **the current code does not retire old `SlotTable` shells through EBR**. After publishing the new table, old readers may still hold the old table pointer, so it cannot be freed immediately. The implementation currently leaves those old shells allocated. Values remain valid because both tables point to stable entries, but repeated growth trades memory for simple reader safety.
+
+```mermaid
+sequenceDiagram
+    participant R as Reader
+    participant S as Shard.table
+    participant W as Growing writer
+    R->>S: Acquire old table pointer
+    W->>W: lock grow mutex
+    W->>W: allocate 2x table and rehash live entries
+    W->>S: Release-store new table pointer
+    R->>R: finish probing old table safely
+    Note over S,W: old table shell is currently retained
+```
+
+Readers never take `grow_lock`; the mutex only prevents multiple writers from rebuilding the same shard simultaneously. A writer that waited for the lock rechecks the threshold because another writer may already have completed the growth.
+
+## Atomic Ordering: Why Each One Is There
+
+| Operation            | Ordering  | Reason                                                           |
+| -------------------- | --------- | ---------------------------------------------------------------- |
+| load shard table     | `Acquire` | observe the initialized table published by a writer              |
+| load entry slot      | `Acquire` | observe the fully initialized key, hash, and value pointer       |
+| publish new entry    | `Release` | make entry initialization visible before readers dereference it  |
+| replace/remove value | `AcqRel`  | publish the new state and synchronize with prior readers/writers |
+| failed CAS           | `Acquire` | observe the pointer that defeated the attempted update           |
+| length counters      | `Relaxed` | counters coordinate capacity/accounting, not entry contents      |
+
+Using `SeqCst` everywhere would be easier to explain but stronger than the algorithm needs. The implementation builds explicit publication edges around pointer ownership while allowing independent operations to reorder where correctness does not depend on their global order.
+
+## Safety Invariants Behind the `unsafe`
+
+Raw pointers make the hot path small, but correctness depends on invariants that the type system cannot verify by itself:
+
+1. A slot pointer is published only after its `Entry` is fully initialized.
+2. Published entry shells are not freed while concurrent operations may find them.
+3. A `ValueBox` is dereferenced only while the thread is pinned or while ownership is otherwise exclusive.
+4. Replaced values are retired exactly once.
+5. A pooled allocation is reused only for the same `TypeId`.
+6. Table capacity is a power of two, making `hash & mask` valid.
+7. The load threshold leaves at least one null slot, so an unsuccessful probe terminates.
+
+Any future optimization—SIMD probing, entry reclamation, slot reuse, or table-shell reclamation—must preserve all seven.
 
 ---
 
 ## Performance Characteristics
 
-| Operation | Contention | Cost |
-|-----------|------------|------|
-| `get`     | Zero (lock-free read) | O(1) amortised |
-| `insert` (existing key) | Per-entry CAS | O(1) amortised |
-| `insert` (new key) | Per-slot CAS + len CAS | O(1) amortised |
-| `remove`  | Per-entry swap + EBR retire | O(1) amortised |
-| `grow`    | Shard mutex (writers only) | O(n/shards) |
+| Operation             | Contention                          | Cost                |
+| --------------------- | ----------------------------------- | ------------------- |
+| `get`                 | no mutex; clone cost depends on `V` | O(1) amortized      |
+| `get_ref`             | no mutex; pins until guard drop     | O(1) amortized      |
+| `insert` existing key | one atomic value swap               | O(1) amortized      |
+| `insert` new key      | length CAS + slot CAS + probing     | O(1) amortized      |
+| `update`              | CAS loop; closure may retry         | O(1) amortized      |
+| `remove`              | atomic null swap + EBR retirement   | O(1) amortized      |
+| `grow`                | one shard's writer mutex            | O(entries in shard) |
+| `for_each`            | pinned, weakly consistent traversal | O(total slots)      |
 
 With 16 shards (default), growing is isolated to 1/16th of the keyspace at a time.
 
@@ -302,12 +553,43 @@ fn main() {
 
 All 12 threads run concurrently. No `Mutex`, no `RwLock` on the hot path. The EBR layer ensures that readers never observe freed memory, even when writers are actively removing keys.
 
+## Iteration Is Weakly Consistent
+
+`for_each`, `keys`, `retain`, and `clear` walk shard tables while pinned. They do not stop writers and do not create a global snapshot. An iteration may see an update in one shard and miss a later update in another. That is acceptable for diagnostics, maintenance passes, and eventually consistent views, but not for transactions or exact point-in-time exports.
+
+`retain` and `clear` use the same logical-deletion mechanism as `remove`: each live value is atomically swapped to null and retired. Entry shells remain in their probe positions.
+
+## How I Would Test This Map
+
+A concurrent structure needs more than unit tests for successful inserts. A serious test plan should cover:
+
+- two writers inserting the same absent key;
+- different keys colliding at the same initial slot;
+- remove racing with `get`, `get_ref`, `update`, and reinsertion;
+- repeated growth while readers probe old tables;
+- nested EBR pins and long-lived guards;
+- values with expensive `Clone` and non-trivial destructors;
+- `retain` or `clear` racing with updates;
+- drop behavior after several resize generations;
+- high-contention counters checked with Loom or another concurrency model checker;
+- Miri runs for raw-pointer and lifetime mistakes where supported.
+
+For benchmarks, report more than operations per second. Include p50, p95, p99, and maximum latency; read/write ratios; key distributions; value size; thread count; resize frequency; allocation counts; and resident memory after growth. Compare against a baseline such as `RwLock<HashMap<...>>`, a sharded mutex map, and a mature concurrent map under the same workload.
+
+## When This Design Fits—and When It Does Not
+
+Use this style of map when reads dominate, keys are strings, values are cloneable or can be borrowed briefly, and latency under contention matters enough to justify unsafe code and custom reclamation.
+
+Prefer a simpler locked map when the workload is small, operations must mutate values in place, iteration requires a snapshot, memory reclamation must be immediate, or the team cannot continuously audit unsafe concurrency invariants. A well-sharded mutex design is often the better engineering decision even if its benchmark peak is lower.
+
 ---
 
 ## What's Next
 
 - **Tombstone-free deletion** — currently removes by nulling the value pointer, leaving "ghost" entries in the probe chain. True tombstone-free deletion requires a full resize.
-- **Iteration safety** — `for_each` pins EBR but doesn't snapshot, so insertions during iteration may or may not be visible.
+- **Old table reclamation** — retire previous `SlotTable` shells through EBR after resize.
+- **Participant lifecycle** — unregister exited threads or transfer their pending garbage through the orphan path.
+- **Snapshot iteration** — add versioning or an explicit snapshot abstraction when exact views are required.
 - **SIMD probing** — scanning 16 slots at once with SSE2 (à la Swiss Table / Hashbrown).
 - **Value pool recycling** — the EBR allocator already pools `ValueBox` allocations per type; could extend with a slab allocator.
 
