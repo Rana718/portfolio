@@ -553,9 +553,8 @@ section.fixed,
 
 .mermaid-diagram svg {
   display: block;
-  width: max-content;
-  min-width: 42rem;
-  max-width: none;
+  width: 100%;
+  max-width: 100%;
   height: auto;
   margin-inline: auto;
 }
