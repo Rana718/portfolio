@@ -2,6 +2,7 @@
 
 import mermaid from "mermaid";
 import { useEffect, useId, useState } from "react";
+import { useTheme } from "@/lib/theme-provider";
 
 interface MermaidDiagramProps {
 	chart: string;
@@ -11,17 +12,18 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 	const reactId = useId();
 	const [svg, setSvg] = useState("");
 	const [error, setError] = useState("");
+	const { theme } = useTheme();
 
 	useEffect(() => {
 		let active = true;
-		const id = `mermaid-${reactId.replace(/[^a-zA-Z0-9]/g, "")}`;
+		// Each render needs a unique id so Mermaid doesn't conflict with a
+		// previously cached element when we re-render for a theme change.
+		const id = `mermaid-${reactId.replace(/[^a-zA-Z0-9]/g, "")}-${theme}`;
 
 		mermaid.initialize({
 			startOnLoad: false,
 			securityLevel: "strict",
-			theme: document.documentElement.classList.contains("dark")
-				? "dark"
-				: "default",
+			theme: theme === "dark" ? "dark" : "default",
 			flowchart: {
 				htmlLabels: true,
 				useMaxWidth: true,
@@ -37,6 +39,11 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 			},
 		});
 
+		// Reset svg so there's no flash of the old-theme diagram while the new
+		// one is rendering.
+		setSvg("");
+		setError("");
+
 		mermaid
 			.render(id, chart)
 			.then(({ svg: renderedSvg }) => {
@@ -51,7 +58,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
 		return () => {
 			active = false;
 		};
-	}, [chart, reactId]);
+	}, [chart, reactId, theme]); // re-run whenever theme changes
 
 	if (error) {
 		return (
