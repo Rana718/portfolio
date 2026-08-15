@@ -44,9 +44,9 @@ export const metadata: Metadata = {
 };
 
 const structuredData = {
-	"@context": "https://schema.org",
-	"@type": "Blog",
-	"@id": "https://ranadolui.me/blog#blog",
+   "@context": "https://schema.org",
+   "@type": "Blog",
+   "@id": "https://ranadolui.me/blog#blog",
    name: "Rana Dolui's Blog",
    description:
       "A growing library of practical software engineering articles across languages, platforms, and technical disciplines.",
