@@ -36,7 +36,7 @@ export function MoreProjectsSection({
 
    return (
       <Container className="py-[12vw] md:py-20">
-         <SectionHeading number="03" title="More Projects" />
+         <SectionHeading number="03" title="Project Archive" />
 
          <FilterBar
             categories={allCategories}

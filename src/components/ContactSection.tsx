@@ -128,7 +128,7 @@ export function ContactSection() {
             trigger={showConfetti}
             onComplete={() => setShowConfetti(false)}
          />
-         <SectionHeading number="07" title="Contact" />
+         <SectionHeading number="08" title="Contact" />
 
          <div className="grid grid-cols-1 md:grid-cols-2 gap-[5vw] md:gap-10">
             <div>

@@ -37,27 +37,28 @@ export const experiences = [
 export const projects = [
    {
       id: 1,
-      title: "AssumioAI",
+      title: "Cognify",
       description:
-         "AI-powered startup idea validation platform that analyzes business ideas, market opportunities, risks, feasibility, and execution strategies through intelligent multi-agent workflows.",
+         "Block-based collaborative workspace with real-time CRDT sync, AI flashcard generation, concept graphs, and PDF knowledge extraction.",
       fullDescription:
-         "AI-powered startup validation platform that helps founders analyze ideas through specialized AI agents, evaluating market opportunities, competition, feasibility, risks, and execution strategies before investing time and money.",
+         "Cognify is a full-stack productivity and learning platform built for students and knowledge workers. It combines a rich block-based document editor (BlockNote) with AI-powered study tools. Features include real-time collaboration via WebSocket + Yjs CRDT, workspace hierarchy, AI flashcard generation (SM-2 spaced repetition), PDF import with auto-chunking, term indexing, research graphs, and document prerequisites detection.",
       tech: [
          "Next.js",
-         "TypeScript",
+         "React 19",
          "TailwindCSS",
-         "Node.js",
-         "PostgreSQL",
-         "Prisma",
-         "OpenAI",
-         "LangGraph",
+         "Go",
+         "Fiber",
+         "MongoDB",
          "Redis",
-         "Framer Motion",
+         "WebSocket",
+         "Yjs",
+         "Gemini",
+         "Docker",
       ],
       category: ["Web App", "AI/ML"],
-      github: "https://github.com/Rana718/AssumioAI",
-      demo: "https://assumioai.ranadolui.me/",
-      image: "/projects/assumioai.png",
+      github: "https://github.com/Rana718/Cognify",
+      demo: "https://cognify.ranadolui.me/",
+      image: "/projects/cognify.png",
       featured: true,
    },
    {
@@ -90,24 +91,27 @@ export const projects = [
    },
    {
       id: 3,
-      title: "CareerWise",
+      title: "AssumioAI",
       description:
-         "AI interview prep with mock sessions, feedback, and guidance. Built with Next.js, prisma and Gemini.",
+         "AI-powered startup idea validation platform that analyzes business ideas, market opportunities, risks, feasibility, and execution strategies through intelligent multi-agent workflows.",
       fullDescription:
-         "CareerWise is a comprehensive AI-powered interview preparation platform that helps job seekers practice and improve their interview skills. It features mock interview sessions, real-time feedback, personalized guidance, and performance analytics. Built with modern technologies for a seamless user experience.",
+         "AI-powered startup validation platform that helps founders analyze ideas through specialized AI agents, evaluating market opportunities, competition, feasibility, risks, and execution strategies before investing time and money.",
       tech: [
          "Next.js",
-         "TailwindCSS",
-         "Prisma",
          "TypeScript",
-         "Postgresql",
+         "TailwindCSS",
+         "Node.js",
+         "PostgreSQL",
+         "Prisma",
+         "OpenAI",
+         "LangGraph",
+         "Redis",
          "Framer Motion",
-         "Gemini",
       ],
       category: ["Web App", "AI/ML"],
-      github: "https://github.com/Rana718/HireLens",
-      demo: "https://careerw-ise.vercel.app/",
-      image: "/projects/careerwise.png",
+      github: "https://github.com/Rana718/AssumioAI",
+      demo: "https://assumioai.ranadolui.me/",
+      image: "/projects/assumioai.png",
       featured: true,
    },
    {
@@ -141,28 +145,6 @@ export const projects = [
    },
    {
       id: 5,
-      title: "KhelRatna",
-      description:
-         "Cricket tournament management platform with live score tracking and YouTube match streaming.",
-      fullDescription:
-         "KhelRatna is a dedicated platform for hosting and managing cricket tournaments. Organizers can create and manage tournaments, update scores in real time, and provide detailed statistics. Players and teams can track their performances, while audiences can follow live scores and even watch tournament matches streamed directly through YouTube integration.",
-      tech: [
-         "Next.js",
-         "Clerk",
-         "Flutter",
-         "Prisma",
-         "TypeScript",
-         "Framer Motion",
-         "TailwindCSS",
-      ],
-      category: ["Mobile App", "Web App"],
-      github: "https://github.com/Rana718/khelratna_user",
-      demo: "https://play.google.com/store/apps/details?id=com.khelratna.app",
-      image: "/projects/khelratna.png",
-      featured: true,
-   },
-   {
-      id: 6,
       title: "Passman",
       description:
          "Secure password manager with end-to-end encryption, multi-factor authentication, vault management, zero-trust mode, and recovery keys for account protection.",
@@ -186,7 +168,65 @@ export const projects = [
       status: "completed",
    },
    {
+      id: 6,
+      title: "KhelRatna",
+      description:
+         "Cricket tournament management platform with live score tracking and YouTube match streaming.",
+      fullDescription:
+         "KhelRatna is a dedicated platform for hosting and managing cricket tournaments. Organizers can create and manage tournaments, update scores in real time, and provide detailed statistics. Players and teams can track their performances, while audiences can follow live scores and even watch tournament matches streamed directly through YouTube integration.",
+      tech: [
+         "Next.js",
+         "Clerk",
+         "Flutter",
+         "Prisma",
+         "TypeScript",
+         "Framer Motion",
+         "TailwindCSS",
+      ],
+      category: ["Mobile App", "Web App"],
+      github: "https://github.com/Rana718/khelratna_user",
+      demo: "https://play.google.com/store/apps/details?id=com.khelratna.app",
+      image: "/projects/khelratna.png",
+      featured: true,
+   },
+   {
       id: 7,
+      title: "Music Mixer",
+      description:
+         "Advanced PipeWire audio mixer with per-app controls and real-time routing.",
+      fullDescription:
+         "Music Mixer is a native Linux desktop application built in Rust and GPUI for managing PipeWire audio streams. It enables per-application volume control, mute management, dynamic output routing, and live monitoring of PipeWire nodes, ports, and links. The application automatically restores routing configurations when devices are connected and safely resets audio state on exit. Designed with a modern custom GUI, KernelPilot provides a powerful alternative to traditional Linux audio mixers.",
+      tech: ["Rust", "Linux"],
+      category: ["Tool"],
+      github: "https://github.com/Lumos-Labs-HQ/volume-mixer.git",
+      demo: "",
+      image: "/projects/mixer.png",
+      featured: true,
+   },
+   {
+      id: 8,
+      title: "CareerWise",
+      description:
+         "AI interview prep with mock sessions, feedback, and guidance. Built with Next.js, prisma and Gemini.",
+      fullDescription:
+         "CareerWise is a comprehensive AI-powered interview preparation platform that helps job seekers practice and improve their interview skills. It features mock interview sessions, real-time feedback, personalized guidance, and performance analytics. Built with modern technologies for a seamless user experience.",
+      tech: [
+         "Next.js",
+         "TailwindCSS",
+         "Prisma",
+         "TypeScript",
+         "Postgresql",
+         "Framer Motion",
+         "Gemini",
+      ],
+      category: ["Web App", "AI/ML"],
+      github: "https://github.com/Rana718/HireLens",
+      demo: "https://careerw-ise.vercel.app/",
+      image: "/projects/careerwise.png",
+      featured: false,
+   },
+   {
+      id: 9,
       title: "CPM",
       description:
          "A fast, isolated C/C++ package manager powered by Nix. Like uv for Python, but for C and C++.",
@@ -203,7 +243,7 @@ export const projects = [
       status: "completed",
    },
    {
-      id: 8,
+      id: 10,
       title: "PeerDrop",
       description:
          "Instant, secure file sharing via peer-to-peer tech with end-to-end encryption. Built with React, Go, and WebSockets.",
@@ -225,7 +265,30 @@ export const projects = [
       status: "completed",
    },
    {
-      id: 9,
+      id: 11,
+      title: "Yavi",
+      description:
+         "SDK builder platform — upload OpenAPI specs, generate SDKs in multiple languages, publish to package registries, and push to GitHub via App integration.",
+      fullDescription:
+         "Yavi is an SDK generation platform (similar to Stainless/Speakeasy) that allows users to upload or paste OpenAPI specs and generate SDKs in TypeScript, Python, Go, Java, and Rust. Features include publishing to npm, PyPI, crates.io, Maven, and NuGet, GitHub App integration for pushing generated code, and AI-powered spec generation and improvement.",
+      tech: [
+         "SvelteKit",
+         "TypeScript",
+         "Go",
+         "Fiber",
+         "Turborepo",
+         "Docker",
+         "Redis",
+         "PostgreSQL",
+      ],
+      category: ["Web App", "Tool"],
+      github: "https://github.com/Rana718/yavi",
+      demo: null,
+      image: "/projects/yavi.png",
+      featured: false,
+   },
+   {
+      id: 12,
       title: "NewsApp",
       description:
          "A news aggregator app that fetches the latest news from various sources using NewsAPI.",
@@ -240,21 +303,7 @@ export const projects = [
       status: "completed",
    },
    {
-      id: 10,
-      title: "Music Mixer",
-      description:
-         "Advanced PipeWire audio mixer with per-app controls and real-time routing.",
-      fullDescription:
-         "Music Mixer is a native Linux desktop application built in Rust and GPUI for managing PipeWire audio streams. It enables per-application volume control, mute management, dynamic output routing, and live monitoring of PipeWire nodes, ports, and links. The application automatically restores routing configurations when devices are connected and safely resets audio state on exit. Designed with a modern custom GUI, KernelPilot provides a powerful alternative to traditional Linux audio mixers.",
-      tech: ["Rust", "Linux"],
-      category: ["Tool"],
-      github: "https://github.com/Lumos-Labs-HQ/volume-mixer.git",
-      demo: "",
-      image: "/projects/mixer.png",
-      featured: true,
-   },
-   {
-      id: 11,
+      id: 13,
       title: "Snipity",
       description:
          "Minimal code editor for creating and sharing snippets easily. Built with Next.js, Convex, Zustand, and Framer Motion.",
@@ -268,7 +317,7 @@ export const projects = [
       featured: false,
    },
    {
-      id: 12,
+      id: 14,
       title: "Trainer",
       description:
          "Linux CLI tool that launches Windows trainers through the exact Proton version and Wine prefix used by a Steam game.",
@@ -283,7 +332,7 @@ export const projects = [
       status: "completed",
    },
    {
-      id: 13,
+      id: 15,
       title: "URL Shortener",
       description:
          "Fast, in-memory URL shortener using BigCache for quick link generation. Built with React, Go, and Docker.",
@@ -298,7 +347,7 @@ export const projects = [
       status: "completed",
    },
    {
-      id: 14,
+      id: 16,
       title: "Pinglo",
       description:
          "Real-time chat application with modern UI and seamless messaging experience.",
@@ -320,7 +369,7 @@ export const projects = [
       featured: false,
    },
    {
-      id: 15,
+      id: 17,
       title: "AI App",
       description:
          "A simple AI app where user can generate images and text using Gemini.",
@@ -342,7 +391,7 @@ export const projects = [
       status: "completed",
    },
    {
-      id: 16,
+      id: 18,
       title: "Magic Pad",
       description:
          "A creative drawing tool inspired by Apple's calculator sketchpad. Built for fun and interaction.",
@@ -357,7 +406,7 @@ export const projects = [
       status: "completed",
    },
    {
-      id: 17,
+      id: 19,
       title: "Fitly",
       description:
          "AI-powered web app that helps users find the best jobs based on their skills and interests.",
@@ -774,15 +823,26 @@ export const technologies = [
 
 export const openSourceRepos = [
    {
-      name: "flash",
+      name: "FlashDB",
+      description:
+         "A Redis-compatible in-memory key-value store written in Rust. Lock-free concurrent hash map with epoch-based reclamation. Outperforms a 6-node Redis Cluster by 2-5x on a single node.",
+      url: "https://github.com/Rana718/FlashDB",
+      isrelease: true,
+      language: ["Rust"],
+      topics: ["redis", "database", "lock-free", "concurrent", "rust"],
+      stars: true,
+      forks: true,
+   },
+   {
+      name: "Flash ORM",
       description:
          "A powerful, database-agnostic ORM built in Go with Prisma-like functionality. Outperforms Drizzle and Prisma by 3-12x in benchmarks.",
       url: "https://github.com/Lumos-Labs-HQ/flash",
-      // stars: 21,
-      // forks: 6,
       isrelease: true,
       language: ["Go", "JavaScript", "TypeScript", "Python"],
       topics: ["orm", "go", "postgresql", "mysql", "sqlite"],
+      stars: true,
+      forks: true,
    },
    {
       name: "Astraapi",
@@ -792,5 +852,7 @@ export const openSourceRepos = [
       isrelease: true,
       language: ["C++", "Python"],
       topics: ["ai", "api", "framework", "C++", "Fastapi"],
+      stars: true,
+      forks: true,
    },
 ];

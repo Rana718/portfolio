@@ -16,7 +16,7 @@ const iconMap: Record<string, React.ElementType> = {
 export function ServicesSection() {
    return (
       <Container className="py-[12vw] md:py-20">
-         <SectionHeading number="06" title="Services" />
+         <SectionHeading number="07" title="Services" />
 
          <div className="grid grid-cols-1 sm:grid-cols-2 gap-[3vw] md:gap-4 mb-[6vw] md:mb-12">
             {services.map((service, i) => {

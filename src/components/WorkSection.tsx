@@ -17,7 +17,7 @@ export function WorkSection({ onProjectClick }: WorkSectionProps) {
 
    return (
       <Container size="narrow" className="py-[12vw] md:py-20">
-         <SectionHeading number="02" title="Selected Work" />
+         <SectionHeading number="02" title="Featured Projects" />
 
          <div className="space-y-[8vw] md:space-y-16">
             {featuredProjects.map((project, index) => (

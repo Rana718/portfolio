@@ -158,11 +158,11 @@ export function HeroSection() {
                   }}
                >
                   <GlassButton
-                     href="#work"
+                     href="#oss"
                      variant="accent"
                      className="px-[4vw] md:px-6 py-[1.2vw] md:py-2.5 text-[2.2vw] md:text-xs"
                   >
-                     VIEW PROJECTS
+                     EXPLORE MY WORK
                   </GlassButton>
                   <GlassButton
                      href="/Rana_Dolui.pdf"
@@ -204,7 +204,7 @@ export function HeroSection() {
 
             {/* Scroll-down chevron */}
             <motion.a
-               href="#experience"
+               href="#oss"
                className="absolute bottom-6 hidden md:block"
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}

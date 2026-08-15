@@ -6,10 +6,11 @@ import { usePathname } from "next/navigation";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 const SECTIONS = [
-   { id: "experience", label: "Exp", shortLabel: "Exp" },
-   { id: "work", label: "Work", shortLabel: "Work" },
+   { id: "oss", label: "OSS", shortLabel: "OSS" },
+   { id: "work", label: "Projects", shortLabel: "Work" },
    { id: "skills", label: "Skills", shortLabel: "Sk" },
-   { id: "services", label: "Services", shortLabel: "Sv" },
+   { id: "blog", label: "Writing", shortLabel: "Blog" },
+   { id: "experience", label: "Exp", shortLabel: "Exp" },
    { id: "contact", label: "Contact", shortLabel: "Ct" },
 ];
 
