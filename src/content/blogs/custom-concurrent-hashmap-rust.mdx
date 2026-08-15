@@ -2,7 +2,7 @@
 title: "Building a Lock-Free Concurrent HashMap in Rust from Scratch"
 description: "Build a sharded concurrent HashMap in Rust using atomic pointers, CAS loops, open addressing, and epoch-based reclamation, with code and diagrams."
 date: "2026-08-11"
-updated: "2026-08-14"
+updated: "2026-08-15"
 tags:
    [
       "Rust",
@@ -26,7 +26,7 @@ This article studies the real `customhash` crate used in the project—not a sim
 
 ## What We Are Building
 
-`CustomMap<V>` is a concurrent `String -> V` map where `V: Clone + Send + Sync + 'static`. Its public surface supports cloned reads, guarded borrowed reads, conditional insertion, CAS-loop updates, logical deletion, iteration, retention, and explicit capacity inspection.
+`CustomMap<V>` is a concurrent `String -> V` map where `V: Clone + Send + Sync + 'static`. Its public surface supports cloned reads, guarded borrowed reads, conditional insertion, copy-on-write CAS updates, logical deletion, iteration, shard-local retention, explicit capacity inspection, and bounded admission through the `try_*` APIs.
 
 The design optimizes for these properties:
 
@@ -36,6 +36,8 @@ The design optimizes for these properties:
 - removed values are reclaimed only after old readers are gone;
 - shard metadata is cache-line separated to reduce false sharing;
 - the table stays below a 70% load factor to keep probe chains short.
+- growth compacts logical tombstones and restores accurate per-shard live counts;
+- `with_capacity` records a maximum-key admission limit for `try_insert` and `try_set`.
 
 It does **not** promise snapshot iteration, immediate physical deletion, or wait-free writes. The updated implementation now safely reclaims old table shells after resize through EBR.
 
@@ -45,7 +47,7 @@ The design splits into three independent layers:
 
 ```mermaid
 flowchart TB
-    M["CustomMap&lt;V&gt;<br/>hasher · shift · shard_mask · key_count"]
+    M["CustomMap&lt;V&gt;<br/>hasher · shift · shard_mask<br/>key_count · max_keys"]
     M --> S0["Shard 0"]
     M --> S1["Shard 1"]
     M --> S2["Shard 2"]
@@ -79,6 +81,15 @@ struct SlotTable<V> {
     threshold: usize,
 }
 
+struct CustomMap<V> {
+    shards: Box<[Shard<V>]>,
+    shift: u32,
+    shard_mask: usize,
+    hasher: RandomState,
+    key_count: CachePadded<AtomicUsize>,
+    max_keys: usize,
+}
+
 #[repr(align(128))]
 struct Shard<V> {
     table: AtomicPtr<SlotTable<V>>,
@@ -99,9 +110,9 @@ flowchart LR
 
 This extra indirection is intentional. Updating a value does not move the key, hash, or table slot. The writer allocates a new `ValueBox`, swaps one pointer, and retires the old box. That keeps the probing structure stable for concurrent readers.
 
-The `#[repr(align(128))]` shard alignment and cache-padded length/gate counters reduce false sharing. Threads modifying shard 0's insertion state should not constantly invalidate the cache line containing shard 1's hot metadata.
+The `#[repr(align(128))]` shard alignment and cache-padded length/gate counters reduce false sharing. Threads modifying shard 0's insertion state should not constantly invalidate the cache line containing shard 1's hot metadata. At map level, `key_count` tracks live values while `max_keys` controls admission in the fallible insertion APIs.
 
-### Capacity Is Always a Power of Two
+### Capacity and Admission
 
 `SlotTable::new` rounds capacity upward and stores `mask = capacity - 1`. That turns modulo operations into a cheap bitwise AND:
 
@@ -112,6 +123,29 @@ let threshold = cap * 7 / 10;
 ```
 
 At a capacity of 1,024, growth begins at 716 live reservations. The empty space is not waste: it bounds average probe length and guarantees that a lookup can eventually encounter a null slot.
+
+`with_capacity(shard_count, expected_keys)` uses the expected key count both to pre-size each shard and as the map's `max_keys`. The fallible APIs check that limit before admitting a new live key:
+
+```rust
+pub fn try_insert(&self, key: String, value: V) -> Result<bool, Full> {
+    if self.key_count.load(Ordering::Relaxed) >= self.max_keys {
+        let (hash, shard) = self.locate(&key);
+        let exists = ebr::with_pin(|_| {
+            self.shards[shard].find(&key, hash)
+                .is_some_and(|e| !e.value.load(Ordering::Acquire).is_null())
+        });
+        // Existing keys may still be updated at capacity.
+        if !exists {
+            return Err(Full);
+        }
+    }
+    Ok(self.insert(key, value))
+}
+```
+
+`try_set` follows the same rule. Updating an existing key is permitted because it does not increase cardinality. `with_shards` uses `usize::MAX`, effectively disabling this admission ceiling, and the infallible `insert`/`set` APIs continue to grow normally.
+
+The check is intentionally lightweight: it is a relaxed preflight check rather than a global key-count reservation. It avoids adding a contended global CAS to every insertion; callers requiring a strict concurrent hard ceiling need coordination above the map.
 
 ---
 
@@ -174,8 +208,6 @@ fn find(&self, key: &str, hash: u64) -> Option<&Entry<V>> {
 `Acquire` load ensures we see all writes to the entry that happened before the `Release` store that put the pointer there. The updated read APIs pin **before loading and traversing the table**, so an old table generation cannot be reclaimed while a reader is still probing it. Reads take no mutex and never enter the insertion gate.
 
 ### Three Read APIs, Three Ownership Trade-offs
-
-The crate exposes more than `get`:
 
 | API               | Returned data     | Pin lifetime               | Best use                                     |
 | ----------------- | ----------------- | -------------------------- | -------------------------------------------- |
@@ -360,7 +392,26 @@ No lost inserts. No corruption. Pure atomics.
 
 When an empty slot is found, the implementation first reserves capacity by incrementing the shard length with `compare_exchange_weak`. Only then does it publish the entry pointer into the slot. This prevents many racing writers from all passing the load-factor check and overfilling the table.
 
-There is another race to handle: after allocating an entry, a writer may discover that another thread inserted the same key. In that case it swaps its freshly allocated value into the existing entry, releases any reserved length, frees the unused entry shell, and retires the replaced value.
+There is another race to handle: after allocating an entry, a writer may discover that another thread inserted the same key. In that case it swaps its freshly allocated value into the existing entry, releases any reserved length, drops only the unused entry shell, and retires the replaced value.
+
+The ownership detail is critical. Once `vb` is installed into the winning entry, it must **not** be freed through the losing private entry. The latest fix clears the private entry's value pointer before dropping that shell:
+
+```rust
+let old = existing.value.swap(vb, Ordering::AcqRel);
+if reserved {
+    self.len.fetch_sub(1, Ordering::Relaxed);
+}
+unsafe {
+    // vb now belongs to `existing`; the private shell must not own it.
+    (*entry).value.store(ptr::null_mut(), Ordering::Relaxed);
+    let _ = Box::from_raw(entry);
+}
+if !old.is_null() {
+    unsafe { ebr::retire_value(old) };
+}
+```
+
+The previous version freed `vb` after publishing it into `existing.value`, leaving the map with a dangling pointer. The corrected ownership transfer removes that use-after-free path.
 
 The updated path allocates the `ValueBox` and `Entry` once before its retry loop rather than cloning both the key and value on every growth retry. The entry remains privately owned until the slot CAS publishes it.
 
@@ -413,6 +464,31 @@ If another writer wins first, the CAS fails, the speculative allocation is freed
 
 `try_update` adds one more branch: the closure can return `None` to cancel the update after inspecting the value.
 
+### Mutable-Style Copy-on-Write with `update_with`
+
+The newest API adds an ergonomic mutation form without exposing shared mutable memory:
+
+```rust
+map.update_with("user:42", |user| {
+    user.login_count += 1;
+    user.last_seen = now;
+});
+```
+
+Internally, `update_with` still follows the safe CAS model. It clones the observed value, gives the closure `&mut V` for that private clone, allocates a new `ValueBox`, and attempts to replace the old pointer. If another writer wins, the speculative box is freed and the operation retries from a fresh clone.
+
+```mermaid
+flowchart LR
+    LOAD["Acquire current pointer"] --> CLONE["Clone V privately"]
+    CLONE --> MUTATE["Run closure on &mut V"]
+    MUTATE --> CAS{"CAS old to new"}
+    CAS -->|success| RETIRE["Retire old ValueBox"]
+    CAS -->|lost race| FREE["Free speculative clone"]
+    FREE --> LOAD
+```
+
+As with `update`, the closure may run more than once under contention. It should mutate only the provided clone and avoid non-idempotent external side effects.
+
 ## Removal Is Logical, Not Structural
 
 Deletion swaps the value pointer to null but leaves the `Entry` in its slot:
@@ -435,6 +511,17 @@ flowchart LR
 ```
 
 Keeping the entry shell is essential for the current probing algorithm. Turning the slot itself back into null could break a collision chain and cause lookups for later keys to stop too early. The same key can be resurrected by CAS-ing its null value pointer, but an unrelated key does not reuse that occupied entry slot until a growth rehash omits logically deleted entries.
+
+Growth now compacts those tombstones while it rehashes. It counts only entries whose value pointer is live and stores that `live_count` back into the shard's `len` after the new table is built. The old table is then retired through EBR. This prevents deleted values from making the shard appear permanently full and restores the load-factor calculation to the number of live entries.
+
+```mermaid
+flowchart LR
+    OLD["Old table<br/>live + tombstoned entries"] --> COPY["Rehash live value pointers"]
+    COPY --> COUNT["live_count = number of non-null values"]
+    COUNT --> NEW["Publish compact table"]
+    NEW --> RESET["shard.len = live_count"]
+    OLD --> RETIRE["Retire old SlotTable through EBR"]
+```
 
 ---
 
@@ -563,9 +650,11 @@ Any future optimization—SIMD probing, entry reclamation, or slot reuse—must 
 | `insert` existing key | one atomic value swap               | O(1) amortized      |
 | `insert` new key      | insert gate + length CAS + slot CAS | O(1) amortized      |
 | `update`              | CAS loop; closure may retry         | O(1) amortized      |
+| `update_with`         | clone + mutate + CAS retry          | O(1) amortized      |
+| `try_insert` new key  | max-key preflight + normal insert   | O(1) amortized      |
 | `remove`              | atomic null swap + EBR retirement   | O(1) amortized      |
 | `grow`                | writer mutex + drained insert gate  | O(entries in shard) |
-| `for_each`            | pinned, weakly consistent traversal | O(total slots)      |
+| `for_each`            | one EBR pin per shard               | O(total slots)      |
 
 With 16 shards in this configuration, growth is isolated to 1/16th of the keyspace at a time.
 
@@ -616,30 +705,13 @@ All 12 threads run concurrently. No `Mutex`, no `RwLock` on the hot path. The EB
 
 ## Iteration Is Weakly Consistent
 
-`for_each`, `keys`, `retain`, `retain_shard`, and `clear` walk shard tables while pinned. They do not stop writers and do not create a global snapshot. An iteration may see an update in one shard and miss a later update in another. That is acceptable for diagnostics, maintenance passes, shard-local expiry cleanup, and eventually consistent views, but not for transactions or exact point-in-time exports.
+`for_each` and `keys` now pin one shard at a time rather than holding one EBR guard across the entire map. That shortens reclamation delays caused by a slow callback or a large shard count. `retain`, `retain_shard`, and `clear` still protect their mutation traversal with a guard. None of these operations creates a global snapshot: an iteration may see an update in one shard and miss a later update in another. That is acceptable for diagnostics, maintenance passes, shard-local expiry cleanup, and eventually consistent views, but not for transactions or exact point-in-time exports.
 
 `retain`, the new `retain_shard(shard_idx, predicate)`, and `clear` use the same logical-deletion mechanism as `remove`: each live value is atomically swapped to null and retired. Entry shells remain in their probe positions. `retain_shard` avoids scanning unrelated shards when a caller already knows which partition needs maintenance.
 
-## How I Would Test This Map
+## Regression Coverage for the Resize Boundary
 
-A concurrent structure needs more than unit tests for successful inserts. A serious test plan should cover:
-
-- two writers inserting the same absent key;
-- different keys colliding at the same initial slot;
-- remove racing with `get`, `get_ref`, `update`, and reinsertion;
-- repeated growth while readers probe old tables;
-- new-key insertion racing exactly with the transition to `GROWING`;
-- reclamation of multiple old table generations after readers unpin;
-- nested EBR pins and long-lived guards;
-- values with expensive `Clone` and non-trivial destructors;
-- `retain` or `clear` racing with updates;
-- drop behavior after several resize generations;
-- high-contention counters checked with Loom or another concurrency model checker;
-- Miri runs for raw-pointer and lifetime mistakes where supported.
-
-For benchmarks, report more than operations per second. Include p50, p95, p99, and maximum latency; read/write ratios; key distributions; value size; thread count; resize frequency; allocation counts; and resident memory after growth. Compare against a baseline such as `RwLock<HashMap<...>>`, a sharded mutex map, and a mature concurrent map under the same workload.
-
-The crate now includes a direct regression test for the resize boundary: four reader threads repeatedly verify 128 stable keys while four writer threads add 8,000 new keys and trigger multiple growth generations. The final assertions verify all 8,128 entries. This specifically exercises pinned old-table readers, the insert gate, publication of new tables, and deferred table reclamation together.
+The crate includes a direct concurrency regression test for the hardest structural boundary. Four reader threads repeatedly verify 128 stable keys while four writer threads add 8,000 new keys and trigger multiple growth generations. The final assertions verify all 8,128 entries. That single scenario exercises pinned readers of old tables, the insertion gate, publication of replacement tables, and deferred table reclamation together.
 
 ## When This Design Fits—and When It Does Not
 
