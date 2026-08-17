@@ -1,9 +1,9 @@
 ---
 title: "Building a Lock-Free Concurrent HashMap in Rust from Scratch"
-description: "Build a sharded concurrent HashMap in Rust using atomic pointers, CAS loops, open addressing, and epoch-based reclamation, with code and diagrams."
+description: "Inside a sharded Rust HashMap using lock-free reads, per-entry synchronization, open addressing, sequence counters, and epoch-based reclamation."
 date: "2026-08-11"
-updated: "2026-08-15"
-tags: ["Rust", "Lock-Free", "Concurrency", "Systems Programming"]
+updated: "2026-08-17"
+tags: ["Rust", "Concurrent HashMap", "Concurrency", "Systems Programming"]
 author: "Rana Dolui"
 slug: "custom-concurrent-hashmap-rust"
 category: "Systems Engineering"
@@ -13,19 +13,19 @@ level: "Advanced"
 
 Most concurrent hash maps begin with a sensible design: put an `RwLock` around a normal map, or divide the table into buckets protected by smaller locks. That approach is easy to reason about and is often fast enough. It becomes less attractive when a read-heavy workload needs predictable latency while many threads update unrelated keys.
 
-This article studies the real `customhash` crate used in the project—not a simplified textbook map. It combines **sharding**, **open addressing**, **atomic pointer publication**, **compare-and-swap updates**, and **epoch-based reclamation (EBR)**. Reads avoid mutexes. Normal inserts and updates coordinate through atomics. Resizing is deliberately different: writers serialize table growth with one mutex per shard.
+This article studies the real `customhash` crate used in the project—not a simplified textbook map. It combines **sharding**, **open addressing**, **atomic pointer publication**, **per-entry synchronization**, **sequence counters**, and **epoch-based reclamation (EBR)**. Ordinary reads avoid locks. Writers touching the same existing key serialize on a one-byte spin lock, while unrelated keys and shards continue independently. Resizing uses one mutex per shard.
 
-> “Lock-free” does not mean that every operation completes in a fixed number of steps. It means system-wide progress continues even if one participating thread pauses. This implementation also contains stronger read paths, but resizing and cloning values still have real costs.
+The important distinction is scope: table lookup and pointer reads are lock-free, but the complete map is not. Existing-key mutation can wait on that entry's spin lock, and growth can wait on the shard mutex and insertion gate.
 
 ## What We Are Building
 
-`CustomMap<V>` is a concurrent `String -> V` map where `V: Clone + Send + Sync + 'static`. Its public surface supports cloned reads, guarded borrowed reads, conditional insertion, copy-on-write CAS updates, logical deletion, iteration, shard-local retention, explicit capacity inspection, and bounded admission through the `try_*` APIs.
+`CustomMap<V>` is a concurrent `String -> V` map where `V: Clone + Send + Sync + 'static`. Its public surface supports cloned and guarded reads, consistent callback reads, conditional insertion, serialized replacement or in-place updates, three removal modes, iteration, shard-local retention, slot inspection, capacity inspection, and bounded admission through the `try_*` APIs.
 
 The design optimizes for these properties:
 
-- reads do not acquire a mutex;
+- ordinary reads do not acquire a lock;
 - unrelated shards update independently;
-- an existing value can be replaced with one atomic pointer swap;
+- writers for one existing key serialize without taking a shard-wide lock;
 - removed values are reclaimed only after old readers are gone;
 - shard metadata is cache-line separated to reduce false sharing;
 - the table stays below a 70% load factor to keep probe chains short.
@@ -54,8 +54,8 @@ flowchart TB
 The three layers:
 
 1. **`CustomMap`** — the public facade. Computes the hash, routes to the right shard.
-2. **`Shard`** — owns one `SlotTable`. Has a `grow_lock` only used during resize (not reads).
-3. **`SlotTable`** — a flat array of `AtomicPtr<Entry<V>>`. It uses open addressing and linear probing. Reads and ordinary updates use atomics; shard growth is serialized.
+2. **`Shard`** — owns one `SlotTable` and coordinates structural insertion and growth. Its mutex is used only during resize.
+3. **`SlotTable`** — a flat array of stable entry pointers. Linear probing finds an entry; its atomic value pointer, spin lock, and sequence counter coordinate value access.
 
 ### The Actual Memory Layout
 
@@ -66,6 +66,8 @@ struct Entry<V> {
     hash: u64,
     value: AtomicPtr<ValueBox<V>>,
     key: String,
+    mlock: AtomicU8,
+    seq: AtomicU32,
 }
 
 struct SlotTable<V> {
@@ -96,12 +98,14 @@ struct Shard<V> {
 flowchart LR
     SLOT["Atomic slot pointer"] --> ENTRY["Stable Entry<br/>hash + key"]
     ENTRY --> VALUE["Atomic value pointer"]
+    ENTRY --> LOCK["AtomicU8 writer lock"]
+    ENTRY --> SEQ["AtomicU32 sequence"]
     VALUE --> V1["ValueBox V"]
     WRITER["Writer"] -. "swap pointer" .-> VALUE
     READER["Pinned reader"] -. "Acquire load" .-> VALUE
 ```
 
-This extra indirection is intentional. Updating a value does not move the key, hash, or table slot. The writer allocates a new `ValueBox`, swaps one pointer, and retires the old box. That keeps the probing structure stable for concurrent readers.
+This extra indirection is intentional. A replacement update does not move the key, hash, or table slot: the writer publishes a new `ValueBox` and retires the old one. The one-byte `mlock` serializes mutation and removal for that entry. The `seq` counter marks an in-place mutation as odd while active and even when stable, allowing `read_consistent` to detect interference and retry.
 
 The `#[repr(align(128))]` shard alignment and cache-padded length/gate counters reduce false sharing. Threads modifying shard 0's insertion state should not constantly invalidate the cache line containing shard 1's hot metadata. At map level, `key_count` tracks live values while `max_keys` controls admission in the fallible insertion APIs.
 
@@ -162,7 +166,7 @@ flowchart LR
     LOW --> SLOT["slot = hash &amp; mask"]
 ```
 
-Using `foldhash::fast::RandomState` gives us randomised hashing — preventing hash-flooding attacks.
+`foldhash::fast::RandomState` is selected for hashing throughput and per-map randomization. It is not a cryptographic hash, so untrusted adversarial keys require a separate denial-of-service assessment.
 
 ---
 
@@ -200,13 +204,15 @@ fn find(&self, key: &str, hash: u64) -> Option<&Entry<V>> {
 
 `Acquire` load ensures we see all writes to the entry that happened before the `Release` store that put the pointer there. The updated read APIs pin **before loading and traversing the table**, so an old table generation cannot be reclaimed while a reader is still probing it. Reads take no mutex and never enter the insertion gate.
 
-### Three Read APIs, Three Ownership Trade-offs
+### Read APIs and Consistency Trade-offs
 
-| API               | Returned data     | Pin lifetime               | Best use                                     |
-| ----------------- | ----------------- | -------------------------- | -------------------------------------------- |
-| `get(key)`        | cloned `V`        | only during the clone      | simple ownership and short critical sections |
-| `get_ref(key)`    | `ValueRef<'_, V>` | until the guard is dropped | avoid cloning a large value                  |
-| `with_entry(...)` | closure result    | while the closure runs     | precomputed hash/shard and controlled access |
+| API                    | Synchronization          | Best use                                      |
+| ---------------------- | ------------------------ | --------------------------------------------- |
+| `get(key)`             | EBR pin + clone          | replacement-only workloads                    |
+| `get_ref(key)`         | EBR guard in `ValueRef`  | short borrowed access without cloning         |
+| `with_entry(...)`      | EBR pin during closure   | precomputed hash/shard access                 |
+| `get_locked(key, ...)` | per-entry spin lock      | read coordinated with in-place mutation       |
+| `read_consistent(...)` | sequence check and retry | experimental optimistic read; see safety note |
 
 `get_ref` ties the borrowed pointer to an EBR guard:
 
@@ -219,6 +225,28 @@ pub struct ValueRef<'a, V> {
 ```
 
 The guard is not decoration. Its `Drop` implementation unpins the thread. As long as the `ValueRef` exists, reclamation cannot recycle the pointed-to value. Holding it for a long time is safe, but it can delay reclamation for every retired value waiting on that epoch.
+
+EBR protects allocation lifetime; it does not by itself synchronize an in-place write to the fields inside `V`. `get_locked` is the coordinated reader for `update_with`. Plain `get`, `get_ref`, and `with_entry` are appropriate when values are replaced through the atomic pointer rather than mutated in place. The sequence-based path is intended as an optimistic alternative, but it has an important Rust memory-model limitation discussed in the update section.
+
+`read_consistent` is a small seqlock-style loop:
+
+```rust
+loop {
+    let seq1 = entry.seq.load(Ordering::Acquire);
+    if seq1 & 1 != 0 { continue; }
+
+    let ptr = entry.value.load(Ordering::Acquire);
+    if ptr.is_null() { return None; }
+    let result = f(unsafe { &(*ptr).0 });
+    atomic::fence(Ordering::Acquire);
+
+    if seq1 == entry.seq.load(Ordering::Acquire) {
+        return Some(result);
+    }
+}
+```
+
+An odd sequence means an in-place writer is active. A changed sequence means a writer overlapped the callback, so the callback runs again against a stable observation.
 
 ---
 
@@ -323,20 +351,20 @@ flowchart LR
 sequenceDiagram
     participant T1 as Thread 1 (read)
     participant S0 as Shard 0
-    participant T2 as Thread 2 (write)
+    participant T2 as Thread 2 (replace)
     participant T3 as Thread 3 (write)
     participant S1 as Shard 1
     participant T4 as Thread 4 (read)
     T1->>S0: pin and load user:42
     S0-->>T1: Alice
-    T2->>S0: swap Alice for Alicia
+    T2->>S0: lock entry and publish Alicia
     S0-->>T2: retire Alice at epoch 9
-    T3->>S1: swap Bob for Bobby
+    T3->>S1: lock another entry and publish Bobby
     T4->>S0: pin and load user:42
     S0-->>T4: Alicia
 ```
 
-Key insight: **Threads 1 and 2 both access shard[0], but neither blocks the other.** Thread 1's read is atomic — it either sees the old value or the new one, never a torn write. Thread 2 replaces the value with one atomic `swap` on the `AtomicPtr` — no lock needed.
+Key insight: the lock is attached to an entry, not the shard. Writers updating `user:42` serialize with each other, but a writer for `user:99` proceeds independently even when both keys happen to share a shard. Replacement-only readers still observe either the old pointer or the new pointer, and EBR keeps the old allocation alive until pinned readers leave.
 
 ```mermaid
 sequenceDiagram
@@ -346,8 +374,10 @@ sequenceDiagram
     participant T4 as T4 reader
     T1->>V: load at epoch 7
     V-->>T1: Alice
-    T2->>V: atomic swap(Alicia)
+    T2->>T2: acquire entry mlock
+    T2->>V: Release-store Alicia
     T2->>T2: retire Alice for epoch 9
+    T2->>T2: release entry mlock
     T4->>V: load at epoch 7
     V-->>T4: Alicia
     Note over T1,T4: Alice is freed only after old readers leave
@@ -424,40 +454,28 @@ flowchart TD
     PROBE --> CLAIM
 ```
 
-## Updating Without Lost Writes
+## Two Update Modes
 
-`update` is a read-modify-write operation implemented as a CAS loop. The closure receives the currently observed value and produces a replacement plus a caller-defined result:
+The current implementation deliberately separates replacement updates from in-place mutation. `update` acquires the entry's spin lock, builds a replacement value, publishes its pointer, releases the lock, and retires the old allocation:
 
 ```rust
-loop {
-    let old_ptr = entry.value.load(Ordering::Acquire);
-    if old_ptr.is_null() {
-        return None;
-    }
-
-    let (new_val, result) = f(unsafe { &(*old_ptr).0 });
-    let new_ptr = new_value(new_val);
-
-    match entry.value.compare_exchange(
-        old_ptr,
-        new_ptr,
-        Ordering::AcqRel,
-        Ordering::Acquire,
-    ) {
-        Ok(_) => {
-            unsafe { ebr::retire_value(old_ptr) };
-            return Some(result);
-        }
-        Err(_) => unsafe { free_value(new_ptr) },
-    }
+spin_lock(&entry.mlock);
+let old_ptr = entry.value.load(Ordering::Acquire);
+if old_ptr.is_null() {
+    spin_unlock(&entry.mlock);
+    return None;
 }
+
+let (new_val, result) = f(unsafe { &(*old_ptr).0 });
+let new_ptr = new_value(new_val);
+entry.value.store(new_ptr, Ordering::Release);
+spin_unlock(&entry.mlock);
+unsafe { ebr::retire_value(old_ptr) };
 ```
 
-If another writer wins first, the CAS fails, the speculative allocation is freed, and the closure runs again against the new current value. Because of that retry behavior, the closure must not perform irreversible side effects such as sending a payment, writing a file, or emitting a non-idempotent message.
+Unlike the former CAS retry loop, the closure runs once after the writer owns the entry lock. This avoids repeated cloning and speculative allocations under same-key contention. The trade-off is that a slow closure delays other locked operations on that key. `try_update` uses the same lock but lets the closure cancel publication by returning `None`.
 
-`try_update` adds one more branch: the closure can return `None` to cancel the update after inspecting the value.
-
-### Mutable-Style Copy-on-Write with `update_with`
+### In-Place Mutation with `update_with`
 
 The newest API adds an ergonomic mutation form without exposing shared mutable memory:
 
@@ -468,26 +486,31 @@ map.update_with("user:42", |user| {
 });
 ```
 
-Internally, `update_with` still follows the safe CAS model. It clones the observed value, gives the closure `&mut V` for that private clone, allocates a new `ValueBox`, and attempts to replace the old pointer. If another writer wins, the speculative box is freed and the operation retries from a fresh clone.
+`update_with` is now the allocation-saving path. It locks the entry and mutates the existing `ValueBox` directly. Before calling the closure it increments `seq` to an odd number; after the closure it increments again to an even number.
 
 ```mermaid
 flowchart LR
-    LOAD["Acquire current pointer"] --> CLONE["Clone V privately"]
-    CLONE --> MUTATE["Run closure on &mut V"]
-    MUTATE --> CAS{"CAS old to new"}
-    CAS -->|success| RETIRE["Retire old ValueBox"]
-    CAS -->|lost race| FREE["Free speculative clone"]
-    FREE --> LOAD
+    LOCK["Acquire entry mlock"] --> ODD["seq becomes odd"]
+    ODD --> MUTATE["Mutate existing V in place"]
+    MUTATE --> EVEN["seq becomes even"]
+    EVEN --> UNLOCK["Release entry mlock"]
+    READ["read_consistent"] --> CHECK{"same even seq before and after?"}
+    CHECK -->|yes| ACCEPT["Accept callback result"]
+    CHECK -->|no| READ
 ```
 
-As with `update`, the closure may run more than once under contention. It should mutate only the provided clone and avoid non-idempotent external side effects.
+This removes the clone, allocation, pointer publication, and EBR retirement that a replacement update requires. `get_locked` provides the straightforward coordinated read path.
+
+There is an important Rust memory-model boundary in the current source. A seqlock can detect that a writer overlapped a read, but detection after the fact does not make an unsynchronized `&V` read concurrent with `&mut V` legal for arbitrary `V`. As currently implemented, `read_consistent`, plain `get`, `get_ref`, `with_entry`, iteration, and slot inspection can overlap `update_with` without taking `mlock`. Existing-key `insert`, `set`, and `insert_if_absent` also publish through the value pointer without taking that lock. Until every access path follows one synchronization protocol—or `update_with` returns to immutable replacement—concurrent use of the in-place path is not sound for arbitrary `V`.
 
 ## Removal Is Logical, Not Structural
 
-Deletion swaps the value pointer to null but leaves the `Entry` in its slot:
+Deletion locks the entry, swaps the value pointer to null, and leaves the `Entry` in its slot:
 
 ```rust
+spin_lock(&entry.mlock);
 let old = entry.value.swap(ptr::null_mut(), Ordering::AcqRel);
+spin_unlock(&entry.mlock);
 if !old.is_null() {
     self.key_count.fetch_sub(1, Ordering::Relaxed);
     unsafe { ebr::retire_value(old) };
@@ -504,6 +527,16 @@ flowchart LR
 ```
 
 Keeping the entry shell is essential for the current probing algorithm. Turning the slot itself back into null could break a collision chain and cause lookups for later keys to stop too early. The same key can be resurrected by CAS-ing its null value pointer, but an unrelated key does not reuse that occupied entry slot until a growth rehash omits logically deleted entries.
+
+The public API now offers three removal costs:
+
+| API                    | Result                         | Why it exists                               |
+| ---------------------- | ------------------------------ | ------------------------------------------- |
+| `remove(key)`          | cloned removed `V`             | caller needs ownership of the old value     |
+| `remove_no_clone(key)` | `bool`                         | delete without paying the clone cost        |
+| `remove_with(key, f)`  | callback result derived from V | inspect the old value while still protected |
+
+`remove_with` runs its callback while holding the entry lock and EBR pin, then retires the allocation. The callback should therefore stay short.
 
 Growth now compacts those tombstones while it rehashes. It counts only entries whose value pointer is live and stores that `live_count` back into the shard's `len` after the new table is built. The old table is then retired through EBR. This prevents deleted values from making the shard appear permanently full and restores the load-factor calculation to the number of live entries.
 
@@ -602,17 +635,21 @@ Readers never take `grow_lock` or touch `insert_gate`; the mutex prevents multip
 
 ## Atomic Ordering: Why Each One Is There
 
-| Operation            | Ordering  | Reason                                                           |
-| -------------------- | --------- | ---------------------------------------------------------------- |
-| load shard table     | `Acquire` | observe the initialized table published by a writer              |
-| load entry slot      | `Acquire` | observe the fully initialized key, hash, and value pointer       |
-| publish new entry    | `Release` | make entry initialization visible before readers dereference it  |
-| replace/remove value | `AcqRel`  | publish the new state and synchronize with prior readers/writers |
-| failed CAS           | `Acquire` | observe the pointer that defeated the attempted update           |
-| length counters      | `Relaxed` | counters coordinate capacity/accounting, not entry contents      |
-| enter insert gate    | `Acquire` | begin structural insertion only when growth is not active        |
-| leave insert gate    | `Release` | make the inserter's completion visible to a growing writer       |
-| close gate for grow  | `AcqRel`  | exclude new inserters after all current inserters have drained   |
+| Operation           | Ordering            | Reason                                                          |
+| ------------------- | ------------------- | --------------------------------------------------------------- |
+| load shard table    | `Acquire`           | observe the initialized table published by a writer             |
+| load entry slot     | `Acquire`           | observe the fully initialized key, hash, and value pointer      |
+| publish new entry   | `Release`           | make entry initialization visible before readers dereference it |
+| replace value       | `Release`           | publish a newly allocated replacement after initialization      |
+| remove value        | `AcqRel`            | publish null and acquire the previously published pointer       |
+| failed CAS          | `Acquire`           | observe the pointer that defeated the attempted update          |
+| acquire entry lock  | `Acquire`           | prevent later value access from moving before lock ownership    |
+| release entry lock  | `Release`           | publish locked mutations before the next lock owner proceeds    |
+| sequence counter    | `Release`/`Acquire` | mark and detect an overlapping in-place mutation                |
+| length counters     | `Relaxed`           | counters coordinate capacity/accounting, not entry contents     |
+| enter insert gate   | `Acquire`           | begin structural insertion only when growth is not active       |
+| leave insert gate   | `Release`           | make the inserter's completion visible to a growing writer      |
+| close gate for grow | `AcqRel`            | exclude new inserters after all current inserters have drained  |
 
 Using `SeqCst` everywhere would be easier to explain but stronger than the algorithm needs. The implementation builds explicit publication edges around pointer ownership while allowing independent operations to reorder where correctness does not depend on their global order.
 
@@ -622,32 +659,36 @@ Raw pointers make the hot path small, but correctness depends on invariants that
 
 1. A slot pointer is published only after its `Entry` is fully initialized.
 2. Published entry shells remain stable while concurrent operations may find them.
-3. A `ValueBox` is dereferenced only while the thread is pinned or while ownership is otherwise exclusive.
+3. A `ValueBox` allocation is dereferenced only while the thread is pinned or while ownership is otherwise exclusive.
 4. Replaced values are retired exactly once.
 5. A pooled allocation is reused only for the same `TypeId`.
 6. Table capacity is a power of two, making `hash & mask` valid.
 7. The load threshold leaves null slots, so an unsuccessful probe terminates.
 8. Growth begins only after the insert gate reaches zero, so no entry can be published into the old table after migration starts.
 9. Every table traversal is pinned before its table pointer is loaded, allowing old tables to be retired safely.
+10. Access to the fields inside `V` must also be synchronized; EBR protects lifetime, not concurrent `&V`/`&mut V` aliasing.
 
-Any future optimization—SIMD probing, entry reclamation, or slot reuse—must preserve all nine.
+The first nine invariants describe the pointer and table design. The tenth is where the current in-place `update_with` flow still needs a unified reader/writer protocol before it can be treated as sound for arbitrary values.
 
 ---
 
 ## Performance Characteristics
 
-| Operation             | Contention                          | Cost                |
-| --------------------- | ----------------------------------- | ------------------- |
-| `get`                 | no mutex; clone cost depends on `V` | O(1) amortized      |
-| `get_ref`             | no mutex; pins until guard drop     | O(1) amortized      |
-| `insert` existing key | one atomic value swap               | O(1) amortized      |
-| `insert` new key      | insert gate + length CAS + slot CAS | O(1) amortized      |
-| `update`              | CAS loop; closure may retry         | O(1) amortized      |
-| `update_with`         | clone + mutate + CAS retry          | O(1) amortized      |
-| `try_insert` new key  | max-key preflight + normal insert   | O(1) amortized      |
-| `remove`              | atomic null swap + EBR retirement   | O(1) amortized      |
-| `grow`                | writer mutex + drained insert gate  | O(entries in shard) |
-| `for_each`            | one EBR pin per shard               | O(total slots)      |
+| Operation             | Contention / allocation cost                   | Cost                |
+| --------------------- | ---------------------------------------------- | ------------------- |
+| `get`                 | lock-free pointer read + clone                 | O(1) amortized      |
+| `get_ref`             | lock-free read; pins until guard drop          | O(1) amortized      |
+| `get_locked`          | one entry spin lock                            | O(1) amortized      |
+| `read_consistent`     | optimistic sequence retries                    | O(1) amortized      |
+| `insert` existing key | one atomic value swap                          | O(1) amortized      |
+| `insert` new key      | insert gate + length CAS + slot CAS            | O(1) amortized      |
+| `update`              | entry lock + one replacement allocation        | O(1) amortized      |
+| `update_with`         | entry lock; no clone or replacement allocation | O(1) amortized      |
+| `remove_no_clone`     | entry lock + null swap + EBR retirement        | O(1) amortized      |
+| `try_insert` new key  | max-key preflight + normal insert              | O(1) amortized      |
+| `grow`                | writer mutex + drained insert gate             | O(entries in shard) |
+| `for_each`            | one EBR pin per shard                          | O(total slots)      |
+| `retain` / `clear`    | one short EBR pin per visited slot             | O(total slots)      |
 
 With 16 shards in this configuration, growth is isolated to 1/16th of the keyspace at a time.
 
@@ -694,13 +735,17 @@ fn main() {
 }
 ```
 
-All 12 threads run concurrently. No `Mutex`, no `RwLock` on the hot path. The EBR layer ensures that readers never observe freed memory, even when writers are actively removing keys.
+All 12 threads run concurrently. This replacement-only example keeps reads lock-free and avoids any map-wide `Mutex` or `RwLock`; growth alone takes a shard mutex. The EBR layer ensures that replaced or removed allocations are not reclaimed while pinned readers may still hold their pointers.
 
 ## Iteration Is Weakly Consistent
 
-`for_each` and `keys` now pin one shard at a time rather than holding one EBR guard across the entire map. That shortens reclamation delays caused by a slow callback or a large shard count. `retain`, `retain_shard`, and `clear` still protect their mutation traversal with a guard. None of these operations creates a global snapshot: an iteration may see an update in one shard and miss a later update in another. That is acceptable for diagnostics, maintenance passes, shard-local expiry cleanup, and eventually consistent views, but not for transactions or exact point-in-time exports.
+`for_each` and `keys` pin one shard at a time. The latest memory-spike fix makes `retain`, `retain_shard`, and `clear` even more granular: they create a short EBR guard for each visited slot instead of pinning an entire maintenance traversal. Retired values can therefore become reclaimable between slots instead of accumulating behind one long-lived guard while a large table is scanned.
+
+None of these operations creates a global snapshot. An iteration may see an update in one shard and miss a later update in another. That is acceptable for diagnostics, maintenance passes, shard-local expiry cleanup, and eventually consistent views, but not for transactions or exact point-in-time exports.
 
 `retain`, the new `retain_shard(shard_idx, predicate)`, and `clear` use the same logical-deletion mechanism as `remove`: each live value is atomically swapped to null and retired. Entry shells remain in their probe positions. `retain_shard` avoids scanning unrelated shards when a caller already knows which partition needs maintenance.
+
+`peek_slot` and `peek_slot_with` expose shard/slot inspection for storage-layer scans. The first clones the key and value; the callback form avoids cloning the value. Both are weakly consistent inspection helpers rather than stable handles: resize can change where an entry appears, and a logically deleted slot returns `None`.
 
 ## Regression Coverage for the Resize Boundary
 
